@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OnceMi.Framework.Config</name>
+    </assembly>
+    <members>
+        <member name="M:OnceMi.Framework.Config.ConfigManager.GetKeyValue(System.String)">
+            <summary>
+            根据Key获取value
+            Exp: AppSettings:OSS:AccessKey
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="P:OnceMi.Framework.Config.OSSConfigNode.IsEnableCache">
+            <summary>
+            是否启用Redis缓存临时URL
+            </summary>
+        </member>
+    </members>
+</doc>

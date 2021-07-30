@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>G:\Projects\oncemi_framework\2.src\OnceMi.Framework\OnceMi.Framework.Api\bin\Release\publish\</_PublishTargetUrl>
+    <History>True|2021-07-27T15:21:10.8907299Z;False|2021-07-27T23:19:21.9711277+08:00;False|2021-07-27T23:18:00.5855816+08:00;True|2021-07-23T23:54:21.1090050+08:00;True|2021-07-23T23:53:10.5325826+08:00;True|2021-07-23T23:36:50.8436688+08:00;False|2021-07-23T23:34:10.0794983+08:00;False|2021-07-23T23:32:32.2785462+08:00;</History>
+  </PropertyGroup>
+</Project>

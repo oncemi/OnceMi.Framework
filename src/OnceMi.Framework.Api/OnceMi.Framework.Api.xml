@@ -1,0 +1,526 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OnceMi.Framework.Api</name>
+    </assembly>
+    <members>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController">
+            <summary>
+            Api管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.GetApiVersions">
+            <summary>
+            获取所有Api版本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.CascaderList">
+            <summary>
+            查询级联选择器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Get(OnceMi.Framework.Model.Dto.QueryApiPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Post(OnceMi.Framework.Model.Dto.CreateApiRequest)">
+            <summary>
+            新增Api
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Put(OnceMi.Framework.Model.Dto.UpdateApiRequest)">
+            <summary>
+            修改Api
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Resolve">
+            <summary>
+            自动发现系统中的API
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.CacheController">
+            <summary>
+            缓存管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.CacheController.Get(System.String)">
+            <summary>
+            查询缓存Key
+            </summary>
+            <param name="queryString">模糊匹配</param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.CacheController.Delete(OnceMi.Framework.Model.Dto.DeleteCachesRequest)">
+            <summary>
+            根据Key清除缓存
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController">
+            <summary>
+            字典管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.CascaderList">
+            <summary>
+            查询级联选择器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Post(OnceMi.Framework.Model.Dto.CreateDictionaryRequest)">
+            <summary>
+            新增字典
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Put(OnceMi.Framework.Model.Dto.UpdateDictionaryRequest)">
+            <summary>
+            修改字典
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.FileController">
+            <summary>
+            文件管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Download">
+            <summary>
+            下载文件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.GrantController">
+            <summary>
+            软件注册
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.GrantController.Get(OnceMi.Framework.Model.Dto.SoftGrantRequest)">
+            <summary>
+            根据机器码获取注册码
+            </summary>
+            <param name="requestModel"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.JobController">
+            <summary>
+            作业管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobController.Post(OnceMi.Framework.Model.Dto.CreateJobRequest)">
+            <summary>
+            创建任务
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController">
+            <summary>
+            作业分组管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.Get(System.Int64)">
+            <summary>
+            查询分组信息
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.Post(OnceMi.Framework.Model.Dto.CreateJobGroupRequest)">
+            <summary>
+            新增分组
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.Put(OnceMi.Framework.Model.Dto.UpdateJobGroupRequest)">
+            <summary>
+            修改分组
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController">
+            <summary>
+            菜单管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.GetMenuTypes">
+            <summary>
+            获取所有Api版本
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.GetNextSortValue(System.Nullable{System.Int64})">
+            <summary>
+            获取下一排序顺序
+            </summary>
+            <param name="parentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.QueryViewMenu">
+            <summary>
+            根据角色查询菜单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.CascaderList">
+            <summary>
+            查询级联选择器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.Post(OnceMi.Framework.Model.Dto.CreateMenuRequest)">
+            <summary>
+            新增菜单
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.Put(OnceMi.Framework.Model.Dto.UpdateMenuRequest)">
+            <summary>
+            修改菜单
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController">
+            <summary>
+            组织机构管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.OrganizeTypeSelectList">
+            <summary>
+            获取组织类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.UserSelectList(System.String)">
+            <summary>
+            获取组织类型
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.CascaderList">
+            <summary>
+            查询级联选择器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.OrganizeTreeList">
+            <summary>
+            查询用户管理页面树
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.Get(OnceMi.Framework.Model.Dto.OrganizePageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.Post(OnceMi.Framework.Model.Dto.CreateOrganizeRequest)">
+            <summary>
+            新增组织
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.Put(OnceMi.Framework.Model.Dto.UpdateOrganizeRequest)">
+            <summary>
+            修改视图
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController">
+            <summary>
+            授权管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.Get">
+            <summary>
+            获取页面所需角色和菜单
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.Get(System.Int64)">
+            <summary>
+            获取角色启用的菜单ID
+            </summary>
+            <param name="roleId">角色Id</param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.QueryUserRolePermission">
+            <summary>
+            获取用户角色操作权限
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.Put(OnceMi.Framework.Model.Dto.UpdateRolePermissionRequest)">
+            <summary>
+            修改授权
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController">
+            <summary>
+            角色管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.GetNextSortValue(System.Nullable{System.Int64})">
+            <summary>
+            获取下一排序顺序
+            </summary>
+            <param name="parentId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.CascaderList">
+            <summary>
+            查询级联选择器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.Post(OnceMi.Framework.Model.Dto.CreateRoleRequest)">
+            <summary>
+            新增角色
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.Put(OnceMi.Framework.Model.Dto.UpdateRoleRequest)">
+            <summary>
+            修改角色
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.UserController">
+            <summary>
+            用户管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Get(OnceMi.Framework.Model.Dto.QueryUserPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Get(System.Int64)">
+            <summary>
+            查询用户信息
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Post(OnceMi.Framework.Model.Dto.CreateUserRequest)">
+            <summary>
+            新增用户
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Put(OnceMi.Framework.Model.Dto.UpdateUserRequest)">
+            <summary>
+            修改用户
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Put(OnceMi.Framework.Model.Dto.UpdateUserStatusRequest)">
+            <summary>
+            修改用户状态
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.GetAvatar(System.String,System.Int32)">
+            <summary>
+            获取随机头像
+            </summary>
+            <param name="name"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController">
+            <summary>
+            视图管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.CascaderList">
+            <summary>
+            查询级联选择器数据
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.Post(OnceMi.Framework.Model.Dto.CreateViewRequest)">
+            <summary>
+            新增视图
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.Put(OnceMi.Framework.Model.Dto.UpdateViewRequest)">
+            <summary>
+            修改视图
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v2.JobDemoController">
+            <summary>
+            Job Demo
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v2.TestController">
+            <summary>
+            测试用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Api.Controllers.v2.EnumTestModel.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Api.Controllers.v2.EnumTestModel.Status">
+            <summary>
+            用户状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Api.Controllers.v2.EnumTestModel.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+    </members>
+</doc>

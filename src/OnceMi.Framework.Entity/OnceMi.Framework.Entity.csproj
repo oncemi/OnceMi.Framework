@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\OnceMi.Framework.Entity.xml</DocumentationFile>
+    <NoWarn>1701;1702;CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql" Version="2.5.200" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnceMi.Framework.Util\OnceMi.Framework.Util.csproj" />
+    <ProjectReference Include="..\OnceMi.IdentityServer4.User\OnceMi.IdentityServer4.User.csproj" />
+  </ItemGroup>
+
+</Project>

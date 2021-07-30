@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql" Version="2.5.200" />
+    <PackageReference Include="IdleBus" Version="1.5.2" />
+  </ItemGroup>
+
+</Project>

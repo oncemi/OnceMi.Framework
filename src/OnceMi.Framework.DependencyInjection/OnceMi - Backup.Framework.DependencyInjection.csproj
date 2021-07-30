@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EasyCaching.Redis" Version="1.2.1" />
+    <PackageReference Include="FreeSql" Version="2.5.100" />
+    <PackageReference Include="FreeSql.Provider.MySql" Version="2.5.100" />
+    <PackageReference Include="FreeSql.Provider.Oracle" Version="2.5.100" />
+    <PackageReference Include="FreeSql.Provider.PostgreSQL" Version="2.5.100" />
+    <PackageReference Include="FreeSql.Provider.Sqlite" Version="2.5.100" />
+    <PackageReference Include="FreeSql.Provider.SqlServer" Version="2.5.100" />
+    <PackageReference Include="IdleBus" Version="1.5.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="System.Data.Odbc" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnceMi.AspNetCore.Extension\OnceMi.AspNetCore.Extension.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.Config\OnceMi.Framework.Config.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.Entity\OnceMi.Framework.Entity.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.IRepository\OnceMi.Framework.IRepository.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.Repository\OnceMi.Framework.Repository.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.Service\OnceMi.Framework.Service.csproj" />
+  </ItemGroup>
+
+</Project>

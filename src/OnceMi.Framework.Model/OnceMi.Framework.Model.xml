@@ -1,0 +1,1876 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OnceMi.Framework.Model</name>
+    </assembly>
+    <members>
+        <member name="T:OnceMi.Framework.Model.Attributes.CleanCacheAttribute">
+            <summary>
+            方法执行完成之后清理指定key的缓存
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Attributes.CleanCacheAttribute.CacheType">
+            <summary>
+            缓存类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Attributes.CleanCacheAttribute.Key">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Attributes.JobAttribute">
+            <summary>
+            方法执行完成之后清理指定key的缓存
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Attributes.NoPackageAttribute">
+            <summary>
+            跳过打包
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Attributes.TransactionAttribute">
+            <summary>
+            方法执行完成之后清理指定key的缓存
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Attributes.TransactionAttribute.Propagation">
+            <summary>
+            事务传播方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Attributes.TransactionAttribute.IsolationLevel">
+            <summary>
+            事务隔离级别
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Common.AdminCacheKey">
+            <summary>
+            权限管理系统缓存KEY
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.VerifyCodeKey">
+            <summary>
+            验证码 admin:verify:code:guid
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.RoleItemKey">
+            <summary>
+            角色 admin:role:角色主键
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.UserInfoKey">
+            <summary>
+            角色 admin:role:角色主键
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.SystemMenusKey">
+            <summary>
+            系统菜单
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.RolePermissionsKey">
+            <summary>
+            角色权限缓存
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.SystemJobApiKey">
+            <summary>
+            作业管理请求Key
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.SystemJobKey">
+            <summary>
+            作业Key
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetVerifyCodeKey(System.String)">
+            <summary>
+            获取验证码主键
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetRoleKey(System.String)">
+            <summary>
+            获取角色主键
+            </summary>
+            <param name="roleCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetRoleKey(System.Int64)">
+            <summary>
+            获取角色主键
+            </summary>
+            <param name="roleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetUserInfoKey(System.Int64)">
+            <summary>
+            获取用户信息主键
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetJobApiKey(System.String)">
+            <summary>
+            获取作业请求key
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.IsSuccessful">
+            <summary>
+            执行结果
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.FiredTime">
+            <summary>
+            实际触发时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.Elapsed">
+            <summary>
+            执行时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.Result">
+            <summary>
+            执行结果
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.Exception">
+            <summary>
+            执行异常
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.ResultObject`1.Code">
+            <summary>
+            错误编号
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.ResultObject`1.Message">
+            <summary>
+            错误消息 自定义
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.ResultObject`1.Time">
+            <summary>
+            JSON创建时间/请求时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.ResultObject`1.Data">
+            <summary>
+            自定义数据 需要重载Data
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.Method">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.Parameters">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.Method">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.Parameters">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateApiRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.DeleteCachesRequest">
+            <summary>
+            按照名称清理缓存Key
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DeleteCachesRequest.Value">
+            <summary>
+            Key名称
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Dto.CreateDictionaryRequest._parentId">
+            <summary>
+            字典父级
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Code">
+            <summary>
+            字典编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Value">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Enabled">
+            <summary>
+            启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest._parentId">
+            <summary>
+            字典父级
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Code">
+            <summary>
+            字典编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Value">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Enabled">
+            <summary>
+            启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobGroupRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobGroupRequest.Code">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.GroupId">
+            <summary>
+            分组Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.Url">
+            <summary>
+            任务地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.RequestMethod">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.RequestHeader">
+            <summary>
+            请求头
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.RequestParam">
+            <summary>
+            请求参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.Cron">
+            <summary>
+            执行计划
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.EmailStrategy">
+            <summary>
+            邮件发送策略
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.EmailAddress">
+            <summary>
+            邮件通知地址，半角分号';'隔开
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobGroupRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobGroupRequest.Code">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.GroupId">
+            <summary>
+            分组Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.Url">
+            <summary>
+            任务地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.RequestMethod">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.RequestHeader">
+            <summary>
+            请求头
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.RequestParam">
+            <summary>
+            请求参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.Cron">
+            <summary>
+            执行计划
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.EmailStrategy">
+            <summary>
+            邮件发送策略
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.EmailAddress">
+            <summary>
+            邮件通知地址，半角分号';'隔开
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.IsHidden">
+            <summary>
+            是否隐藏
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Closable">
+            <summary>
+            可关闭
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.Opened">
+            <summary>
+            打开组
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.IsOpenInNewWindow">
+            <summary>
+            打开新窗口
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.ViewId">
+            <summary>
+            视图Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateMenuRequest.ApiId">
+            <summary>
+            ApiId
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.IsHidden">
+            <summary>
+            是否隐藏
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Closable">
+            <summary>
+            可关闭
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.Opened">
+            <summary>
+            打开组
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.IsOpenInNewWindow">
+            <summary>
+            打开新窗口
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.ViewId">
+            <summary>
+            视图Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateMenuRequest.ApiId">
+            <summary>
+            ApiId
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.Name">
+            <summary>
+            组织机构名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.Code">
+            <summary>
+            组织机构编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.OrganizeType">
+            <summary>
+            组织类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.IsEnabled">
+            <summary>
+            是否激活
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.DepartLeaders">
+            <summary>
+            部门领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateOrganizeRequest.HeadLeaders">
+            <summary>
+            分管领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.Name">
+            <summary>
+            组织机构名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.Code">
+            <summary>
+            组织机构编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.OrganizeType">
+            <summary>
+            组织类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.IsEnabled">
+            <summary>
+            是否激活
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.DepartLeaders">
+            <summary>
+            部门领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateOrganizeRequest.HeadLeaders">
+            <summary>
+            分管领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRolePermissionRequest.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRolePermissionRequest.Permissions">
+            <summary>
+            菜单权限
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.Code">
+            <summary>
+            角色名称（唯一）
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.Name">
+            <summary>
+            角色描述名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.OrganizeId">
+            <summary>
+            组织Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.Sort">
+             <summary>
+            排序
+             </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateRoleRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.Code">
+            <summary>
+            角色名称（唯一）
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.Name">
+            <summary>
+            角色描述名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.OrganizeId">
+            <summary>
+            组织Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.Sort">
+             <summary>
+            排序
+             </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateRoleRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.Status">
+            <summary>
+            用户状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.BirthDay">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.Password">
+            <summary>
+            更新密码，为空不更新
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.PasswordHashed">
+            <summary>
+            密码是否被hash
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.PhoneNumberConfirmed">
+            <summary>
+            电话号码是否已经确认
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.PhoneNumber">
+            <summary>
+            电话号码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.EmailConfirmed">
+            <summary>
+            是否已经确认电子邮件
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.Email">
+            <summary>
+            电子邮件
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.UserRoles">
+            <summary>
+            用户角色
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateUserRequest.UserOrganizes">
+            <summary>
+            用户组织机构
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.QueryUserPageRequest.Status">
+            <summary>
+            用户状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.QueryUserPageRequest.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.QueryUserPageRequest.OrganizeId">
+            <summary>
+            组织机构Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.Status">
+            <summary>
+            用户状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.BirthDay">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.Password">
+            <summary>
+            更新密码，为空不更新
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.PasswordHashed">
+            <summary>
+            密码是否被hash
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.PhoneNumberConfirmed">
+            <summary>
+            电话号码是否已经确认
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.PhoneNumber">
+            <summary>
+            电话号码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.EmailConfirmed">
+            <summary>
+            是否已经确认电子邮件
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.Email">
+            <summary>
+            电子邮件
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.UserRoles">
+            <summary>
+            用户角色
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserRequest.UserOrganizes">
+            <summary>
+            用户组织机构
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateUserStatusRequest.Status">
+            <summary>
+            用户状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.Query">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.Router">
+            <summary>
+            路由
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.PageTitle">
+            <summary>
+            页面标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CreateViewRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.Router">
+            <summary>
+            路由
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.Query">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.PageTitle">
+            <summary>
+            页面标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateViewRequest.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.IPageRequest">
+            <summary>
+            分页查询
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageRequest.Page">
+            <summary>
+            当前页
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageRequest.Size">
+            <summary>
+            每页大小
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Dto.IRequest.MapTo``1(``0)">
+            <summary>
+            为当前Request创建Map到TResult的方法
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ISearchRequest.OrderByModels">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ISearchRequest.OrderBy">
+            <summary>
+            排序字段和排序方式，URL参数示例：orderby=name,desc
+            可包含多个orderby参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ISearchRequest.Search">
+            <summary>
+            查询关键字
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Dto.ISearchRequest.IsOrderField(System.String)">
+            <summary>
+            是否为排序字段（asc，desc）
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.ITranRequest">
+            <summary>
+            流水号请求
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ITranRequest.Page">
+            <summary>
+            当前页
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ITranRequest.Size">
+            <summary>
+            每页大小
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.IUpdateRequest">
+            <summary>
+            更新请求
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.ApiItemResponse">
+            <summary>
+            API DTO
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.OperationId">
+            <summary>
+            操作Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Code">
+            <summary>
+            操作码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Method">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Parameters">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.UpdatedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ApiItemResponse.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.CacheKeyItemResponse">
+            <summary>
+            缓存Key
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CacheKeyItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CacheKeyItemResponse.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.CacheKeyItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.ParentId">
+            <summary>
+            字典父级
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Code">
+            <summary>
+            字典编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Value">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Enabled">
+            <summary>
+            启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.JobGroupItemResponse">
+            <summary>
+            作业分组DTO
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobGroupItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobGroupItemResponse.Code">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobGroupItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.FiredTime">
+            <summary>
+            实际触发时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Elapsed">
+            <summary>
+            执行时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Result">
+            <summary>
+            执行结果
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Stage">
+            <summary>
+            阶段
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.JobItemResponse">
+            <summary>
+            菜单DTO
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.GroupId">
+            <summary>
+            分组Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Group">
+            <summary>
+            分组，字典
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Url">
+            <summary>
+            任务地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.RequestMethod">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.RequestHeader">
+            <summary>
+            请求头
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.RequestParam">
+            <summary>
+            请求参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Cron">
+            <summary>
+            执行计划
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.EmailStrategy">
+            <summary>
+            邮件发送策略
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.EmailAddress">
+            <summary>
+            邮件通知地址，半角分号';'隔开
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.RunCount">
+            <summary>
+            执行次数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Status">
+            <summary>
+            作业状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.MenuItemResponse">
+            <summary>
+            菜单DTO
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Code">
+            <summary>
+            键名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.TypeName">
+            <summary>
+            类型名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.IsHidden">
+            <summary>
+            是否隐藏
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Closable">
+            <summary>
+            可关闭
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.Opened">
+            <summary>
+            打开组
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.IsOpenInNewWindow">
+            <summary>
+            打开新窗口
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.UpdatedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.ViewId">
+            <summary>
+            视图Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuItemResponse.ApiId">
+            <summary>
+            ApiId
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Router">
+            <summary>
+            路由名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Path">
+            <summary>
+            菜单路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Invisible">
+            <summary>
+            是否隐藏菜单项，true 隐藏，false 不隐藏，会注入到路由元数据meta中。
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Link">
+            <summary>
+            链接
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Query">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Authority">
+            <summary>
+            菜单权限
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Page">
+            <summary>
+            页面信息
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserMenuResponse.Children">
+            <summary>
+            子菜单
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuPageMetaResponse.Title">
+            <summary>
+            页面标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.MenuPageMetaResponse.Breadcrumb">
+            <summary>
+            页面面包屑
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.Name">
+            <summary>
+            组织机构名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.Code">
+            <summary>
+            组织机构编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.OrganizeType">
+            <summary>
+            组织类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.OrganizeTypeName">
+            <summary>
+            组织类型名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.IsEnabled">
+            <summary>
+            是否激活
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.DepartLeaderNames">
+            <summary>
+            部门领导名字
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.DepartLeaders">
+            <summary>
+            部门领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.HeadLeaderNames">
+            <summary>
+            分管领导名字
+            逗号分隔
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.HeadLeaders">
+            <summary>
+            分管领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.Label">
+            <summary>
+            树标签
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.UpdatedUserId">
+            <summary>
+            修改者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.OrganizeItemResponse.UpdatedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.RoleItemResponse">
+            <summary>
+            API DTO
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.Code">
+            <summary>
+            角色名称（唯一）
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.Name">
+            <summary>
+            角色描述名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.OrganizeId">
+            <summary>
+            组织Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.OrganizeName">
+            <summary>
+            组织名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.Sort">
+             <summary>
+            排序
+             </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.IsEnabled">
+            <summary>
+            是否激活
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.Label">
+            <summary>
+            树标签
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RoleItemResponse.UpdatedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.UserItemResponse">
+            <summary>
+            API DTO
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.Status">
+            <summary>
+            用户状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.BirthDay">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.Address">
+            <summary>
+            地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.PhoneNumberConfirmed">
+            <summary>
+            电话号码是否已经确认
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.PhoneNumber">
+            <summary>
+            电话号码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.EmailConfirmed">
+            <summary>
+            是否已经确认电子邮件
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.Email">
+            <summary>
+            电子邮件
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.CreatedUserId">
+            <summary>
+            创建用户ID
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.UpdatedUserId">
+            <summary>
+            最后修改人Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserItemResponse.UpdatedTime">
+            <summary>
+            最后修改时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserSelectItemResponse.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.UserSelectItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.Router">
+            <summary>
+            路由
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.Query">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.PageTitle">
+            <summary>
+            页面标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.UpdatedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ViewItemResponse.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ICascaderResponse.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ICascaderResponse.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ICascaderResponse.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ICascaderResponse.Children">
+            <summary>
+            子项
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageResponse`1.Page">
+            <summary>
+            当前页
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageResponse`1.Size">
+            <summary>
+            每页大小
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageResponse`1.Count">
+            <summary>
+            总行数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageResponse`1.PageData">
+            <summary>
+            当前页数据
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ISelectResponse`1.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.ISelectResponse`1.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Model.Dto.ITreeResponse`1">
+            <summary>
+            返回树形对象
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+    </members>
+</doc>

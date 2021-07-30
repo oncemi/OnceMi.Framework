@@ -1,0 +1,488 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OnceMi.Framework.Entity</name>
+    </assembly>
+    <members>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.OperationId">
+            <summary>
+            操作Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Version">
+            <summary>
+            版本
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Code">
+            <summary>
+            操作码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Method">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Parameters">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.CreateMethod">
+            <summary>
+            创建方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.ApiCreateMethod">
+            <summary>
+            创建方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Configs.Key">
+            <summary>
+            键名
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Configs.Content">
+            <summary>
+            配置内容
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Dictionaries">
+            <summary>
+            字典表
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.ParentId">
+            <summary>
+            字典父级
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Name">
+            <summary>
+            字典名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Code">
+            <summary>
+            字典编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Value">
+            <summary>
+            字典值
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Enabled">
+            <summary>
+            启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.JobGroups">
+            <summary>
+            任务分组
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobGroups.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobGroups.Code">
+            <summary>
+            编码
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.JobHistories">
+            <summary>
+            任务执行记录
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.FiredTime">
+            <summary>
+            实际触发时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Elapsed">
+            <summary>
+            执行时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Result">
+            <summary>
+            执行结果
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Stage">
+            <summary>
+            阶段
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Starting">
+            <summary>
+            启动中
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Started">
+            <summary>
+            已启动
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Running">
+            <summary>
+            执行中
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Stopping">
+            <summary>
+            停止中
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Stopped">
+            <summary>
+            已停止
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Failed">
+            <summary>
+            失败
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.GroupId">
+            <summary>
+            分组Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Group">
+            <summary>
+            分组，字典
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Url">
+            <summary>
+            任务地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.RequestMethod">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.RequestHeader">
+            <summary>
+            请求头
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.RequestParam">
+            <summary>
+            请求参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Cron">
+            <summary>
+            执行计划
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.StartTime">
+            <summary>
+            开始时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.EndTime">
+            <summary>
+            结束时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.EmailStrategy">
+            <summary>
+            邮件发送策略
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.EmailAddress">
+            <summary>
+            邮件通知地址，半角分号';'隔开
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.FireCount">
+            <summary>
+            执行次数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Status">
+            <summary>
+            作业状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.EmailStrategy.No">
+            <summary>
+            不发送
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.EmailStrategy.Error">
+            <summary>
+            仅异常
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.EmailStrategy.All">
+            <summary>
+            全部发送
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStatus.Stopped">
+            <summary>
+            已停止
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStatus.Paused">
+            <summary>
+            已暂停
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStatus.Running">
+            <summary>
+            运行中
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.JobStatus.Waiting">
+            <summary>
+            等待中
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Icon">
+            <summary>
+            图标
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Type">
+            <summary>
+            类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Sort">
+            <summary>
+            排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.IsHidden">
+            <summary>
+            是否隐藏
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Closable">
+            <summary>
+            可关闭
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Opened">
+            <summary>
+            打开组
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.IsOpenInNewWindow">
+            <summary>
+            打开新窗口
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.ViewId">
+            <summary>
+            视图Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.ApiId">
+            <summary>
+            ApiId
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Menus.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.RoleId">
+            <summary>
+            角色Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.MenuId">
+            <summary>
+            菜单Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.Role">
+            <summary>
+            角色
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.Menu">
+            <summary>
+            菜单
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.Content">
+            <summary>
+            Base64 存放
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.IsPublic">
+            <summary>
+            是否公有
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.Url">
+            <summary>
+            文件URL，在Service中查询
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.PageTitle">
+            <summary>
+            页面标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.Router">
+            <summary>
+            路由
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.Query">
+            <summary>
+            参数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Views.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.IBaseEntity`1">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.IBaseEntity`1.IsDeleted">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.IBaseEntity`1.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.IBaseEntity`1.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.IBaseEntity`1.UpdatedUserId">
+            <summary>
+            修改者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.IBaseEntity`1.UpdatedTime">
+            <summary>
+            修改时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.IEntity`1.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+    </members>
+</doc>

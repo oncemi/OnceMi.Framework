@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>.\OnceMi.Framework.Model.xml</DocumentationFile>
+    <NoWarn>1701;1702;CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="OnceMi.Framework.Model.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OnceMi.Framework.Entity\OnceMi.Framework.Entity.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.Util\OnceMi.Framework.Util.csproj" />
+  </ItemGroup>
+
+</Project>

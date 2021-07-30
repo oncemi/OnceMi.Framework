@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OnceMi.Framework.Extension</name>
+    </assembly>
+    <members>
+        <member name="M:OnceMi.Framework.Extension.Aop.CleanCacheAsyncInterceptor.CanIntercept(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            判断是否包含有CleanCache的属性
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Aop.CleanCacheAsyncInterceptor.InterceptAsynchronous(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            拦截异步方法 返回值为Task
+            </summary>
+            <param name="invocation"></param>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Aop.CleanCacheAsyncInterceptor.InterceptAsynchronous``1(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            拦截异步方法 返回值为Task object
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="invocation"></param>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Aop.CleanCacheAsyncInterceptor.InterceptSynchronous(Castle.DynamicProxy.IInvocation)">
+            <summary>
+            拦截同步执行的方法
+            </summary>
+            <param name="invocation"></param>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Aop.IAttributeAsyncInterceptor">
+            <summary>
+            属性拦截器接口
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Authorizations.NoPermissionAttribute">
+            <summary>
+            用于保护API资源，被保护的接口在用户登录后即可访问
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Authorizations.PermissionAuthorizationHandler.CompareMenu(OnceMi.Framework.Entity.Admin.Menus,System.String,System.String)">
+            <summary>
+            比较请求的菜单和用户权限菜单是否相同
+            </summary>
+            <param name="menu"></param>
+            <param name="requestPath"></param>
+            <param name="requestMethod"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Filters.GlobalPermissionFilter">
+            <summary>
+            全局授权过滤器
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Filters.GolbalTranActionFilter">
+            <summary>
+            重复请求
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Helpers.RewriteHelper">
+            <summary>
+            一些重写规则
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Subscribers.JobHistorySubscribeService">
+            <summary>
+            写作业历史记录
+            </summary>
+        </member>
+    </members>
+</doc>

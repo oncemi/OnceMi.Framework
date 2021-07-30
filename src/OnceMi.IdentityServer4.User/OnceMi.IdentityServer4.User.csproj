@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Version>1.0.6</Version>
+    <AssemblyVersion>1.0.6.0</AssemblyVersion>
+    <Authors>OnceMi</Authors>
+    <Description>IdentityServer4用户模块。</Description>
+    <PackageProjectUrl>https://github.com/oncemi/IdentityServer4.FreeSql</PackageProjectUrl>
+    <RepositoryType>Github</RepositoryType>
+    <RepositoryUrl>https://github.com/oncemi/IdentityServer4.FreeSql</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <FileVersion>1.0.6.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FreeSql" Version="2.5.200" />
+    <PackageReference Include="FreeSql.DbContext" Version="2.5.200" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>
