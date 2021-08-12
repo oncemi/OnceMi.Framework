@@ -36,10 +36,10 @@ IdentityServer4认证中心：https://ids4.demo.oncemi.com/
 一个高质量的开源项目不仅仅体现在代码和设计上面，也体现在配套的文档中。详细的文档才能让使用者知其然再知其所以然，如果有描述模糊的地方，还请提交iusse，我们将尽快更新。  
 
 ### 项目结构
-![](https://doc.oncemi.com/server/index.php?s=/api/attachment/visitFile/sign/6a42ab31f0779a81086575dd04f0a5a6)
+![](https://raw.githubusercontent.com/oncemi/OnceMi.Framework/main/docs/imgs/01.png)
 
 ### 捐赠
 <center class="half">
-    <img src="https://doc.oncemi.com/server/index.php?s=/api/attachment/visitFile/sign/37db9e4975f3491fe15cde57798a8869" width = "630" height = "300" alt="图片名称" align=center />
+    <img src="https://raw.githubusercontent.com/oncemi/OnceMi.Framework/main/docs/imgs/02.png" width = "630" height = "300" alt="图片名称" align=center />
 </center>
  
