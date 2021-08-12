@@ -28,15 +28,15 @@ Demo：https://ofw.demo.oncemi.com/
 密码：123456  
   
 Swagger UI：https://ofw-api.demo.oncemi.com/sys/swagger-ui/index.html  
-HealthCheck UI：https://ofw-api.demo.oncemi.com/sys/health-ui
+HealthCheck UI：https://ofw-api.demo.oncemi.com/sys/health-ui  
 IdentityServer4认证中心：https://ids4.demo.oncemi.com/  
 
 ### 文档地址
-文档地址：https://doc.oncemi.com/web/#/5
+文档地址：https://doc.oncemi.com/web/#/5  
 一个高质量的开源项目不仅仅体现在代码和设计上面，也体现在配套的文档中。详细的文档才能让使用者知其然再知其所以然，如果有描述模糊的地方，还请提交iusse，我们将尽快更新。  
 
 ### 项目结构
-![](https://raw.githubusercontent.com/oncemi/OnceMi.Framework/main/docs/imgs/01.png)
+![](https://raw.githubusercontent.com/oncemi/OnceMi.Framework/main/docs/imgs/01.png)  
 
 ### 捐赠
 <center class="half">
