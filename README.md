@@ -1,5 +1,5 @@
 # OnceMi.Framework
-基于.NET 5和Vue开发的企业级前后端分离权限管理开发框架，具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4统一认证。  
+基于.NET 5和Vue开发的企业级前后端分离权限管理开发框架（后台管理系统），具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4统一认证。  
 
 ### 特色
 - 界面美观大方，支持主题切换，夜间模式等，基于[vue-antd-admin](https://github.com/iczer/vue-antd-admin "vue-antd-admin")开发
