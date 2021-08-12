@@ -12,6 +12,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="db\**" />
+    <Compile Remove="upload\**" />
+    <Content Remove="db\**" />
+    <Content Remove="upload\**" />
+    <EmbeddedResource Remove="db\**" />
+    <EmbeddedResource Remove="upload\**" />
+    <None Remove="db\**" />
+    <None Remove="upload\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="OnceMi.Framework.Api.xml" />
   </ItemGroup>
 
@@ -19,16 +30,23 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.13.0" />
-    <PackageReference Include="OnceMi.AspNetCore.IdGenerator" Version="1.0.4" />
-    <PackageReference Include="OnceMi.AspNetCore.OSS" Version="1.0.4" />
+    <PackageReference Include="OnceMi.AspNetCore.AutoInjection" Version="1.0.2" />
+    <PackageReference Include="OnceMi.AspNetCore.OSS" Version="1.0.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OnceMi.AspNetCore.MQ\OnceMi.AspNetCore.MQ.csproj" />
     <ProjectReference Include="..\OnceMi.Framework.Config\OnceMi.Framework.Config.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.DependencyInjection\OnceMi.Framework.DependencyInjection.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.Extension\OnceMi.Framework.Extension.csproj" />
+    <ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
     <ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />
     <ProjectReference Include="..\OnceMi.Framework.Util\OnceMi.Framework.Util.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

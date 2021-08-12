@@ -136,7 +136,6 @@ namespace OnceMi.Framework.Service.Admin
             return result;
         }
 
-        [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
         public async Task<ViewItemResponse> Insert(CreateViewRequest request)
         {
             Views view = _mapper.Map<Views>(request);
@@ -159,12 +158,13 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task Update(UpdateViewRequest request)
         {
             Views view = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (view == null)
             {
-                throw new BusException(-1, "修改的目不存在");
+                throw new BusException(-1, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
@@ -184,8 +184,20 @@ namespace OnceMi.Framework.Service.Admin
 
         [Transaction]
         [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
+            /*
+             * 删除逻辑：
+             * 数据：
+             * 1、删除要删除的View节点，以及节点下的子节点；物理删除
+             * 2、删除菜单中引用的视图；物理删除
+             * 3、删除用户权限中使用的菜单
+             * 缓存：
+             * 4、移除菜单缓存
+             * 5、移除角色权限缓存
+             */
+
             if (ids == null || ids.Count == 0)
             {
                 throw new BusException(-1, "没有要删除的条目");
@@ -210,28 +222,12 @@ namespace OnceMi.Framework.Service.Admin
             List<long> menuIds = await GetMenuIncludeViews(delIds);
             List<long> permissionIds = await GetPermissionIncludeMenus(menuIds);
 
-            using (var uow = _repository.Orm.CreateUnitOfWork())
-            {
-                try
-                {
-                    if (delIds != null)
-                        uow.Orm.Delete<Views>().Where(p => delIds.Contains(p.Id)).ExecuteAffrows();
-                    if (menuIds != null)
-                        uow.Orm.Delete<Views>().Where(p => menuIds.Contains(p.Id)).ExecuteAffrows();
-                    if (permissionIds != null)
-                        uow.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrows();
-
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"删除视图失败, {ex.Message}");
-                    throw new BusException(-1, $"删除视图失败, {ex.Message}");
-                }
-            }
-            //清除菜单缓存
-            _cache.Remove(AdminCacheKey.SystemMenusKey);
+            if (delIds != null && delIds.Count > 0)
+                await _repository.Orm.Delete<Views>().Where(p => delIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            if (menuIds != null && menuIds.Count > 0)
+                await _repository.Orm.Delete<Menus>().Where(p => menuIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            if (permissionIds != null && permissionIds.Count > 0)
+                await _repository.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
         }
 
         /// <summary>

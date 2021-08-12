@@ -11,6 +11,18 @@ namespace OnceMi.Framework.IService.Admin
     public interface IUsersService : IBaseService
     {
         /// <summary>
+        /// 查询用户状态
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ISelectResponse<string>>> GetUserStatus();
+
+        /// <summary>
+        /// 查询用户性别
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ISelectResponse<string>>> GetUserGender();
+
+        /// <summary>
         /// 查询用户下拉
         /// </summary>
         /// <param name="query"></param>
@@ -52,6 +64,13 @@ namespace OnceMi.Framework.IService.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         Task UpdateUserStatus(UpdateUserStatusRequest request);
+
+        /// <summary>
+        /// 更新密码
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task UpdateUserPassword(UpdateUserPasswordRequest request);
 
         /// <summary>
         /// 删除用户

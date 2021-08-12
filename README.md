@@ -1,13 +1,45 @@
 # OnceMi.Framework
-基于.NET5/VUE开发的企业级前后端分离快速开发框架，支持国内外多种流行数据库以及统一认证授权。  
+基于.NET 5和Vue开发的企业级前后端分离权限管理开发框架，具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4统一认证。  
 
-### 跑起来！
-1、框架高度依赖Redis，请先准备Redis服务器。  
-2、如果Redis安装在本地，直接运气即可，非本机，请修改`appsettings.json`中redis配置，然后运行本项目。  
+### 特色
+- 界面美观大方，支持主题切换，夜间模式等，基于[vue-antd-admin](https://github.com/iczer/vue-antd-admin "vue-antd-admin")开发
+- 采用FreeSql，支持Sqlite/MySQL/PostgreSQL/SQLServer/Oracle(未测试)等多种流行数据库
+- 基于仓储模式开发
+- 支持IdentityServer4统一认证（目前未集成单机认证，后续将集成）
+- 基于角色的权限控制
+- 后端不做过多封装，小白也能轻松上手
+- 多层开发，结构清晰，封装完善，易于扩展
+- 支持AOP面向切面开发
+- 支持AOP数据库事务，AOP缓存管理（缓存管理仅清除，可自行实现完整的缓存管理）
+- 支持分布式Redis
+- 支持Redis和RabbitMQ消息队列，且设计了简单快捷的订阅和发布机制
+- 支持任务调度，作业管理（基于Quartz.net）。即使把本框架仅作为一个定时任务管理器，也是很不错的。
+- 支持健康检查
+- 支持Service层和Repository自动注入
+- 支持自动依赖注入
+- 统一文件管理，支持上传文件至本地和OSS（支持Minio，腾讯云，阿里云，基于[OnceMi.AspNetCore.OSS](https://github.com/oncemi/OnceMi.AspNetCore.OSS "OnceMi.AspNetCore.OSS")）
+- 使用Automapper处理对象映射
+- 支持组织管理、角色管理、用户管理、菜单管理、授权管理等基本功能
+- 得益于.NET Core的跨平台特性，支持Linux、Windows、OSX。你甚至可以将此框架运行在树莓派上面。
 
-### 文档
-一个高质量的开源项目不仅仅体现在代码和设计上面，也体现在配套的文档中。详细的文档才能让使用者知其然再知其所以然。  
-本文档的将尽可能的将如何使用本框架描述清楚，当前文档在编写中....敬请期待。  
+### 预览
+Demo：https://ofw.demo.oncemi.com/  
+用户名：test  
+密码：123456  
+  
+Swagger UI：https://ofw-api.demo.oncemi.com/sys/swagger-ui/index.html  
+HealthCheck UI：https://ofw-api.demo.oncemi.com/sys/health-ui
+IdentityServer4认证中心：https://ids4.demo.oncemi.com/  
 
-### 项目
-框架核心内容基本上已经完成了，现在在测试和编写周边功能。
+### 文档地址
+文档地址：https://doc.oncemi.com/web/#/5
+一个高质量的开源项目不仅仅体现在代码和设计上面，也体现在配套的文档中。详细的文档才能让使用者知其然再知其所以然，如果有描述模糊的地方，还请提交iusse，我们将尽快更新。  
+
+### 项目结构
+![](https://doc.oncemi.com/server/index.php?s=/api/attachment/visitFile/sign/6a42ab31f0779a81086575dd04f0a5a6)
+
+### 捐赠
+<center class="half">
+    <img src="https://doc.oncemi.com/server/index.php?s=/api/attachment/visitFile/sign/37db9e4975f3491fe15cde57798a8869" width = "630" height = "300" alt="图片名称" align=center />
+</center>
+ 

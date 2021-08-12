@@ -10,7 +10,7 @@ namespace OnceMi.Framework.Config
     {
         public string HealthCheckName { get; set; }
 
-        public string HealthCheckEndpoint { get; set; }
+        public string HealthCheckUIPath { get; set; }
 
         public int EvaluationTimeinSeconds { get; set; }
 

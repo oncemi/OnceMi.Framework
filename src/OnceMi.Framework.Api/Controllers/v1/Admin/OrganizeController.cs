@@ -49,7 +49,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 获取组织类型
+        /// 查询组织列表（选择框）
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -135,7 +135,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 修改视图
+        /// 修改组织
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>

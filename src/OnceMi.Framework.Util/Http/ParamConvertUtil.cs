@@ -4,7 +4,7 @@ using System.Text;
 
 namespace OnceMi.Framework.Util.Http
 {
-    class QueryParamConvertUtils<T> where T : class
+    public class ParamConvertUtils<T> where T : class
     {
         /// <summary>
         /// 将实体类通过反射组装成字符串
@@ -21,6 +21,29 @@ namespace OnceMi.Framework.Util.Http
                 sb.Append(propertyInfos[i].Name + "=" + propertyInfos[i].GetValue(t, null) + "&");
             }
             return sb.ToString();
+        }
+
+        public static T StringConvertEntity(string query, bool isfullUrl)
+        {
+            if (isfullUrl)
+            {
+                int index = query.IndexOf("?");
+                if(index < 0)
+                {
+                    throw new Exception($"Can not find param from url '{query}'");
+                }
+                if(index == query.Length - 1)
+                {
+                    throw new Exception($"Can not find param from url '{query}'");
+                }
+                index = index + 1;
+                query = query.Substring(index, query.Length - index);
+                return StringConvertEntity(query);
+            }
+            else
+            {
+                return StringConvertEntity(query);
+            }
         }
 
         public static T StringConvertEntity(string query)
@@ -53,7 +76,7 @@ namespace OnceMi.Framework.Util.Http
                     {
                         continue;
                     }
-                    dictionary.Add(temp[0], temp[1]);
+                    dictionary.Add(temp[0],HttpUtil.UrlDecode(temp[1]));
                 }
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(typeof(T));
                 T entry = (T)assembly.CreateInstance(typeof(T).FullName);

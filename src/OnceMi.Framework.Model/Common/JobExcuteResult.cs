@@ -1,7 +1,9 @@
-﻿using System;
+﻿using OnceMi.Framework.Entity.Admin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Common
@@ -37,5 +39,8 @@ namespace OnceMi.Framework.Model.Common
         /// 执行异常
         /// </summary>
         public System.Exception Exception { get; set; }
+
+        [JsonIgnore]
+        public Jobs Job { get; set; }
     }
 }

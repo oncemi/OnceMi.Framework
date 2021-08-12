@@ -64,14 +64,15 @@ namespace OnceMi.Framework.Model.Dto
         public DateTime? EndTime { get; set; }
 
         /// <summary>
-        /// 邮件发送策略
+        /// 通知发送策略
         /// </summary>
-        public EmailStrategy EmailStrategy { get; set; } = EmailStrategy.No;
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public NoticePolicy NoticePolicy { get; set; } = NoticePolicy.No;
 
         /// <summary>
-        /// 邮件通知地址，半角分号';'隔开
+        /// 通知发送角色组Id
         /// </summary>
-        public string EmailAddress { get; set; }
+        public long? NoticeRoleId { get; set; }
 
         /// <summary>
         /// 描述

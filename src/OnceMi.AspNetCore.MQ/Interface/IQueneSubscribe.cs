@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using OnceMi.AspNetCore.MQ.Utils;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,7 +17,6 @@ namespace OnceMi.AspNetCore.MQ
         private Task _task;
         private IDisposable _subDisposable;
         private readonly CancellationTokenSource _tokenSource = new CancellationTokenSource();
-
 
         public IQueneSubscribe(IMessageQueneService mqService, ILogger logger)
         {
@@ -57,17 +57,19 @@ namespace OnceMi.AspNetCore.MQ
             _tokenSource.Cancel();
 
             int timeout = 3000;
+            Stopwatch sw = Stopwatch.StartNew();
             while (_task.Status == TaskStatus.Running)
             {
-                Thread.Sleep(1);
-                timeout--;
-                if (timeout <= 0)
+                if (sw.ElapsedMilliseconds > timeout)
                 {
                     break;
                 }
+                Thread.Sleep(1);
             }
+            sw.Stop();
             _tokenSource.Dispose();
             _task.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

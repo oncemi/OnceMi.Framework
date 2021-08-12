@@ -8,18 +8,8 @@ namespace OnceMi.Framework.Model.Dto
 {
     [MapperFrom(typeof(Dictionaries))]
     [MapperTo(typeof(ICascaderResponse))]
-    public class DictionaryItemResponse : IResponse
+    public class DictionaryItemResponse : ITreeResponse<DictionaryItemResponse>
     {
-        /// <summary>
-        /// Id
-        /// </summary>
-        public long Id { get; set; }
-
-        /// <summary>
-        /// 字典父级
-        /// </summary>
-		public long? ParentId { get; set; }
-
         /// <summary>
         /// 字典名称
         /// </summary>
@@ -43,7 +33,7 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 启用
         /// </summary>
-		public bool Enabled { get; set; }
+		public bool IsEnabled { get; set; }
 
         /// <summary>
         /// 排序
@@ -51,8 +41,18 @@ namespace OnceMi.Framework.Model.Dto
 		public int Sort { get; set; }
 
         /// <summary>
-        /// 子条目
+        /// 树标签
         /// </summary>
-        public List<DictionaryItemResponse> Children { get; set; }
+        public override string Label
+        {
+            get
+            {
+                return this.Name;
+            }
+            set
+            {
+
+            }
+        }
     }
 }

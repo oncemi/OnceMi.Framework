@@ -12,6 +12,17 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="F:OnceMi.Framework.Config.DefaultAppConfig.DefaultOriginsName">
+            <summary>
+            默认跨域策略名称
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Config.DefaultAppConfig.DefaultJsonNamingPolicy">
+            <summary>
+            默认json名称序列化策略
+            首字母小写
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Config.OSSConfigNode.IsEnableCache">
             <summary>
             是否启用Redis缓存临时URL

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
@@ -16,28 +15,21 @@ using OnceMi.AspNetCore.MQ;
 using OnceMi.AspNetCore.OSS;
 using OnceMi.Framework.Api.Middlewares;
 using OnceMi.Framework.Config;
-using OnceMi.Framework.DependencyInjection;
 using OnceMi.Framework.Extension.Authorizations;
+using OnceMi.Framework.Extension.DependencyInjection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Extension.Middlewares;
 using OnceMi.Framework.Model;
 using OnceMi.Framework.Util.Json;
 using System;
-using System.IO;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api
 {
     public class Startup
     {
-        private const string _defaultOrigins = "DefaultCorsPolicy";
-        //全局json对象返回设置，默认小驼峰
-        private JsonNamingPolicy _jsonNamingPolicy = JsonNamingPolicy.CamelCase;
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -50,6 +42,9 @@ namespace OnceMi.Framework.Api
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+            //ConfigManager
+            services.AddConfig();
+
             #region IdGenerator
 
             services.AddIdGenerator(x =>
@@ -61,8 +56,6 @@ namespace OnceMi.Framework.Api
 
             //MemoryCache
             services.AddMemoryCache();
-            //ConfigManager
-            services.AddConfig();
             //Db
             services.AddDatabase();
             //AutoMapper
@@ -80,8 +73,7 @@ namespace OnceMi.Framework.Api
                 if (config == null
                 || string.IsNullOrWhiteSpace(config.Endpoint)
                 || string.IsNullOrWhiteSpace(config.AccessKey)
-                || string.IsNullOrWhiteSpace(config.SecretKey)
-                || string.IsNullOrWhiteSpace(config.DefaultBucketName))
+                || string.IsNullOrWhiteSpace(config.SecretKey))
                 {
                     throw new Exception("Configuration can not bind oss config.");
                 }
@@ -91,6 +83,7 @@ namespace OnceMi.Framework.Api
                 option.AccessKey = config.AccessKey;
                 option.SecretKey = config.SecretKey;
                 option.IsEnableCache = config.IsEnableCache;
+                option.IsEnableHttps = config.IsEnableHttps;
             });
 
             #endregion
@@ -106,19 +99,13 @@ namespace OnceMi.Framework.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy(_defaultOrigins, policy =>
+                options.AddPolicy(DefaultAppConfig.DefaultOriginsName, policy =>
                  {
                      policy.AllowAnyHeader()
                      .AllowAnyMethod()
                      .AllowAnyOrigin();
                  });
             });
-
-            #endregion
-
-            #region HealthCheck
-
-            services.AddHealthCheckService();
 
             #endregion
 
@@ -145,7 +132,7 @@ namespace OnceMi.Framework.Api
             //Json序列化处理
             services.Configure<CustumJsonSerializerOptions>(option =>
             {
-                option.JsonNamingPolicy = _jsonNamingPolicy;
+                option.JsonNamingPolicy = DefaultAppConfig.DefaultJsonNamingPolicy;
             });
             var token = Configuration.GetSection("TokenManagement").Get<TokenManagementNode>();
 
@@ -168,27 +155,19 @@ namespace OnceMi.Framework.Api
                     {
                         OnChallenge = async context =>
                         {
-                            if (!string.IsNullOrEmpty(context.ErrorDescription))
-                                await WriteResponse(context.Response, StatusCodes.Status401Unauthorized, context.ErrorDescription);
-                            else
-                                await WriteResponse(context.Response, StatusCodes.Status401Unauthorized, "Unauthorized");
-                            context.HandleResponse();
+                            await CustumJwtBearerEvents.OnChallenge(context);
                         },
                         OnForbidden = async context =>
                         {
-                            await WriteResponse(context.Response, StatusCodes.Status403Forbidden, "Forbidden");
+                            await CustumJwtBearerEvents.OnForbidden(context);
                         },
-                        OnAuthenticationFailed = context =>
+                        OnAuthenticationFailed = async context =>
                         {
-                            // 如果过期，则把<是否过期>添加到，返回头信息中
-                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                            {
-                                context.Response.Headers.Add("Token-Expired", "true");
-                            }
-                            return Task.CompletedTask;
+                            await CustumJwtBearerEvents.OnAuthenticationFailed(context);
                         }
                     };
                 });
+
 
             services.AddAuthorization(options =>
             {
@@ -206,17 +185,15 @@ namespace OnceMi.Framework.Api
 
             #endregion
 
+            //配置自动注入
+            //services.AddAutoInjection();
+
             #region Controller
 
             services.AddHttpContextAccessor();
             services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true);
             services.Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
             services.AddHostedService<LifetimeEventsService>();
-            services.Configure<HostOptions>(option =>
-            {
-                option.ShutdownTimeout = TimeSpan.FromSeconds(10);
-            });
-
             services.AddControllers(options =>
             {
                 //全局异常
@@ -239,8 +216,10 @@ namespace OnceMi.Framework.Api
                     //DateTime
                     options.JsonSerializerOptions.Converters.Add(new DateTimeConverter());
                     options.JsonSerializerOptions.Converters.Add(new DateTimeNullableConverter());
+                    options.JsonSerializerOptions.Converters.Add(new ExceptionConverter());
+                    options.JsonSerializerOptions.Converters.Add(new TypeConverter());
                     //小驼峰
-                    options.JsonSerializerOptions.PropertyNamingPolicy = _jsonNamingPolicy;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = DefaultAppConfig.DefaultJsonNamingPolicy;
                 });
 
             //ApiBehaviorOptions必须在AddControllers之后
@@ -249,6 +228,12 @@ namespace OnceMi.Framework.Api
                 //重写模型验证返回数据格式
                 options.InvalidModelStateResponseFactory = RewriteHelper.RewriteInvalidModelStateResponse;
             });
+
+            #endregion
+
+            #region HealthCheck
+
+            services.AddHealthCheckService();
 
             #endregion
         }
@@ -266,14 +251,12 @@ namespace OnceMi.Framework.Api
             {
                 builder.Run(async context =>
                 {
-                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, _jsonNamingPolicy);
+                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, DefaultAppConfig.DefaultJsonNamingPolicy);
                 });
             });
 
             #endregion
 
-            //配置文件
-            app.UseConfig();
             //Swagger
             app.UseSwaggerWithUI();
             //初始化数据库
@@ -281,8 +264,8 @@ namespace OnceMi.Framework.Api
             //健康检查
             app.UseHealthChecks();
             //跨域
-            app.UseCors(_defaultOrigins);
-            //RabbitMQ消息队列
+            app.UseCors(DefaultAppConfig.DefaultOriginsName);
+            //消息队列
             app.UseMessageQuene();
 
             app.UseHttpsRedirection();
@@ -309,21 +292,6 @@ namespace OnceMi.Framework.Api
 
                 endpoints.MapControllers();
             });
-        }
-
-        private async Task WriteResponse(HttpResponse response, int statusCode, string message)
-        {
-            response.ContentType = "application/json";
-            response.StatusCode = statusCode;
-
-            await response.WriteAsync(JsonUtil.SerializeToString(new ResultObject<object>()
-            {
-                Code = statusCode,
-                Message = message,
-            }, new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = _jsonNamingPolicy
-            }));
         }
     }
 }

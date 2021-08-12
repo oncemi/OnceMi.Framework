@@ -5,6 +5,7 @@ using NLog;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Extension.Job;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Util.Reflection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

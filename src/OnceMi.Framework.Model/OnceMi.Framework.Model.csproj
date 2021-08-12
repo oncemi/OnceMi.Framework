@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnceMi.Framework.Entity\OnceMi.Framework.Entity.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Util\OnceMi.Framework.Util.csproj" />
   </ItemGroup>
 
 </Project>

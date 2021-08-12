@@ -48,6 +48,44 @@
             <param name="requestMethod"></param>
             <returns></returns>
         </member>
+        <member name="M:OnceMi.Framework.Extension.DependencyInjection.FreeSqlCreateDatabaseExtension.CreateDatabaseIfNotExists(FreeSql.FreeSqlBuilder)">
+            <summary>
+            请在UseConnectionString配置后调用此方法
+            </summary>
+            <param name="this"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.DependencyInjection.ProxiedServicesExtensions">
+            <summary>
+            注入AOP代理扩展
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterAutoMapper.GetMapperFrom">
+            <summary>
+            自动注入包含MapperFromAttribute的类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterAutoMapper.GetMapperTo">
+            <summary>
+            自动注入包含MapperToAttribute的类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterDatabase.UseDbSeed(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            初始化数据库
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterRedisCache.AddRedisCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入缓存服务
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
+        </member>
         <member name="T:OnceMi.Framework.Extension.Filters.GlobalPermissionFilter">
             <summary>
             全局授权过滤器
@@ -62,6 +100,119 @@
             <summary>
             一些重写规则
             </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            添加（开始）任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Delete(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            删除任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Pause(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            暂停任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Resume(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            恢复任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Stop(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            停止任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Trigger(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            立即执行任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Exists(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            作业是否存在
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Init">
+            <summary>
+            初始化作业
+            系统启动时，从数据库中加载之前在运行的任务
+            状态变更：
+            1、等待变更为等待
+            2、运行变更为等待（重新加载后需要重新开始运行）
+            系统启动时，先清除缓存，然后将过期任务设置为停止
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            添加作业
+            状态变更：
+            1、初始化状态为停止状态，变更为等待运行状态（立即执行）
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Delete(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            删除任务
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Pause(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            暂停任务
+            状态变更：
+            从等待或运行状态变更为暂停状态，不能从停止状态变更到暂停状态
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Resume(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            恢复
+            状态变更：
+            1、从暂停状态变更为等待状态
+            2、从停止状态（手动停止）变更为等待状态
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Stop(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            停止作业
+            状态变更：
+            1、从等待变更为停止
+            2、从运行变更为停止
+            3、从暂停变更为停止
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Trigger(OnceMi.Framework.Entity.Admin.Jobs)">
+            <summary>
+            立即执行
+            </summary>
+            <param name="job"></param>
+            <returns></returns>
         </member>
         <member name="T:OnceMi.Framework.Extension.Subscribers.JobHistorySubscribeService">
             <summary>

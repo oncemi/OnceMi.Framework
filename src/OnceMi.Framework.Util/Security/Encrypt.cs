@@ -418,7 +418,6 @@ namespace OnceMi.Framework.Util.Security
                 aes.KeySize = 256;
                 aes.Mode = CipherMode.CBC;
                 aes.Padding = PaddingMode.PKCS7;
-
                 try
                 {
                     using (MemoryStream Memory = new MemoryStream())

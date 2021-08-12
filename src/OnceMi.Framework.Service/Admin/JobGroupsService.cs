@@ -12,6 +12,7 @@ using OnceMi.Framework.Util.User;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
@@ -102,6 +103,10 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(-1, $"分组编码“{request.Code}”已存在！");
             }
+            if (!IsRightGroupCode(request.Code))
+            {
+                throw new BusException(-1, $"分组编码格式不正确，编码只能由字母、数组和下划线组成");
+            }
             //创建信息
             jobGroup.Id = _idGenerator.NewId();
             jobGroup.CreatedTime = DateTime.Now;
@@ -124,12 +129,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(-1, $"分组名称“{request.Name}”已存在！");
             }
-            //判断编码是否重复
-            if (await _repository.Select.AnyAsync(p => p.Code == request.Code && !p.IsDeleted && p.Id != request.Id))
-            {
-                throw new BusException(-1, $"分组编码“{request.Code}”已存在！");
-            }
-            jobGroup = request.MapTo(jobGroup);
+            jobGroup.Name = request.Name;
             jobGroup.UpdatedTime = DateTime.Now;
             jobGroup.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
 
@@ -152,14 +152,22 @@ namespace OnceMi.Framework.Service.Admin
                 .ToListAsync();
             foreach (var item in allDelGroups)
             {
-                if (await _repository.Orm.Select<Jobs>().AnyAsync(p => p.GroupId == item.Id))
+                if (await _repository.Orm.Select<Jobs>().AnyAsync(p => p.GroupId == item.Id && !p.IsDeleted))
                 {
                     throw new BusException(-1, $"分组“{item.Name}”正在使用，无法删除");
                 }
             }
             await _repository.Where(p => ids.Contains(p.Id))
-                .ToDelete()
+                .ToUpdate()
+                .Set(p => p.IsDeleted, true)
+                .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
                 .ExecuteAffrowsAsync();
+        }
+
+        private bool IsRightGroupCode(string code)
+        {
+            Regex regex = new Regex(@"^\w+$");
+            return regex.IsMatch(code);
         }
     }
 }

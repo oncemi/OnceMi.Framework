@@ -87,7 +87,6 @@ namespace OnceMi.Framework.Extension.Authorizations
                 context.Succeed(requirement);
                 return;
             }
-
             //获取角色授权的菜单
             List<long> menuIds = await _permissionService.QueryRolePermissionList(roleIds);
             if (menuIds == null || menuIds.Count == 0)
@@ -140,7 +139,7 @@ namespace OnceMi.Framework.Extension.Authorizations
             return true;
 
             bool IsParameter(string input)
-                => !string.IsNullOrEmpty(input) && input.Length < 3 && (input[0] == '{' && input[^1] == '}');
+                => !string.IsNullOrEmpty(input) && input.Length > 2 && (input[0] == '{' && input[^1] == '}');
 
             string[] GetPaths(string path)
                 => path.Trim().Split('/').Where(p => !string.IsNullOrEmpty(p)).ToArray();

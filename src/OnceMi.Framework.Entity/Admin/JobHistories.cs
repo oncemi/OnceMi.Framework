@@ -1,10 +1,7 @@
 ﻿using FreeSql.DataAnnotations;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Entity.Admin
 {
@@ -35,10 +32,21 @@ namespace OnceMi.Framework.Entity.Admin
         public int? Elapsed { get; set; }
 
         /// <summary>
+        /// 执行状态
+        /// </summary>
+        public HistoryStatus Status { get; set; }
+
+        /// <summary>
         /// 执行结果
         /// </summary>
         [Column(DbType = "text", IsNullable = true)]
         public string Result { get; set; }
+
+        /// <summary>
+        /// 下次触发时间
+        /// </summary>
+        [Column(IsNullable = true)]
+        public DateTime? NextFiredTime { get; set; }
 
         /// <summary>
         /// 备注
@@ -47,15 +55,36 @@ namespace OnceMi.Framework.Entity.Admin
         public string Remark { get; set; }
 
         /// <summary>
-        /// 阶段
+        /// 任务阶段
         /// </summary>
-        public JobStage Stage { get; set; }
+        public HistoryStage Stage { get; set; }
 
         [Navigate(nameof(JobId))]
         public Jobs Jobs { get; set; }
     }
 
-    public enum JobStage
+    public enum HistoryStatus
+    {
+        /// <summary>
+        /// 成功
+        /// </summary>
+        [Description("成功")]
+        Success = 1,
+
+        /// <summary>
+        /// 失败
+        /// </summary>
+        [Description("失败")]
+        Failed = 2,
+
+        /// <summary>
+        /// 终止
+        /// </summary>
+        [Description("终止")]
+        Vetoed = 3,
+    }
+
+    public enum HistoryStage
     {
         /// <summary>
         /// 启动中
@@ -84,13 +113,13 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 已停止
         /// </summary>
-        [Description("已停止")]
+        [Description("已完成")]
         Stopped = 1 << 4,
 
         /// <summary>
-        /// 失败
+        /// 初始化
         /// </summary>
-        [Description("失败")]
-        Failed = 1<<5,
+        [Description("初始化")]
+        Initialized = 1 << 5,
     }
 }

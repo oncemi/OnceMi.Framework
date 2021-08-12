@@ -456,6 +456,7 @@ namespace OnceMi.Framework.Util.Http
 
         public static string UrlEncode(string str, UrlEncodeType type = UrlEncodeType.Data)
         {
+            if (string.IsNullOrEmpty(str)) return str;
             if (type == UrlEncodeType.Data)
                 return Uri.EscapeDataString(str);
             else
@@ -464,6 +465,7 @@ namespace OnceMi.Framework.Util.Http
 
         public static string UrlDecode(string str)
         {
+            if (string.IsNullOrEmpty(str)) return str;
             return Uri.UnescapeDataString(str);
         }
 

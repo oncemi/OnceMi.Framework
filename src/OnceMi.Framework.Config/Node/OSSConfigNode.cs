@@ -19,6 +19,6 @@ namespace OnceMi.Framework.Config
         /// </summary>
         public bool IsEnableCache { get; set; } = false;
 
-        public string DefaultBucketName { get; set; }
+        public bool IsEnableHttps { get; set; } = true;
     }
 }

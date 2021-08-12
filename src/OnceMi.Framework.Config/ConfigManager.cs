@@ -8,6 +8,7 @@ namespace OnceMi.Framework.Config
     public class ConfigManager
     {
         private static ConfigManager _manager = null;
+        private static readonly object _locker = new object();
 
         [JsonIgnore]
         public IConfiguration Configuration { get; private set; }
@@ -32,13 +33,15 @@ namespace OnceMi.Framework.Config
 
         public void Load()
         {
-            try
+            if(_manager == null)
             {
-                _manager = this;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Load config failed. {ex.Message}");
+                lock (_locker)
+                {
+                    if(_manager == null)
+                    {
+                        _manager = this;
+                    }
+                }
             }
         }
 
@@ -62,7 +65,7 @@ namespace OnceMi.Framework.Config
                 nameofT = sectionName;
             }
             IConfigurationSection section = this.Configuration.GetSection(nameofT);
-            if(section == null || !section.Exists())
+            if (section == null || !section.Exists())
             {
                 return default;
             }

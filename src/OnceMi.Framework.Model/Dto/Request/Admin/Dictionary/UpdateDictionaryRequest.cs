@@ -52,7 +52,7 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 启用
         /// </summary>
-		public bool Enabled { get; set; } = true;
+		public bool IsEnabled { get; set; } = true;
 
         /// <summary>
         /// 排序

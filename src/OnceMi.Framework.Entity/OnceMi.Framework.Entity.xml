@@ -104,9 +104,9 @@
             描述
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Enabled">
+        <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.IsEnabled">
             <summary>
-            启用
+            字典状态
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Dictionaries.Sort">
@@ -154,9 +154,19 @@
             执行时间
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Status">
+            <summary>
+            执行状态
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Result">
             <summary>
             执行结果
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.NextFiredTime">
+            <summary>
+            下次触发时间
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Remark">
@@ -166,37 +176,52 @@
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.JobHistories.Stage">
             <summary>
-            阶段
+            任务阶段
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Starting">
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStatus.Success">
+            <summary>
+            成功
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStatus.Failed">
+            <summary>
+            失败
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStatus.Vetoed">
+            <summary>
+            终止
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStage.Starting">
             <summary>
             启动中
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Started">
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStage.Started">
             <summary>
             已启动
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Running">
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStage.Running">
             <summary>
             执行中
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Stopping">
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStage.Stopping">
             <summary>
             停止中
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Stopped">
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStage.Stopped">
             <summary>
             已停止
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.JobStage.Failed">
+        <member name="F:OnceMi.Framework.Entity.Admin.HistoryStage.Initialized">
             <summary>
-            失败
+            初始化
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Name">
@@ -249,9 +274,19 @@
             结束时间
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.EmailStrategy">
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.NoticePolicy">
             <summary>
-            邮件发送策略
+            通知发送策略
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.NoticeRoleId">
+            <summary>
+            通知发送角色组Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.NoticeRole">
+            <summary>
+            通知发送角色组
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Jobs.EmailAddress">
@@ -269,6 +304,16 @@
             描述
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.LastFireTime">
+            <summary>
+            上次执行时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.NextFireTime">
+            <summary>
+            下次预计执行时间
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Status">
             <summary>
             作业状态
@@ -279,17 +324,22 @@
             是否启用
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.EmailStrategy.No">
+        <member name="P:OnceMi.Framework.Entity.Admin.Jobs.AppId">
+            <summary>
+            应用Id
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.NoticePolicy.No">
             <summary>
             不发送
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.EmailStrategy.Error">
+        <member name="F:OnceMi.Framework.Entity.Admin.NoticePolicy.Error">
             <summary>
             仅异常
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Entity.Admin.EmailStrategy.All">
+        <member name="F:OnceMi.Framework.Entity.Admin.NoticePolicy.All">
             <summary>
             全部发送
             </summary>
@@ -404,7 +454,7 @@
             Base64 存放
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.IsPublic">
+        <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.AccessMode">
             <summary>
             是否公有
             </summary>
@@ -412,6 +462,26 @@
         <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.Url">
             <summary>
             文件URL，在Service中查询
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.PublicRead">
+            <summary>
+            公共读
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.PublicReadAndWrite">
+            <summary>
+            公共读写
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.PublicWrite">
+            <summary>
+            公共写
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.Private">
+            <summary>
+            公共写
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Views.Path">

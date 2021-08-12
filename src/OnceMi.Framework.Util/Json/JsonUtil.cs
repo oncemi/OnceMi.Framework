@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -29,6 +30,8 @@ namespace OnceMi.Framework.Util.Json
             {
                 options.Converters.Add(new DateTimeConverter());
                 options.Converters.Add(new DateTimeNullableConverter());
+                options.Converters.Add(new ExceptionConverter());
+                options.Converters.Add(new TypeConverter());
             }
             else
             {
@@ -47,7 +50,16 @@ namespace OnceMi.Framework.Util.Json
                     options.Converters.Add(new DateTimeConverter());
                     options.Converters.Add(new DateTimeNullableConverter());
                 }
+                if (!options.Converters.Any(p => p.GetType() == typeof(ExceptionConverter)))
+                {
+                    options.Converters.Add(new ExceptionConverter());
+                }
+                if (!options.Converters.Any(p => p.GetType() == typeof(TypeConverter)))
+                {
+                    options.Converters.Add(new TypeConverter());
+                }
             }
+            
             //忽略大小写
             options.PropertyNameCaseInsensitive = true;
             //允许注释

@@ -277,7 +277,7 @@ namespace OnceMi.Framework.Service.Admin
             Menus menu = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (menu == null)
             {
-                throw new BusException(-1, "修改的目不存在");
+                throw new BusException(-1, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
@@ -316,10 +316,21 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.UpdateAsync(menu);
         }
 
+        [Transaction]
         [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
         [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
+            /*
+             * 删除逻辑：
+             * 数据：
+             * 1、删除要删除的菜单节点，以及节点下的子节点；物理删除
+             * 2、删除用户权限中使用的菜单
+             * 缓存：
+             * 4、移除菜单缓存
+             * 5、移除角色权限缓存
+             */
+
             if (ids == null || ids.Count == 0)
             {
                 throw new BusException(-1, "没有要删除的条目");
@@ -342,25 +353,10 @@ namespace OnceMi.Framework.Service.Admin
                 return;
             }
             List<long> permissionIds = await GetPermissionIncludeMenus(delIds);
-            //UnitOfWork
-            using (var uow = _repository.Orm.CreateUnitOfWork())
-            {
-                try
-                {
-                    if (delIds != null)
-                        uow.Orm.Delete<Menus>().Where(p => delIds.Contains(p.Id)).ExecuteAffrows();
-                    if (permissionIds != null)
-                        uow.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrows();
-
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"删除菜单失败, {ex.Message}");
-                    throw new BusException(-1, $"删除菜单失败, {ex.Message}");
-                }
-            }
+            if (delIds != null)
+                await _repository.Orm.Delete<Menus>().Where(p => delIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            if (permissionIds != null)
+                await _repository.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
         }
 
         #region private

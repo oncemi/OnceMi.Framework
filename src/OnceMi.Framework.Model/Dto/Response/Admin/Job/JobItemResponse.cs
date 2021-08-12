@@ -33,7 +33,7 @@ namespace OnceMi.Framework.Model.Dto
         {
             get
             {
-                return this.Group == null ? null : this.Group.Name;
+                return Group?.Name;
             }
         }
 
@@ -41,7 +41,7 @@ namespace OnceMi.Framework.Model.Dto
         {
             get
             {
-                return this.Group == null ? null : this.Group.Code;
+                return Group?.Code;
             }
         }
 
@@ -65,14 +65,10 @@ namespace OnceMi.Framework.Model.Dto
         /// </summary>
         public string RequestHeader { get; set; }
 
-        public Dictionary<string, string> RequestHeaderDic { get; set; }
-
         /// <summary>
         /// 请求参数
         /// </summary>
         public string RequestParam { get; set; }
-
-        public Dictionary<string, string> RequestParamDic { get; set; }
 
         /// <summary>
         /// 执行计划
@@ -90,14 +86,28 @@ namespace OnceMi.Framework.Model.Dto
         public DateTime? EndTime { get; set; }
 
         /// <summary>
-        /// 邮件发送策略
+        /// 通知发送策略
         /// </summary>
-        public EmailStrategy EmailStrategy { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public NoticePolicy NoticePolicy { get; set; }
 
         /// <summary>
-        /// 邮件通知地址，半角分号';'隔开
+        /// 通知发送角色组Id
         /// </summary>
-        public string EmailAddress { get; set; }
+        public long? NoticeRoleId { get; set; }
+
+        public string NoticeRoleName 
+        {
+            get
+            {
+                return NoticeRole?.Name;
+            }
+        }
+
+        /// <summary>
+        /// 通知发送角色组
+        /// </summary>
+        public RoleItemResponse NoticeRole { get; set; }
 
         /// <summary>
         /// 执行次数
@@ -112,7 +122,18 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 作业状态
         /// </summary>
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public JobStatus Status { get; set; }
+
+        /// <summary>
+        /// 上次执行时间
+        /// </summary>
+        public DateTime? LastFireTime { get; set; }
+
+        /// <summary>
+        /// 下次预计执行时间
+        /// </summary>
+        public DateTime? NextFireTime { get; set; }
 
         /// <summary>
         /// 是否启用

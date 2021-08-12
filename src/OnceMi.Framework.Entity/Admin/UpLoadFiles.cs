@@ -1,15 +1,10 @@
 ﻿using FreeSql.DataAnnotations;
+using OnceMi.IdentityServer4.User.Entities;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Entity.Admin
 {
-    public enum StorageType
-    {
-        OSS = 1,
-        Local = 2,
-        Base64 = 3,
-    }
-
     [Table(Name = nameof(UpLoadFiles))]
     public class UpLoadFiles : IBaseEntity<long>
     {
@@ -43,7 +38,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 是否公有
         /// </summary>
-        public bool IsPublic { get; set; } = false;
+        public FileAccessMode AccessMode { get; set; }
 
         public int Version { get; set; } = 1;
 
@@ -56,5 +51,47 @@ namespace OnceMi.Framework.Entity.Admin
         [Column(IsIgnore = true)]
         public string Url { get; set; }
 
+        [Navigate(nameof(CreatedUserId))]
+        public Users Owner { get; set; }
+
+    }
+
+    public enum StorageType
+    {
+        [Description("对象储存")]
+        OSS = 1,
+
+        [Description("本地")]
+        Local = 2,
+
+        [Description("Base64")]
+        Base64 = 3,
+    }
+
+    public enum FileAccessMode
+    {
+        /// <summary>
+        /// 公共读
+        /// </summary>
+        [Description("公共读")]
+        PublicRead = 1,
+
+        /// <summary>
+        /// 公共读写
+        /// </summary>
+        [Description("公共读写")]
+        PublicReadAndWrite = 3,
+
+        /// <summary>
+        /// 公共写
+        /// </summary>
+        [Description("公共写")]
+        PublicWrite = 5,
+
+        /// <summary>
+        /// 公共写
+        /// </summary>
+        [Description("私有")]
+        Private = 7,
     }
 }

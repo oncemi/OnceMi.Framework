@@ -1,7 +1,9 @@
 ﻿using FreeSql.DataAnnotations;
+using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Entity.Admin
 {
@@ -67,9 +69,22 @@ namespace OnceMi.Framework.Entity.Admin
         public DateTime? EndTime { get; set; }
 
         /// <summary>
-        /// 邮件发送策略
+        /// 通知发送策略
         /// </summary>
-        public EmailStrategy EmailStrategy { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public NoticePolicy NoticePolicy { get; set; }
+
+        /// <summary>
+        /// 通知发送角色组Id
+        /// </summary>
+        [Column(IsNullable = true)]
+        public long? NoticeRoleId { get; set; }
+
+        /// <summary>
+        /// 通知发送角色组
+        /// </summary>
+        [Navigate(nameof(NoticeRoleId))]
+        public Roles NoticeRole { get; set; }
 
         /// <summary>
         /// 邮件通知地址，半角分号';'隔开
@@ -88,8 +103,19 @@ namespace OnceMi.Framework.Entity.Admin
         public string Description { get; set; }
 
         /// <summary>
+        /// 上次执行时间
+        /// </summary>
+        public DateTime? LastFireTime { get; set; }
+
+        /// <summary>
+        /// 下次预计执行时间
+        /// </summary>
+        public DateTime? NextFireTime { get; set; }
+
+        /// <summary>
         /// 作业状态
         /// </summary>
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public JobStatus Status { get; set; }
 
         /// <summary>
@@ -97,11 +123,16 @@ namespace OnceMi.Framework.Entity.Admin
         /// </summary>
         public bool IsEnabled { get; set; } = true;
 
+        /// <summary>
+        /// 应用Id
+        /// </summary>
+        public int AppId { get; set; }
+
         [Column(IsIgnore = true)]
         public List<JobHistories> JobHistories { get; set; }
     }
 
-    public enum EmailStrategy
+    public enum NoticePolicy
     {
         /// <summary>
         /// 不发送

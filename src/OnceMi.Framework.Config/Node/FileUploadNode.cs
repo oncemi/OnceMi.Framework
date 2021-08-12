@@ -8,7 +8,9 @@ namespace OnceMi.Framework.Config
 {
     public class FileUploadNode
     {
-        public bool IsAsyncFileUpload { get; set; }
+        public bool IsUploadToOSS { get; set; }
+
+        public string BucketName { get; set; }
 
         public string FileUploadPath { get; set; }
     }

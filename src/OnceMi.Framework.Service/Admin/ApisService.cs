@@ -7,8 +7,10 @@ using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
+using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.User;
 using Swashbuckle.AspNetCore.Swagger;
@@ -32,6 +34,7 @@ namespace OnceMi.Framework.Service.Admin
         private readonly SwaggerGeneratorOptions _options;
         private readonly IMapper _mapper;
         private readonly RedisClient _redisClient;
+        private readonly IMenusService _menusService;
 
         public ApisService(IApisRepository repository
             , ILogger<ApisService> logger
@@ -40,7 +43,8 @@ namespace OnceMi.Framework.Service.Admin
             , ISwaggerProvider swagger
             , SwaggerGeneratorOptions options
             , IMapper mapper
-            , RedisClient redisClient) : base(repository)
+            , RedisClient redisClient
+            , IMenusService menusService) : base(repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -49,6 +53,7 @@ namespace OnceMi.Framework.Service.Admin
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _redisClient = redisClient ?? throw new ArgumentNullException(nameof(redisClient));
+            _menusService = menusService ?? throw new ArgumentNullException(nameof(menusService));
             _accessor = accessor;
         }
 
@@ -192,12 +197,14 @@ namespace OnceMi.Framework.Service.Admin
             return _mapper.Map<ApiItemResponse>(result);
         }
 
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task Update(UpdateApiRequest request)
         {
             Apis api = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (api == null)
             {
-                throw new BusException(-1, "修改的目不存在");
+                throw new BusException(-1, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
@@ -223,6 +230,9 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.UpdateAsync(api);
         }
 
+        [Transaction]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task AutoResolve()
         {
             List<ApiDocInfo> apis = ResolveApi();
@@ -280,12 +290,36 @@ namespace OnceMi.Framework.Service.Admin
             //删除系统自动同步的
             await _repository.DeleteAsync(p => 1 == 1);
             await _repository.InsertAsync(oldApis);
+            //查询菜单列表中不存在的接口（自动解析后被删除的）
+            List<long> allApiIds = oldApis.Select(p => p.Id).ToList();
+            List<Menus> allApiMenus = await _repository.Orm.Select<Menus>()
+                .Where(p => p.Type == MenuType.Api && !allApiIds.Contains(p.ApiId.Value))
+                .ToListAsync();
+            if (allApiMenus != null && allApiMenus.Count > 0)
+            {
+                List<long> delMenuIds = allApiMenus.Select(p => p.Id).ToList();
+                await _menusService.Delete(delMenuIds);
+            }
 
             _logger.LogInformation($"成功解析到{oldApis.Count}个Api，并已存入数据库！");
         }
 
+        [Transaction]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
+            /*
+             * 删除逻辑：
+             * 数据：
+             * 1、删除要删除的Api节点，以及节点下的子节点；物理删除
+             * 2、删除菜单中引用的Api；物理删除
+             * 3、删除用户权限中使用的菜单
+             * 缓存：
+             * 4、移除菜单缓存
+             * 5、移除角色权限缓存
+             */
+
             if (ids == null || ids.Count == 0)
             {
                 throw new BusException(-1, "没有要删除的条目");
@@ -310,28 +344,12 @@ namespace OnceMi.Framework.Service.Admin
             List<long> menuIds = await GetMenuIncludeApis(delIds);
             List<long> permissionIds = await GetPermissionIncludeMenus(menuIds);
 
-            using (var uow = _repository.Orm.CreateUnitOfWork())
-            {
-                try
-                {
-                    if (delIds != null)
-                        uow.Orm.Delete<Apis>().Where(p => delIds.Contains(p.Id)).ExecuteAffrows();
-                    if (menuIds != null)
-                        uow.Orm.Delete<Views>().Where(p => menuIds.Contains(p.Id)).ExecuteAffrows();
-                    if (permissionIds != null)
-                        uow.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrows();
-
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"Delete apis failed, {ex.Message}");
-                    throw new BusException(-1, $"Delete apis failed, {ex.Message}");
-                }
-            }
-            //清除菜单缓存
-            _redisClient.Del(AdminCacheKey.SystemMenusKey);
+            if (delIds != null && delIds.Count > 0)
+                await _repository.Where(p => delIds.Contains(p.Id)).ToDelete().ExecuteAffrowsAsync();
+            if (menuIds != null && menuIds.Count > 0)
+                await _repository.Orm.Delete<Views>().Where(p => menuIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            if (permissionIds != null && permissionIds.Count > 0)
+                await _repository.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
         }
 
         private void GetQueryApiChild(List<Apis> source, Apis api, List<Apis> removeApis = null)

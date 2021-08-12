@@ -27,26 +27,42 @@ namespace OnceMi.Framework.Api.Controllers.v2
     {
         private readonly IMessageQueneService _messageQuene;
         private readonly ILogger<JobDemoController> _logger;
-        private readonly ITestService _testService;
 
         public JobDemoController(ILogger<JobDemoController> logger
-            , IMessageQueneService messageQuene
-            , ITestService testService)
+            , IMessageQueneService messageQuene)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _messageQuene = messageQuene ?? throw new ArgumentNullException(nameof(messageQuene));
-            _testService = testService ?? throw new ArgumentNullException(nameof(testService));
         }
 
         [HttpGet]
         [AllowAnonymous]
         [Job]
-        public object Get()
+        public async Task<object> Get([FromQuery] string id)
         {
+            await Task.Delay(10000);
+
             return new
             {
                 Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Job]
+        public async Task<object> Post(TestRequestModel request)
+        {
+            await Task.Delay(1000);
+            return new
+            {
+                Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+        }
+    }
+
+    public class TestRequestModel
+    {
+        public string Id { get; set; }
     }
 }

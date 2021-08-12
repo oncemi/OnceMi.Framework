@@ -189,36 +189,23 @@ namespace OnceMi.Framework.Service.Admin
                 FindMenuParents(allMenus, item, distPermissions);
             }
 
-            using (var uow = _repository.Orm.CreateUnitOfWork())
+            if (distPermissions.Count == 0)
             {
-                try
+                await _repository.DeleteAsync(p => p.RoleId == request.RoleId);
+            }
+            else
+            {
+                List<RolePermissions> permissions = distPermissions.Select(p => new RolePermissions()
                 {
-                    if (distPermissions.Count == 0)
-                    {
-                        await _repository.DeleteAsync(p => p.RoleId == request.RoleId);
-                    }
-                    else
-                    {
-                        List<RolePermissions> permissions = distPermissions.Select(p => new RolePermissions()
-                        {
-                            Id = _idGenerator.NewId(),
-                            RoleId = request.RoleId,
-                            MenuId = p,
-                            IsDeleted = false,
-                            CreatedTime = DateTime.Now,
-                            CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id
-                        }).ToList();
-                        await _repository.DeleteAsync(p => p.RoleId == request.RoleId);
-                        await _repository.InsertAsync(permissions);
-                    }
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"Update role permission failed, {ex.Message}");
-                    throw new BusException(-1, $"更新角色授权失败, {ex.Message}");
-                }
+                    Id = _idGenerator.NewId(),
+                    RoleId = request.RoleId,
+                    MenuId = p,
+                    IsDeleted = false,
+                    CreatedTime = DateTime.Now,
+                    CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id
+                }).ToList();
+                await _repository.DeleteAsync(p => p.RoleId == request.RoleId);
+                await _repository.InsertAsync(permissions);
             }
             //清空角色权限缓存
             _cache.Remove(AdminCacheKey.RolePermissionsKey);
@@ -242,8 +229,8 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     return permissions;
                 }
-                List<Views> views = await _repository.Orm.Select<Views>().Where(p => !p.IsDeleted).ToListAsync();
-                List<Apis> apis = await _repository.Orm.Select<Apis>().Where(p => !p.IsDeleted).ToListAsync();
+                List<Views> views = await _repository.Orm.Select<Views>().Where(p => !p.IsDeleted).NoTracking().ToListAsync();
+                List<Apis> apis = await _repository.Orm.Select<Apis>().Where(p => !p.IsDeleted).NoTracking().ToListAsync();
                 foreach (var item in permissions)
                 {
                     if (item.Menu == null) continue;

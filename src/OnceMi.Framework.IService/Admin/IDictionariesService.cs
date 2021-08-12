@@ -7,7 +7,9 @@ namespace OnceMi.Framework.IService.Admin
 {
     public interface IDictionariesService : IBaseService<Dictionaries, long>
     {
-        Task<DictionaryItemResponse> Query(long id);
+        Task<int> QueryNextSortValue(long? parentId);
+
+        Task<DictionaryItemResponse> Query(DictionaryDetailRequest request);
 
         Task<IPageResponse<DictionaryItemResponse>> Query(IPageRequest request);
 

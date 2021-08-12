@@ -6,10 +6,8 @@ using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
-using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Cache;
 using OnceMi.Framework.Util.User;
@@ -175,6 +173,20 @@ namespace OnceMi.Framework.Service.Admin
             return result;
         }
 
+        public async Task<List<Users>> QueryRoleUsers(long roleId)
+        {
+            var roleUsers = await _repository.Select
+                .IncludeMany(p => p.Users)
+                .Where(p => p.Id == roleId)
+                .NoTracking()
+                .FirstAsync();
+            if (roleUsers == null || roleUsers.Users == null || roleUsers.Users.Count == 0)
+            {
+                return null;
+            }
+            return roleUsers.Users;
+        }
+
         public async Task<RoleItemResponse> Insert(CreateRoleRequest request)
         {
             Roles role = _mapper.Map<Roles>(request);
@@ -273,7 +285,6 @@ namespace OnceMi.Framework.Service.Admin
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
-        [CleanCache(CacheType.MemoryCache, AdminCacheKey.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
             if (ids == null || ids.Count == 0)
@@ -310,6 +321,11 @@ namespace OnceMi.Framework.Service.Admin
                 .Set(p => p.IsEnabled, false)
                 .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
                 .ExecuteAffrowsAsync();
+
+            //清空角色权限缓存
+            _cache.Remove(AdminCacheKey.RolePermissionsKey);
+            //清空开发人员角色缓存
+            _cache.Remove(AdminCacheKey.GetRoleKey(_config.AppSettings.DeveloperRoleName));
         }
 
         #region private

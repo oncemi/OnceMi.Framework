@@ -6,6 +6,7 @@ using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Exception;
@@ -37,6 +38,19 @@ namespace OnceMi.Framework.Service.Admin
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _accessor = accessor;
+        }
+
+        public async Task<int> QueryNextSortValue(long? parentId)
+        {
+            parentId = parentId == 0 ? null : parentId;
+            var maxValueObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)
+                .OrderByDescending(p => p.Sort)
+                .FirstAsync();
+            if (maxValueObj != null)
+            {
+                return maxValueObj.Sort + 1;
+            }
+            return 1;
         }
 
         public async Task<IPageResponse<DictionaryItemResponse>> Query(IPageRequest request)
@@ -106,81 +120,105 @@ namespace OnceMi.Framework.Service.Admin
             };
         }
 
-        public async Task<DictionaryItemResponse> Query(long id)
+        public async Task<DictionaryItemResponse> Query(DictionaryDetailRequest request)
         {
-            List<Dictionaries> allDics = await _repository
-                .Where(p => !p.IsDeleted)
-                .NoTracking()
-                .ToListAsync();
-            Dictionaries queryDic = allDics.Where(p => p.Id == id).FirstOrDefault();
-            if (queryDic == null)
-                return null;
+            if (!string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
+            {
+                Dictionaries queryDic = await _repository
+                    .Where(p => !p.IsDeleted && p.Code == request.Code)
+                    .NoTracking()
+                    .FirstAsync();
+                if (queryDic == null)
+                {
+                    throw new BusException(-1, $"根据编码【{request.Code}】查询字典信息失败");
+                }
+                request.Id = queryDic.Id;
+            }
+            if (request.IncludeChild)
+            {
+                List<Dictionaries> allDics = await _repository
+                    .Where(p => !p.IsDeleted)
+                    .NoTracking()
+                    .ToListAsync();
+                if (allDics == null || allDics.Count == 0)
+                {
+                    throw new BusException(-1, $"查询字典信息失败");
+                }
+                Dictionaries queryDic = allDics.Where(p => p.Id == request.Id).FirstOrDefault();
+                if (queryDic == null)
+                    return null;
 
-            GetQueryDictionaryChild(allDics, queryDic);
-            DictionaryItemResponse result = _mapper.Map<DictionaryItemResponse>(queryDic);
-            return result;
+                GetQueryDictionaryChild(allDics, queryDic);
+                DictionaryItemResponse result = _mapper.Map<DictionaryItemResponse>(queryDic);
+                return result;
+            }
+            else
+            {
+                Dictionaries queryDic = await _repository
+                    .Where(p => !p.IsDeleted && p.Id == request.Id)
+                    .NoTracking()
+                    .FirstAsync();
+                DictionaryItemResponse result = _mapper.Map<DictionaryItemResponse>(queryDic);
+                return result;
+            }
         }
 
         public async Task<DictionaryItemResponse> Insert(CreateDictionaryRequest request)
         {
-            Dictionaries view = _mapper.Map<Dictionaries>(request);
-            if (view == null)
+            Dictionaries dictionary = _mapper.Map<Dictionaries>(request);
+            if (dictionary == null)
             {
                 throw new Exception($"Map '{nameof(CreateDictionaryRequest)}' DTO to '{nameof(Dictionaries)}' entity failed.");
             }
-            if ((view.ParentId != null && view.ParentId != 0)
-                && !await _repository.Select.AnyAsync(p => p.Id == view.ParentId && !p.IsDeleted))
+            if ((dictionary.ParentId != null && dictionary.ParentId != 0)
+                && !await _repository.Select.AnyAsync(p => p.Id == dictionary.ParentId && !p.IsDeleted))
             {
                 throw new BusException(-1, "父条目不存在");
             }
-            if (await _repository.Select.AnyAsync(p => p.Code == view.Code && p.ParentId == request.ParentId && !p.IsDeleted))
+            if (await _repository.Select.AnyAsync(p => p.Code == dictionary.Code && p.ParentId == request.ParentId && !p.IsDeleted))
             {
                 throw new BusException(-1, $"当前子目录下Code'{request.Code}'已存在");
             }
-            if (await _repository.Select.AnyAsync(p => p.Name == view.Name && p.ParentId == request.ParentId && !p.IsDeleted))
+            if (await _repository.Select.AnyAsync(p => p.Name == dictionary.Name && p.ParentId == request.ParentId && !p.IsDeleted))
             {
                 throw new BusException(-1, $"当前子目录下Name'{request.Name}'已存在");
             }
-            view.ParentId = view.ParentId == 0 ? null : view.ParentId;
+            dictionary.ParentId = dictionary.ParentId == 0 ? null : dictionary.ParentId;
             //view.Id = _idGenerator.NewId();
-            view.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
-            view.CreatedTime = DateTime.Now;
+            dictionary.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
+            dictionary.CreatedTime = DateTime.Now;
             //保存
-            var result = await _repository.InsertAsync(view);
+            var result = await _repository.InsertAsync(dictionary);
             return _mapper.Map<DictionaryItemResponse>(result);
         }
 
         public async Task Update(UpdateDictionaryRequest request)
         {
-            Dictionaries view = await _repository.Where(p => p.Id == request.Id).FirstAsync();
-            if (view == null)
+            Dictionaries dictionary = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            if (dictionary == null)
             {
-                throw new BusException(-1, "修改的目不存在");
+                throw new BusException(-1, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
                 throw new BusException(-1, "父条目不存在");
             }
-            if (await _repository.Select.AnyAsync(p => p.Code == view.Code && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
+            if (await _repository.Select.AnyAsync(p => p.Code == dictionary.Code && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
             {
                 throw new BusException(-1, $"当前子目录下Code'{request.Code}'已存在");
             }
-            if (await _repository.Select.AnyAsync(p => p.Name == view.Name && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
+            if (await _repository.Select.AnyAsync(p => p.Name == dictionary.Name && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
             {
                 throw new BusException(-1, $"当前子目录下Name'{request.Name}'已存在");
             }
-            view.ParentId = request.ParentId == 0 ? null : request.ParentId;
-            view.Code = request.Code;
-            view.Name = request.Name;
-            view.Value = request.Value;
-            view.Description = request.Description;
-            view.Enabled = request.Enabled;
-            view.UpdatedTime = DateTime.Now;
-            view.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
-            await _repository.UpdateAsync(view);
+            dictionary = request.MapTo(dictionary);
+            dictionary.UpdatedTime = DateTime.Now;
+            dictionary.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
+            await _repository.UpdateAsync(dictionary);
         }
 
+        [Transaction]
         public async Task Delete(List<long> ids)
         {
             if (ids == null || ids.Count == 0)
@@ -204,22 +242,10 @@ namespace OnceMi.Framework.Service.Admin
             {
                 return;
             }
-
-            using (var uow = _repository.Orm.CreateUnitOfWork())
-            {
-                try
-                {
-                    if (delIds != null)
-                        uow.Orm.Delete<Dictionaries>().Where(p => delIds.Contains(p.Id)).ExecuteAffrows();
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"删除字典失败, {ex.Message}");
-                    throw new BusException(-1, $"删除字典失败, {ex.Message}");
-                }
-            }
+            await _repository.Orm.Select<Dictionaries>()
+                .Where(p => delIds.Contains(p.Id))
+                .ToDelete()
+                .ExecuteDeletedAsync();
         }
 
         /// <summary>

@@ -1,20 +1,27 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using OnceMi.AspNetCore.IdGenerator;
+using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
+using OnceMi.Framework.Model.Dto.Request.Admin.User;
 using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Util.Enum;
+using OnceMi.Framework.Util.Http;
+using OnceMi.Framework.Util.Images;
 using OnceMi.Framework.Util.Security;
 using OnceMi.Framework.Util.User;
 using OnceMi.IdentityServer4.User;
 using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -26,23 +33,59 @@ namespace OnceMi.Framework.Service.Admin
         private readonly IUsersRepository _repository;
         private readonly ILogger<UsersService> _logger;
         private readonly IIdGeneratorService _idGenerator;
+        private readonly IUpLoadFilesService _upLoadFilesService;
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
-        private readonly IMemoryCache _cache;
 
         public UsersService(IUsersRepository repository
             , ILogger<UsersService> logger
             , IIdGeneratorService idGenerator
+            , IUpLoadFilesService upLoadFilesService
             , IHttpContextAccessor accessor
-            , IMapper mapper
-            , IMemoryCache cache)
+            , IMapper mapper)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
+            _upLoadFilesService = upLoadFilesService ?? throw new ArgumentNullException(nameof(upLoadFilesService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _cache = cache ?? throw new ArgumentNullException(nameof(cache));
             _accessor = accessor;
+        }
+
+        public async Task<List<ISelectResponse<string>>> GetUserStatus()
+        {
+            List<EnumModel> enumModels = EnumUtil.EnumToList<UserStatus>();
+            if (enumModels == null || enumModels.Count == 0)
+            {
+                return new List<ISelectResponse<string>>();
+            }
+            List<ISelectResponse<string>> result = enumModels
+                .OrderBy(p => p.Value)
+                .Select(p => new ISelectResponse<string>()
+                {
+                    Name = p.Description,
+                    Value = p.Name,
+                })
+                .ToList();
+            return await Task.FromResult(result);
+        }
+
+        public async Task<List<ISelectResponse<string>>> GetUserGender()
+        {
+            List<EnumModel> enumModels = EnumUtil.EnumToList<UserGender>();
+            if (enumModels == null || enumModels.Count == 0)
+            {
+                return new List<ISelectResponse<string>>();
+            }
+            List<ISelectResponse<string>> result = enumModels
+                .OrderBy(p => p.Value)
+                .Select(p => new ISelectResponse<string>()
+                {
+                    Name = p.Description,
+                    Value = p.Name,
+                })
+                .ToList();
+            return await Task.FromResult(result);
         }
 
         public async Task<List<ISelectResponse<long>>> GetUserSelectList(string query)
@@ -99,6 +142,10 @@ namespace OnceMi.Framework.Service.Admin
             {
                 exp = exp.And(p => p.Status == UserStatus.Enable);
             }
+            if (request.OrderByModels.Count == 0)
+            {
+                request.OrderBy = new string[] { $"{nameof(Users.CreatedTime)},desc" };
+            }
             //get count
             long count = await _repository.Where(exp).CountAsync();
             List<Users> allUsers = await _repository.Select
@@ -130,21 +177,15 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<UserItemResponse> Query(long id)
         {
-            var response = await _cache.GetOrCreateAsync(AdminCacheKey.GetUserInfoKey(id), async (entry) =>
-            {
-                //设置滑动过期策略，1小时候过期
-                entry.SetSlidingExpiration(TimeSpan.FromMinutes(60));
-                //查询用户
-                Users user = await _repository.Where(p => p.Id == id && !p.IsDeleted)
-                    .LeftJoin(u => u.CreateUser.Id == u.CreatedUserId)
-                    .IncludeMany(u => u.Roles)
-                    .IncludeMany(u => u.Organizes)
-                    .FirstAsync();
-                if (user == null)
-                    return null;
-                return _mapper.Map<UserItemResponse>(user);
-            });
-            return response;
+            //查询用户
+            Users user = await _repository.Where(p => p.Id == id && !p.IsDeleted)
+                .LeftJoin(u => u.CreateUser.Id == u.CreatedUserId)
+                .IncludeMany(u => u.Roles)
+                .IncludeMany(u => u.Organizes)
+                .FirstAsync();
+            if (user == null)
+                return null;
+            return _mapper.Map<UserItemResponse>(user);
         }
 
         [Transaction]
@@ -181,12 +222,40 @@ namespace OnceMi.Framework.Service.Admin
                 user.Password = user.Create(request.Password);
             else
                 user.Password = user.Create(Encrypt.SHA256(request.Password));
+            //保存头像
+            UploadFileInfo fileInfo = null;
+            if (!string.IsNullOrEmpty(request.Avatar))
+            {
+                using (Image headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
+                {
+                    using (var saveStream = new MemoryStream())
+                    {
+                        headerImage.Save(saveStream, ImageFormat.Png);
+                        fileInfo = await _upLoadFilesService.Upload(saveStream, $"{user.Id}.png", (user.CreatedUserId == null ? user.Id : user.CreatedUserId.Value), FileAccessMode.PublicRead);
+                        if (fileInfo != null && !string.IsNullOrEmpty(fileInfo.Url))
+                        {
+                            user.Avatar = fileInfo.Url;
+                        }
+                    }
+                }
+            }
+            try
+            {
+                await _repository.InsertAsync(user);
+                await UpdateUserRoles(user.Id, request.UserRoles);
+                await UpdateUserOrganizes(user.Id, request.UserOrganizes);
 
-            await _repository.InsertAsync(user);
-            await UpdateUserRoles(user.Id, request.UserRoles);
-            await UpdateUserOrganizes(user.Id, request.UserOrganizes);
-
-            return _mapper.Map<UserItemResponse>(user);
+                return _mapper.Map<UserItemResponse>(user);
+            }
+            catch
+            {
+                //如果保存用户信息失败，且上传头像已经完成，那么删除上传的头像信息
+                if (fileInfo != null)
+                {
+                    await _upLoadFilesService.DeleteFile(fileInfo);
+                }
+                throw;
+            }
         }
 
         [Transaction]
@@ -217,6 +286,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //map会清理掉password
             string oldPwd = user.Password;
+            string oldAvatar = user.Avatar;
             user = request.MapTo(user);
             if (!string.IsNullOrEmpty(request.Password))
             {
@@ -233,12 +303,55 @@ namespace OnceMi.Framework.Service.Admin
             user.UpdatedTime = DateTime.Now;
             user.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
 
-            await _repository.UpdateAsync(user);
-            await UpdateUserRoles(user.Id, request.UserRoles);
-            await UpdateUserOrganizes(user.Id, request.UserOrganizes);
-
-            //移除当前用户信息缓存
-            _cache.Remove(AdminCacheKey.GetUserInfoKey(user.Id));
+            //保存头像
+            UploadFileInfo fileInfo = null;
+            if (!string.IsNullOrEmpty(request.Avatar)
+                && !request.Avatar.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                using (Image headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
+                {
+                    using (var saveStream = new MemoryStream())
+                    {
+                        headerImage.Save(saveStream, ImageFormat.Png);
+                        fileInfo = await _upLoadFilesService.Upload(saveStream, $"{user.Id}.png", (user.CreatedUserId == null ? user.Id : user.CreatedUserId.Value), FileAccessMode.PublicRead);
+                        if (fileInfo != null && !string.IsNullOrEmpty(fileInfo.Url))
+                        {
+                            user.Avatar = fileInfo.Url;
+                        }
+                    }
+                }
+            }
+            try
+            {
+                await _repository.UpdateAsync(user);
+                await UpdateUserRoles(user.Id, request.UserRoles);
+                await UpdateUserOrganizes(user.Id, request.UserOrganizes);
+            }
+            catch
+            {
+                //如果保存用户信息失败，且上传头像已经完成，那么删除上传的头像信息
+                if (fileInfo != null)
+                {
+                    await _upLoadFilesService.DeleteFile(fileInfo);
+                }
+                throw;
+            }
+            //删除旧的头像文件
+            if ((fileInfo != null || fileInfo == null && string.IsNullOrEmpty(request.Avatar))
+                && !string.IsNullOrEmpty(oldAvatar)
+                && oldAvatar.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    var oldAvatarKey = ParamConvertUtils<UserAvatarUrlParamModel>.StringConvertEntity(oldAvatar, true);
+                    if (oldAvatarKey != null && !string.IsNullOrEmpty(oldAvatarKey.Key))
+                    {
+                        UploadFileInfo uploadFileInfo = _upLoadFilesService.DecodeFileKey(oldAvatarKey.Key);
+                        await _upLoadFilesService.DeleteFile(uploadFileInfo);
+                    }
+                }
+                catch { }
+            }
         }
 
         public async Task UpdateUserStatus(UpdateUserStatusRequest request)
@@ -255,9 +368,25 @@ namespace OnceMi.Framework.Service.Admin
                 user.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
                 user.Status = request.Status;
                 await _repository.UpdateAsync(user);
-                //移除当前用户信息缓存
-                _cache.Remove(AdminCacheKey.GetUserInfoKey(user.Id));
             }
+        }
+
+        public async Task UpdateUserPassword(UpdateUserPasswordRequest request)
+        {
+            Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).ToOneAsync();
+            if (user == null)
+            {
+                throw new BusException(-1, $"用户不存在");
+            }
+            if (!user.Authenticate(request.oldPassword))
+            {
+                throw new BusException(-1, $"旧密码错误");
+            }
+            await _repository.Where(p => p.Id == request.Id)
+                .ToUpdate()
+                .Set(p => p.Password, user.Create(request.Password))
+                .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
+                .ExecuteAffrowsAsync();
         }
 
         /// <summary>
@@ -265,6 +394,7 @@ namespace OnceMi.Framework.Service.Admin
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
+        [Transaction]
         public async Task Delete(List<long> ids)
         {
             if (ids == null || ids.Count == 0)
@@ -277,11 +407,6 @@ namespace OnceMi.Framework.Service.Admin
                 .Set(p => p.Status, UserStatus.Disable)
                 .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
                 .ExecuteAffrowsAsync();
-            foreach (var item in ids)
-            {
-                //移除当前用户信息缓存
-                _cache.Remove(AdminCacheKey.GetUserInfoKey(item));
-            }
         }
 
         public Task<byte[]> GetAvatar(string name, int size = 100)

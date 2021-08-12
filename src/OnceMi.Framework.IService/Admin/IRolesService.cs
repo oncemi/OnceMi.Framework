@@ -1,4 +1,5 @@
 ﻿using OnceMi.Framework.Model.Dto;
+using OnceMi.IdentityServer4.User.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -34,6 +35,13 @@ namespace OnceMi.Framework.IService.Admin
         /// <param name="id"></param>
         /// <returns></returns>
         Task<RoleItemResponse> Query(long id);
+
+        /// <summary>
+        /// 查询角色组下的用户
+        /// </summary>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        Task<List<Users>> QueryRoleUsers(long roleId);
 
         /// <summary>
         /// 创建

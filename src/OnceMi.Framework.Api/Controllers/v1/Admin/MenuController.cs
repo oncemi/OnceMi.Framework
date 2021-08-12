@@ -42,7 +42,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 获取所有Api版本
+        /// 获取菜单类型
         /// </summary>
         /// <returns></returns>
         [HttpGet]

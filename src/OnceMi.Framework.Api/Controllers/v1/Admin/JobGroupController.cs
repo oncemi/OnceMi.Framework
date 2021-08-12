@@ -62,6 +62,33 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
+        /// 查询分组列表
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(nameof(SelectList))]
+        public async Task<List<ISelectResponse<long>>> SelectList(long id)
+        {
+            var data = await _service.Query(new IPageRequest()
+            {
+                Page = 1,
+                Size = 999999,
+                OrderBy = new string[] { "id,asc" },
+            });
+            if (data != null && data.PageData != null && data.PageData.Any())
+            {
+                return data.PageData.Select(p => new ISelectResponse<long>()
+                {
+                    Name = p.Name,
+                    Value = p.Id
+                })
+                    .ToList();
+            }
+            return new List<ISelectResponse<long>>();
+        }
+
+        /// <summary>
         /// 新增分组
         /// </summary>
         /// <param name="request"></param>

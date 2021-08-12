@@ -29,21 +29,28 @@ namespace OnceMi.Framework.Extension.Subscribers
 
         public override async Task Subscribe(JobHistories model, CancellationToken cancellationToken = default)
         {
-            if (model == null) return;
-            if(_jobHistoriesService == null)
+            try
             {
-                lock (locker)
+                if (model == null) return;
+                if (_jobHistoriesService == null)
                 {
-                    if (_jobHistoriesService == null)
+                    lock (locker)
                     {
-                        using (var scope = _serviceProvider.CreateScope())
+                        if (_jobHistoriesService == null)
                         {
-                            _jobHistoriesService = scope.ServiceProvider.GetRequiredService<IJobHistoriesService>();
+                            using (var scope = _serviceProvider.CreateScope())
+                            {
+                                _jobHistoriesService = scope.ServiceProvider.GetRequiredService<IJobHistoriesService>();
+                            }
                         }
                     }
                 }
+                await _jobHistoriesService.InsertAsync(model);
             }
-            await _jobHistoriesService.InsertAsync(model);
+            catch(Exception ex)
+            {
+                _logger.LogError($"Write job history failed, {ex.Message}", ex);
+            }
         }
     }
 }

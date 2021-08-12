@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace OnceMi.Framework.Api.Controllers.v1.Admin
 {
     /// <summary>
-    /// Api管理
+    /// 接口管理
     /// </summary>
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
@@ -48,7 +48,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 查询级联选择器数据
+        /// 查询级联选择器
         /// </summary>
         /// <returns></returns>
         [HttpGet]
@@ -80,7 +80,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 根据ID查询
+        /// 查询接口详情
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -92,7 +92,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 新增Api
+        /// 新增
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -127,7 +127,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 修改Api
+        /// 修改
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -163,7 +163,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 自动发现系统中的API
+        /// 同步
         /// </summary>
         [HttpPost]
         [Route(nameof(Resolve))]
@@ -173,7 +173,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 根据Id删除
+        /// 删除
         /// </summary>
         [HttpDelete]
         public async Task Delete(List<long> ids)

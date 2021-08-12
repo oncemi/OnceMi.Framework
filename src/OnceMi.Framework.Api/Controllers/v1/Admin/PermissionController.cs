@@ -44,7 +44,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 获取角色启用的菜单ID
+        /// 获取角色启用的菜单
         /// </summary>
         /// <param name="roleId">角色Id</param>
         /// <returns></returns>

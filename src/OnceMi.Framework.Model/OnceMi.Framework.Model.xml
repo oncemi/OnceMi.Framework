@@ -49,17 +49,7 @@
             权限管理系统缓存KEY
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.VerifyCodeKey">
-            <summary>
-            验证码 admin:verify:code:guid
-            </summary>
-        </member>
         <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.RoleItemKey">
-            <summary>
-            角色 admin:role:角色主键
-            </summary>
-        </member>
-        <member name="F:OnceMi.Framework.Model.Common.AdminCacheKey.UserInfoKey">
             <summary>
             角色 admin:role:角色主键
             </summary>
@@ -84,32 +74,11 @@
             作业Key
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetVerifyCodeKey(System.String)">
-            <summary>
-            获取验证码主键
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
         <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetRoleKey(System.String)">
             <summary>
             获取角色主键
             </summary>
             <param name="roleCode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetRoleKey(System.Int64)">
-            <summary>
-            获取角色主键
-            </summary>
-            <param name="roleId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetUserInfoKey(System.Int64)">
-            <summary>
-            获取用户信息主键
-            </summary>
-            <param name="userId"></param>
             <returns></returns>
         </member>
         <member name="M:OnceMi.Framework.Model.Common.AdminCacheKey.GetJobApiKey(System.String)">
@@ -147,6 +116,16 @@
         <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.Exception">
             <summary>
             执行异常
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.UploadFileInfo.AccessMode">
+            <summary>
+            访问模式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Common.UploadFileInfo.ExpiredTime">
+            <summary>
+            到期时间
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Model.ResultObject`1.Code">
@@ -289,7 +268,7 @@
             描述
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Enabled">
+        <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.IsEnabled">
             <summary>
             启用
             </summary>
@@ -297,6 +276,21 @@
         <member name="P:OnceMi.Framework.Model.Dto.CreateDictionaryRequest.Sort">
             <summary>
             排序
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryDetailRequest.Id">
+            <summary>
+            使用Id查询
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryDetailRequest.Code">
+            <summary>
+            使用Code查询
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryDetailRequest.IncludeChild">
+            <summary>
+            是否包含子节点
             </summary>
         </member>
         <member name="F:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest._parentId">
@@ -329,7 +323,7 @@
             描述
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.Enabled">
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateDictionaryRequest.IsEnabled">
             <summary>
             启用
             </summary>
@@ -394,14 +388,14 @@
             结束时间
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.EmailStrategy">
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.NoticePolicy">
             <summary>
-            邮件发送策略
+            通知发送策略
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.EmailAddress">
+        <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.NoticeRoleId">
             <summary>
-            邮件通知地址，半角分号';'隔开
+            通知发送角色组Id
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Model.Dto.CreateJobRequest.Description">
@@ -469,14 +463,14 @@
             结束时间
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.EmailStrategy">
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.NoticePolicy">
             <summary>
-            邮件发送策略
+            通知发送策略
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.EmailAddress">
+        <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.NoticeRoleId">
             <summary>
-            邮件通知地址，半角分号';'隔开
+            通知发送角色组Id
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Model.Dto.UpdateJobRequest.Description">
@@ -1200,16 +1194,6 @@
             描述
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.ParentId">
-            <summary>
-            字典父级
-            </summary>
-        </member>
         <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Name">
             <summary>
             字典名称
@@ -1230,7 +1214,7 @@
             描述
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Enabled">
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.IsEnabled">
             <summary>
             启用
             </summary>
@@ -1240,9 +1224,34 @@
             排序
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Children">
+        <member name="P:OnceMi.Framework.Model.Dto.DictionaryItemResponse.Label">
             <summary>
-            子条目
+            树标签
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.FileItemResponse.Content">
+            <summary>
+            Base64 存放
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.FileItemResponse.StorageType">
+            <summary>
+            储存类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.FileItemResponse.AccessMode">
+            <summary>
+            是否公有
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.FileItemResponse.Url">
+            <summary>
+            文件URL，在Service中查询
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.FileItemResponse.CreatedTime">
+            <summary>
+            创建时间
             </summary>
         </member>
         <member name="T:OnceMi.Framework.Model.Dto.JobGroupItemResponse">
@@ -1265,6 +1274,11 @@
             创建时间
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Id">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.FiredTime">
             <summary>
             实际触发时间
@@ -1280,14 +1294,29 @@
             执行时间
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Status">
+            <summary>
+            执行状态
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Result">
             <summary>
             执行结果
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.NextFiredTime">
+            <summary>
+            下次触发时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Model.Dto.JobHistoryItemResponse.Stage">
             <summary>
-            阶段
+            任务阶段
             </summary>
         </member>
         <member name="T:OnceMi.Framework.Model.Dto.JobItemResponse">
@@ -1345,14 +1374,19 @@
             结束时间
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.EmailStrategy">
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.NoticePolicy">
             <summary>
-            邮件发送策略
+            通知发送策略
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.EmailAddress">
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.NoticeRoleId">
             <summary>
-            邮件通知地址，半角分号';'隔开
+            通知发送角色组Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.NoticeRole">
+            <summary>
+            通知发送角色组
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.RunCount">
@@ -1368,6 +1402,16 @@
         <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.Status">
             <summary>
             作业状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.LastFireTime">
+            <summary>
+            上次执行时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.NextFireTime">
+            <summary>
+            下次预计执行时间
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Model.Dto.JobItemResponse.IsEnabled">

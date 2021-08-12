@@ -30,9 +30,6 @@ namespace OnceMi.Framework.Extension.Filters
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            string key = "123456";
-            _redisClient.Set(AdminCacheKey.GetJobApiKey(key), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TimeSpan.FromSeconds((8 + new Random().Next(5))));
-
             //检查是否为作业请求
             var isJobRequest = context.ActionDescriptor.EndpointMetadata?.Any(p => p is JobAttribute);
             if (isJobRequest == true)
@@ -51,6 +48,7 @@ namespace OnceMi.Framework.Extension.Filters
                     return;
                 }
             }
+            //检查是否文件下载请求
             //检查是否有AllowAnonymous
             var hasAllowAnonymous = context.ActionDescriptor.EndpointMetadata?.Any(p => p is AllowAnonymousAttribute);
             if (hasAllowAnonymous == true)

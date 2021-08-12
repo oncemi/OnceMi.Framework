@@ -36,24 +36,24 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 字典值
         /// </summary>
-        [Column(StringLength = 1000)]
+        [Column(DbType = "text", IsNullable = true)]
         public string Value { get; set; }
 
         /// <summary>
         /// 描述
         /// </summary>
-        [Column(StringLength = 500)]
+        [Column(StringLength = 500, IsNullable = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// 启用
+        /// 字典状态
         /// </summary>
-		public bool Enabled { get; set; } = true;
+		public bool IsEnabled { get; set; }
 
         /// <summary>
         /// 排序
         /// </summary>
-		public int Sort { get; set; } = 0;
+		public int Sort { get; set; }
 
         /// <summary>
         /// 子条目

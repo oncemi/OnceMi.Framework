@@ -227,7 +227,7 @@ namespace OnceMi.Framework.Service.Admin
             Organizes organize = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (organize == null)
             {
-                throw new BusException(-1, "修改的目不存在");
+                throw new BusException(-1, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
@@ -245,31 +245,18 @@ namespace OnceMi.Framework.Service.Admin
             organize.UpdatedTime = DateTime.Now;
             organize.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
 
-            using (var uow = _repository.Orm.CreateUnitOfWork())
+            //删除之前的OrganizeManagers
+            await _repository.Orm.Select<OrganizeManagers>()
+                .Where(p => p.OrganizeId == organize.Id)
+                .ToDelete()
+                .ExecuteAffrowsAsync();
+            //写入新的
+            if (managers.Count > 0)
             {
-                try
-                {
-                    //删除之前的OrganizeManagers
-                    await _repository.Orm.Select<OrganizeManagers>()
-                        .Where(p => p.OrganizeId == organize.Id)
-                        .ToDelete()
-                        .ExecuteAffrowsAsync();
-                    //写入新的
-                    if (managers.Count > 0)
-                    {
-                        await _repository.Orm.Insert(managers).ExecuteAffrowsAsync();
-                    }
-                    //保存
-                    await _repository.UpdateAsync(organize);
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"Update organize failed, {ex.Message}");
-                    throw new BusException(-1, $"修改组织机构失败, {ex.Message}");
-                }
+                await _repository.Orm.Insert(managers).ExecuteAffrowsAsync();
             }
+            //保存
+            await _repository.UpdateAsync(organize);
         }
 
         /// <summary>
@@ -316,27 +303,14 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(-1, "删除失败，当前组织机构下包含未删除的用户");
             }
-            using (var uow = _repository.Orm.CreateUnitOfWork())
+            if (delIds != null)
             {
-                try
-                {
-                    if (delIds != null)
-                    {
-                        await uow.Orm.Select<Organizes>().Where(p => delIds.Contains(p.Id))
-                            .ToUpdate()
-                            .Set(p => p.IsDeleted, true)
-                            .Set(p => p.IsEnabled, false)
-                            .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
-                            .ExecuteAffrowsAsync();
-                    }
-                    uow.Commit();
-                }
-                catch (Exception ex)
-                {
-                    uow.Rollback();
-                    _logger.LogError(ex, $"删除组织失败, {ex.Message}");
-                    throw new BusException(-1, $"删除组织失败, {ex.Message}");
-                }
+                await _repository.Select.Where(p => delIds.Contains(p.Id))
+                    .ToUpdate()
+                    .Set(p => p.IsDeleted, true)
+                    .Set(p => p.IsEnabled, false)
+                    .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
+                    .ExecuteAffrowsAsync();
             }
         }
 

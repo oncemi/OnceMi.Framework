@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
+using OnceMi.Framework.Model.Exception;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,13 +47,46 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             {
                 Page = 1,
                 Size = 999999,
-                OrderBy = new string[] { "id,asc" },
+                OrderBy = new string[] { $"{nameof(DictionaryItemResponse.Sort)},asc" },
             });
             if (data != null && data.PageData != null && data.PageData.Any())
             {
                 return _mapper.Map<List<ICascaderResponse>>(data.PageData);
             }
             return new List<ICascaderResponse>();
+        }
+
+        /// <summary>
+        /// 查询字典树 
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(nameof(DictionaryTreeList))]
+        public async Task<IEnumerable<DictionaryItemResponse>> DictionaryTreeList()
+        {
+            var data = await _service.Query(new IPageRequest()
+            {
+                Page = 1,
+                Size = 999999,
+                OrderBy = new string[] { $"{nameof(DictionaryItemResponse.Sort)},asc" },
+            });
+            if (data != null && data.PageData != null && data.PageData.Any())
+            {
+                return data.PageData;
+            }
+            return new List<DictionaryItemResponse>();
+        }
+
+        /// <summary>
+        /// 获取下一排序顺序
+        /// </summary>
+        /// <param name="parentId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route(nameof(GetNextSortValue))]
+        public async Task<int> GetNextSortValue([FromQuery] long? parentId)
+        {
+            return await _service.QueryNextSortValue(parentId);
         }
 
         /// <summary>
@@ -67,14 +101,19 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 根据ID查询
+        /// 查询字典详情
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<DictionaryItemResponse> Get(long id)
+        [HttpGet]
+        [Route(nameof(Detail))]
+        public async Task<DictionaryItemResponse> Detail([FromQuery] DictionaryDetailRequest request)
         {
-            return await _service.Query(id);
+            if(string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
+            {
+                throw new BusException(-1, "查询条件Id和编码不能同时为空");
+            }
+            return await _service.Query(request);
         }
 
         /// <summary>

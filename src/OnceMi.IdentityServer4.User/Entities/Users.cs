@@ -32,7 +32,7 @@ namespace OnceMi.IdentityServer4.User.Entities
         public UserStatus Status { get; set; }
 
         /// <summary>
-        /// 
+        /// 性别
         /// </summary>
         public UserGender Gender { get; set; }
 

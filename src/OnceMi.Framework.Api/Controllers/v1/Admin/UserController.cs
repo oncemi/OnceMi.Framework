@@ -30,6 +30,27 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
+        /// <summary>
+        /// 获取用户状态
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<List<ISelectResponse<string>>> UserStatusSelectList()
+        {
+            return await _service.GetUserStatus();
+        }
+
+        /// <summary>
+        /// 查询用户性别
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<List<ISelectResponse<string>>> UserGenderSelectList()
+        {
+            return await _service.GetUserGender();
+        }
 
         /// <summary>
         /// 分页查询
@@ -112,6 +133,18 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
+        /// 修改用户密码
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("UpdateUserPassword")]
+        public async Task Put(UpdateUserPasswordRequest request)
+        {
+            await _service.UpdateUserPassword(request);
+        }
+
+        /// <summary>
         /// 根据Id删除
         /// </summary>
         [HttpDelete]
@@ -129,10 +162,10 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpGet]
         [Route("GetAvatar/{name}")]
         [AllowAnonymous]
-        public async Task<FileResult> GetAvatar(string name, int size)
+        public async Task<IActionResult> GetAvatar(string name, int size)
         {
             byte[] avatarBytes = await _service.GetAvatar(name, size);
-            return new FileStreamResult(new MemoryStream(avatarBytes), "image/png");
+            return File(new MemoryStream(avatarBytes), "image/png", "avatar.png");
         }
     }
 }

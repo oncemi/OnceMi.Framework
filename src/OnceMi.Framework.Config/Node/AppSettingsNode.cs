@@ -12,6 +12,8 @@ namespace OnceMi.Framework.Config
 
         public int AppId { get; set; }
 
+        public string Host { get; set; }
+
         private string _developerRoleName = null;
 
         public string DeveloperRoleName
@@ -34,8 +36,46 @@ namespace OnceMi.Framework.Config
             }
         }
 
+        private string _aesSecretKey = null;
+
+        public string AESSecretKey
+        {
+            get
+            {
+                return _aesSecretKey;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value) || value.Length < 16)
+                {
+                    throw new ArgumentNullException(nameof(AESSecretKey), "加密密钥不能为空，且至少需要16位");
+                }
+                _aesSecretKey = value;
+            }
+        }
+
+        private string _aesVector = null;
+
+        public string AESVector
+        {
+            get
+            {
+                return _aesVector;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value) || value.Length < 16)
+                {
+                    throw new ArgumentNullException(nameof(AESVector), "加密向量不能为空，且至少需要16位");
+                }
+                _aesVector = value;
+            }
+        }
+
         public string FileUploadPath { get; set; }
 
         public bool IsEnableRequestLog { get; set; }
+
+        public bool IsInitializeDb { get; set; }
     }
 }
