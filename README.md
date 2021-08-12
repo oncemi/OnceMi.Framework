@@ -38,6 +38,10 @@ IdentityServer4认证中心：https://ids4.demo.oncemi.com/
 ### 项目结构
 ![](https://raw.githubusercontent.com/oncemi/OnceMi.Framework/main/docs/imgs/01.png)  
 
+### 支持
+鼓励自己手动解决问题:+1:，如果是本项目问题，还请麻烦提交Issue（能提交pull就更好啦:smile:），大家一起交流进步。  
+QQ交流群：460481440  
+
 ### 捐赠
 <center class="half">
     <img src="https://raw.githubusercontent.com/oncemi/OnceMi.Framework/main/docs/imgs/02.png" width = "630" height = "300" alt="图片名称" align=center />
