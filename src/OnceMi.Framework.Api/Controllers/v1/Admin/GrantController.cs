@@ -65,7 +65,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     ProduectName = "",
                     MachineCodes = hdwInfos,
                     SignTime = TimeUtil.Timestamp(),
-                    EndTime = TimeUtil.DateTimeToUnixTimeStamp(DateTime.MaxValue),
+                    EndTime = TimeUtil.DateTimeToUnixTimeStamp(DateTime.MaxValue.AddSeconds(-1)),
                     Version = values[^1],
                     SignName = "oncemi.com",
                     SignFor = "",
@@ -74,7 +74,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                 return new SoftGrantResponse()
                 {
                     Licence = licence,
-                    EndTime = DateTime.MaxValue,
+                    EndTime = DateTime.MaxValue.AddSeconds(-1),
                     Version = values[^1]
                 };
             }

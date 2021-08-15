@@ -33,6 +33,7 @@ namespace OnceMi.Framework.Service.Admin
             DatabaseEntities data = new DatabaseEntities
             {
                 Apis = await _repository.Orm.Select<Apis>().ToListAsync(),
+                Jobs = await _repository.Orm.Select<Jobs>().ToListAsync(),
                 JobGroups = await _repository.Orm.Select<JobGroups>().ToListAsync(),
                 Menus = await _repository.Orm.Select<Menus>().ToListAsync(),
                 RolePermissions = await _repository.Orm.Select<RolePermissions>().ToListAsync(),

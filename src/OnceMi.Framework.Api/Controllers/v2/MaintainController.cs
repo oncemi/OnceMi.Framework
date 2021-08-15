@@ -28,6 +28,7 @@ namespace OnceMi.Framework.Api.Controllers.v2
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
+        [AllowAnonymous]
         public async Task<IActionResult> Export()
         {
             var stream = await _service.ExportMaintainData();

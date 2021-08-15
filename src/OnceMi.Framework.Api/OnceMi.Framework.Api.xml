@@ -582,7 +582,7 @@
             根据Id删除
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.GetAvatar(System.String,System.Int32)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Avatar(System.String,System.Int32)">
             <summary>
             获取随机头像
             </summary>

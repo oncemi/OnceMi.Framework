@@ -11,21 +11,20 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OnceMi.Framework.Util.Reflection;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Net.Http;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
-    public static class RegisterHealthCheckService
+    public static class RegisterHealthCheck
     {
         public static IServiceCollection AddHealthCheckService(this IServiceCollection services)
         {
             using (var provider = services.BuildServiceProvider())
             {
-                IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
-                IServer server = provider.GetRequiredService<IServer>();
+                ConfigManager config = provider.GetRequiredService<ConfigManager>();
+
+                #region 注入HealthCheck
 
                 var checksBuilder = services.AddHealthChecks();
                 List<Type> hasRegisted = new List<Type>();
@@ -36,12 +35,17 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                     checksBuilder.AddCheck(item);
                     hasRegisted.Add(item);
                 }
+
+                #endregion
+
+                #region  注入HealthCheck UI
+
                 //get app endpoint
-                string endpoint = configuration.GetValue<string>("AppSettings:Host");
-                HealthCheckNode config = configuration.GetSection("AppSettings:HealthCheck").Get<HealthCheckNode>();
-                if (config == null || string.IsNullOrEmpty(config.HealthCheckUIPath))
+                string host = config.AppSettings.Host;
+                string endpoint = config.AppSettings.HealthCheck.HealthCheckEndpoint;
+                if (!string.IsNullOrEmpty(host))
                 {
-                    throw new Exception("Configuration can not bind healthcheck config.");
+                    endpoint = host.EndsWith('/') ? $"{host.TrimEnd('/')}{endpoint}" : $"{host}{endpoint}";
                 }
 
                 //Add health checks UI
@@ -54,30 +58,27 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                             ServerCertificateCustomValidationCallback = (sender, certificate, chain, errors) => true
                         };
                     });
-                    options.AddHealthCheckEndpoint(config.HealthCheckName, $"{endpoint}{(config.HealthCheckUIPath.StartsWith('/') ? config.HealthCheckUIPath : "/" + config.HealthCheckUIPath)}");
-                    options.SetEvaluationTimeInSeconds(config.EvaluationTimeinSeconds);
-                    options.SetMinimumSecondsBetweenFailureNotifications(config.MinimumSecondsBetweenFailureNotifications);
-                    options.MaximumHistoryEntriesPerEndpoint(config.MaximumHistoryEntriesPerEndpoint);
+                    options.AddHealthCheckEndpoint(config.AppSettings.HealthCheck.HealthCheckName, config.AppSettings.HealthCheck.HealthCheckEndpoint);
+                    options.SetEvaluationTimeInSeconds(config.AppSettings.HealthCheck.EvaluationTimeinSeconds);
+                    options.SetMinimumSecondsBetweenFailureNotifications(config.AppSettings.HealthCheck.MinimumSecondsBetweenFailureNotifications);
+                    options.MaximumHistoryEntriesPerEndpoint(config.AppSettings.HealthCheck.MaximumHistoryEntriesPerEndpoint);
                 })
                     .AddInMemoryStorage();
+
+                #endregion
+
                 return services;
             }
         }
 
         public static IApplicationBuilder UseHealthChecks(this IApplicationBuilder app)
         {
-            IConfiguration configuration = app.ApplicationServices.GetRequiredService<IConfiguration>();
-            string healthCheckUIPath = configuration.GetValue<string>("AppSettings:HealthCheck:HealthCheckUIPath");
-            if (!healthCheckUIPath.StartsWith('/'))
-            {
-                healthCheckUIPath = "/" + healthCheckUIPath;
-            }
+            ConfigManager config = app.ApplicationServices.GetRequiredService<ConfigManager>();
 
-            app.UseHealthChecks(healthCheckUIPath, new HealthCheckOptions()
+            app.UseHealthChecks(config.AppSettings.HealthCheck.HealthCheckEndpoint, new HealthCheckOptions()
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-
             });
 
             //有bug，工作不正常，界面上不显示header text和刷新时间
@@ -87,7 +88,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             //    options.UseRelativeResourcesPath = false;
             //    options.UseRelativeApiPath = false;
             //    options.UseRelativeWebhookPath = false;
-            //    options.UIPath = "/sys/health-ui";
+            //    options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
             //});
             return app;
         }
@@ -109,40 +110,6 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 }
             }
             return builder;
-        }
-
-        private static string GetListenAddress(IConfiguration configuration, IServer server)
-        {
-            string endpoint = null;
-            var address = server.Features.Get<IServerAddressesFeature>()?.Addresses?.ToArray();
-            if (address == null || address.Length == 0)
-            {
-                throw new Exception("Can not get current app endpoint.");
-            }
-            if (address.Length > 1)
-            {
-                foreach (var item in address)
-                {
-                    if (item.StartsWith("https", StringComparison.OrdinalIgnoreCase))
-                    {
-                        endpoint = item;
-                        break;
-                    }
-                }
-                if (string.IsNullOrEmpty(endpoint))
-                {
-                    endpoint = address[0];
-                }
-            }
-            else
-            {
-                endpoint = address[0];
-            }
-            if (string.IsNullOrEmpty(endpoint))
-            {
-                throw new Exception("Can not get current app endpoint.");
-            }
-            return endpoint.Replace("[::]", "localhost").Replace("0.0.0.0", "localhost");
         }
     }
 }

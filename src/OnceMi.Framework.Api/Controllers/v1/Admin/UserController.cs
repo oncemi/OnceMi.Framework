@@ -160,9 +160,9 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="size"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAvatar/{name}")]
+        [Route("[action]/{name}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetAvatar(string name, int size)
+        public async Task<IActionResult> Avatar(string name, int size)
         {
             byte[] avatarBytes = await _service.GetAvatar(name, size);
             return File(new MemoryStream(avatarBytes), "image/png", "avatar.png");

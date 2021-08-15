@@ -40,20 +40,8 @@ namespace OnceMi.Framework.Api.Controllers.v2
         [Job]
         public async Task<object> Get([FromQuery] string id)
         {
-            await Task.Delay(10000);
+            await Task.Delay(3000);
 
-            return new
-            {
-                Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
-            };
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [Job]
-        public async Task<object> Post(TestRequestModel request)
-        {
-            await Task.Delay(1000);
             return new
             {
                 Time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")

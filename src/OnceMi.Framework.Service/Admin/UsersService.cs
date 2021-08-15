@@ -182,7 +182,8 @@ namespace OnceMi.Framework.Service.Admin
                 .LeftJoin(u => u.CreateUser.Id == u.CreatedUserId)
                 .IncludeMany(u => u.Roles)
                 .IncludeMany(u => u.Organizes)
-                .FirstAsync();
+                .NoTracking()
+                .ToOneAsync();
             if (user == null)
                 return null;
             return _mapper.Map<UserItemResponse>(user);
@@ -456,7 +457,7 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.Orm.Select<UserRole>()
                 .Where(p => p.UserId == userId)
                 .ToDelete()
-                .ExecuteDeletedAsync();
+                .ExecuteAffrowsAsync();
             List<UserRole> newUserRoles = roles.Select(p => new UserRole()
             {
                 Id = _idGenerator.NewId(),
@@ -485,7 +486,7 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.Orm.Select<UserOrganize>()
                 .Where(p => p.UserId == userId)
                 .ToDelete()
-                .ExecuteDeletedAsync();
+                .ExecuteAffrowsAsync();
             List<UserOrganize> newUserOrganizes = organizes.Select(p => new UserOrganize()
             {
                 Id = _idGenerator.NewId(),

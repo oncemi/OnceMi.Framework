@@ -108,10 +108,10 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             //验证请求方式
             if (!Enum.TryParse(request.RequestMethod, true, out OperationType method))
             {
-                throw new BusException(-1, $"不允许的操作类型：{request.RequestMethod}。");
+                throw new BusException(-1, $"不允许的操作类型：{request.RequestMethod}");
             }
             request.RequestMethod = method.ToString();
-            request.EndTime = request.EndTime ?? DateTime.MaxValue;
+            request.EndTime = request.EndTime ?? DateTime.MaxValue.AddSeconds(-1);
             var job = await _service.Insert(request);
             if (request.IsEnabled)
             {
@@ -164,6 +164,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                 throw new BusException(-1, "任务结束时间必须大于任务开始时间");
             }
             request.Cron = cronOut;
+            //验证请求方式
+            if (!Enum.TryParse(request.RequestMethod, true, out OperationType method))
+            {
+                throw new BusException(-1, $"不允许的操作类型：{request.RequestMethod}");
+            }
+            request.RequestMethod = method.ToString();
+            request.EndTime = request.EndTime ?? DateTime.MaxValue.AddSeconds(-1);
             //先移除
             if (await _jobSchedulerService.Exists(job))
             {
@@ -275,10 +282,6 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             {
                 result = "Cron表达式不能为空";
                 return false;
-            }
-            if (!source.EndsWith('?'))
-            {
-                source += " ?";
             }
             if (!CronExpression.IsValidExpression(source))
             {

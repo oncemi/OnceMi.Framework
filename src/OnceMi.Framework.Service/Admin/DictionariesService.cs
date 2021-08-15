@@ -245,7 +245,7 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.Orm.Select<Dictionaries>()
                 .Where(p => delIds.Contains(p.Id))
                 .ToDelete()
-                .ExecuteDeletedAsync();
+                .ExecuteAffrowsAsync();
         }
 
         /// <summary>

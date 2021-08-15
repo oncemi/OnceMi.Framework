@@ -12,6 +12,8 @@ namespace OnceMi.Framework.Model.Dto
     {
         public List<Apis> Apis { get; set; }
 
+        public List<Jobs> Jobs { get; set; }
+
         public List<JobGroups> JobGroups { get; set; }
 
         public List<Menus> Menus { get; set; }

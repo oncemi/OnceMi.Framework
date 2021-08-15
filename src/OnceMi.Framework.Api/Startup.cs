@@ -23,6 +23,7 @@ using OnceMi.Framework.Extension.Middlewares;
 using OnceMi.Framework.Model;
 using OnceMi.Framework.Util.Json;
 using System;
+using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -191,8 +192,9 @@ namespace OnceMi.Framework.Api
             #region Controller
 
             services.AddHttpContextAccessor();
-            services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true);
-            services.Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
+            //大量阻止同步 I/O 的操作可能会导致线程池资源不足，进而导致应用无响应。 仅在使用不支持异步 I/O 的库时，才启用 AllowSynchronousIO
+            //services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true);
+            //services.Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
             services.AddHostedService<LifetimeEventsService>();
             services.AddControllers(options =>
             {
@@ -241,7 +243,8 @@ namespace OnceMi.Framework.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app
             , IWebHostEnvironment env
-            , ILoggerFactory loggerFactory)
+            , ILoggerFactory loggerFactory
+            , ConfigManager config)
         {
             #region 全局异常处理
 
@@ -287,7 +290,7 @@ namespace OnceMi.Framework.Api
                     options.UseRelativeResourcesPath = false;
                     options.UseRelativeApiPath = false;
                     options.UseRelativeWebhookPath = false;
-                    options.UIPath = "/sys/health-ui";
+                    options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
                 }).AllowAnonymous();
 
                 endpoints.MapControllers();
