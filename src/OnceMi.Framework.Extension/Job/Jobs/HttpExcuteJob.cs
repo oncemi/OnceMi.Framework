@@ -15,6 +15,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -40,23 +41,13 @@ namespace OnceMi.Framework.Extension.Job
         public override async Task<object> Execute(IJobExecutionContext context, Entity.Admin.Jobs job)
         {
             string url;
-            bool isInnerRequest = false;
-            if (job.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
-            {
-                url = job.Url;
-                isInnerRequest = false;
-            }
+            bool isInnerRequest = !job.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase);
+            if (isInnerRequest)
+                url = GetEndpoint(job.Url);
             else
-            {
-                string endpoint = GetEndpoint();
-                string jobPath = job.Url.StartsWith("/") ? job.Url : ("/" + job.Url);
-                url = endpoint + jobPath;
-                isInnerRequest = true;
-            }
+                url = job.Url;
             if (!Enum.TryParse(job.RequestMethod, true, out Method method))
-            {
                 throw new JobExcuteException($"Can not parse request method({job.RequestMethod})");
-            }
             //ResultObject<object> result;
             var result = await ExecuteHttpRequest(url, method, job.RequestHeader, job.RequestParam, isInnerRequest, context.CancellationToken);
             if (result == null)
@@ -81,7 +72,7 @@ namespace OnceMi.Framework.Extension.Job
             }
             else
             {
-                if(result.StatusCode != HttpStatusCode.OK)
+                if (result.StatusCode != HttpStatusCode.OK)
                 {
                     throw new JobExcuteException($"Job request failed, HttpStatusCode is {result.StatusCode}.")
                     {
@@ -92,7 +83,7 @@ namespace OnceMi.Framework.Extension.Job
             }
         }
 
-        private string GetEndpoint()
+        private string GetEndpoint(string jobPath)
         {
             string endpoint = null;
             var address = _server.Features.Get<IServerAddressesFeature>()?.Addresses?.ToArray();
@@ -123,7 +114,9 @@ namespace OnceMi.Framework.Extension.Job
             {
                 throw new Exception("Can not get current app endpoint.");
             }
-            return endpoint.Replace("[::]", "localhost").Replace("0.0.0.0", "localhost");
+            var uri = Regex.Replace(endpoint, @"^(?<scheme>https?):\/\/((\+)|(\*)|\[::\]|(0.0.0.0))(?=[\:\/]|$)", "${scheme}://localhost");
+            Uri httpEndpoint = new Uri(uri, UriKind.Absolute);
+            return new UriBuilder(httpEndpoint.Scheme, httpEndpoint.Host, httpEndpoint.Port, jobPath).ToString();
         }
 
         private Dictionary<string, string> ParseJsonToDictionary(string header)

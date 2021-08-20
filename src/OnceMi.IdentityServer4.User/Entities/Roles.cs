@@ -6,6 +6,7 @@ namespace OnceMi.IdentityServer4.User.Entities
     /// <summary>
     /// 角色表
     /// </summary>
+    [Table(Name = nameof(Roles))]
     [Index("index_{TableName}_" + nameof(Name), nameof(Name), false)]
     [Index("index_{TableName}_" + nameof(Code), nameof(Code), false)]
     public class Roles : IBaseEntity<long>

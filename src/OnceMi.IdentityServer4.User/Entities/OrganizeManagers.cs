@@ -10,6 +10,7 @@ namespace OnceMi.IdentityServer4.User.Entities
     /// <summary>
     /// 组织机构管理人员（领导，分管领导）
     /// </summary>
+    [Table(Name = nameof(OrganizeManagers))]
     public class OrganizeManagers : IBaseEntity<long>
     {
         /// <summary>

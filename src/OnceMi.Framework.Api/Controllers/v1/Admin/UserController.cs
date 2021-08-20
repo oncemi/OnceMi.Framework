@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IService.Admin;
@@ -23,12 +24,15 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     {
         private readonly ILogger<UserController> _logger;
         private readonly IUsersService _service;
+        private readonly IMapper _mapper;
 
         public UserController(ILogger<UserController> logger
-            , IUsersService service)
+            , IUsersService service
+            , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _service = service ?? throw new ArgumentNullException(nameof(service));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         /// <summary>
         /// 获取用户状态
@@ -71,7 +75,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpGet("{id}")]
         public async Task<UserItemResponse> Get(long id)
         {
-            return await _service.Query(id);
+            var user = await _service.Query(id.ToString(), false);
+            return _mapper.Map<UserItemResponse>(user);
         }
 
         /// <summary>

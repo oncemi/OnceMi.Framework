@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Config
 {
-    public static class DefaultAppConfig
+    public static class GlobalConstant
     {
         /// <summary>
         /// 默认跨域策略名称
         /// </summary>
-        public static string DefaultOriginsName = "DefaultCorsPolicy";
+        public const string DefaultOriginsName = "DefaultCorsPolicy";
 
         /// <summary>
         /// 默认json名称序列化策略

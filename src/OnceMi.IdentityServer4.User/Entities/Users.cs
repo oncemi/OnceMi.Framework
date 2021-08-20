@@ -5,6 +5,7 @@ using System.ComponentModel;
 
 namespace OnceMi.IdentityServer4.User.Entities
 {
+    [Table(Name = nameof(Users))]
     [Index("index_{TableName}_" + nameof(UserName), nameof(UserName), true)]
     public class Users : IBaseEntity<long>
     {

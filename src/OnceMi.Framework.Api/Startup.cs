@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,7 +22,6 @@ using OnceMi.Framework.Extension.Middlewares;
 using OnceMi.Framework.Model;
 using OnceMi.Framework.Util.Json;
 using System;
-using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -100,7 +98,7 @@ namespace OnceMi.Framework.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy(DefaultAppConfig.DefaultOriginsName, policy =>
+                options.AddPolicy(GlobalConstant.DefaultOriginsName, policy =>
                  {
                      policy.AllowAnyHeader()
                      .AllowAnyMethod()
@@ -133,25 +131,51 @@ namespace OnceMi.Framework.Api
             //Json序列化处理
             services.Configure<CustumJsonSerializerOptions>(option =>
             {
-                option.JsonNamingPolicy = DefaultAppConfig.DefaultJsonNamingPolicy;
+                option.JsonNamingPolicy = GlobalConstant.DefaultJsonNamingPolicy;
             });
-            var token = Configuration.GetSection("TokenManagement").Get<TokenManagementNode>();
+            var tokenConfig = Configuration.GetSection("TokenManagement").Get<TokenManagementNode>();
+            var identityServerConfig = Configuration.GetSection("IdentityServer").Get<IdentityServerNode>();
 
             services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(x =>
                 {
-                    x.Authority = Configuration.GetValue<string>("IdentityServer:Url");
-                    x.Audience = Configuration.GetValue<string>("IdentityServer:Audience");
-                    x.RequireHttpsMetadata = Configuration.GetValue<bool>("IdentityServer:RequireHttps");
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    if (identityServerConfig.IsEnabledIdentityServer)
                     {
-                        //RoleClaimType = ClaimTypes.Role,
-                        NameClaimType = JwtClaimTypes.Name,
+                        #region IdentityServer
 
-                        RequireExpirationTime = true, //过期时间
-                        ClockSkew = TimeSpan.FromMinutes(5),
-                    };
+                        x.Authority = Configuration.GetValue<string>("IdentityServer:Url");
+                        x.Audience = Configuration.GetValue<string>("IdentityServer:Audience");
+                        x.RequireHttpsMetadata = Configuration.GetValue<bool>("IdentityServer:RequireHttps");
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            //RoleClaimType = ClaimTypes.Role,
+                            NameClaimType = JwtClaimTypes.Name,
+
+                            RequireExpirationTime = true, //过期时间
+                            ClockSkew = TimeSpan.FromMinutes(5),
+                        };
+
+                        #endregion
+                    }
+                    else
+                    {
+                        #region 本地认证
+
+                        x.RequireHttpsMetadata = false;
+                        x.SaveToken = true;
+                        x.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfig.Secret)),
+                            ValidIssuer = tokenConfig.Issuer,
+                            ValidAudience = tokenConfig.Audience,
+                            ValidateIssuer = false,
+                            ValidateAudience = false
+                        };
+
+                        #endregion
+                    }
                     x.Events = new JwtBearerEvents
                     {
                         OnChallenge = async context =>
@@ -167,6 +191,7 @@ namespace OnceMi.Framework.Api
                             await CustumJwtBearerEvents.OnAuthenticationFailed(context);
                         }
                     };
+
                 });
 
 
@@ -186,8 +211,17 @@ namespace OnceMi.Framework.Api
 
             #endregion
 
-            //配置自动注入
-            //services.AddAutoInjection();
+            #region  自动注入
+
+            services.AddAutoInjection();
+
+            #endregion
+
+            #region HealthCheck
+
+            services.AddHealthCheckService();
+
+            #endregion
 
             #region Controller
 
@@ -221,7 +255,7 @@ namespace OnceMi.Framework.Api
                     options.JsonSerializerOptions.Converters.Add(new ExceptionConverter());
                     options.JsonSerializerOptions.Converters.Add(new TypeConverter());
                     //小驼峰
-                    options.JsonSerializerOptions.PropertyNamingPolicy = DefaultAppConfig.DefaultJsonNamingPolicy;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = GlobalConstant.DefaultJsonNamingPolicy;
                 });
 
             //ApiBehaviorOptions必须在AddControllers之后
@@ -230,12 +264,6 @@ namespace OnceMi.Framework.Api
                 //重写模型验证返回数据格式
                 options.InvalidModelStateResponseFactory = RewriteHelper.RewriteInvalidModelStateResponse;
             });
-
-            #endregion
-
-            #region HealthCheck
-
-            services.AddHealthCheckService();
 
             #endregion
         }
@@ -254,7 +282,7 @@ namespace OnceMi.Framework.Api
             {
                 builder.Run(async context =>
                 {
-                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, DefaultAppConfig.DefaultJsonNamingPolicy);
+                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, GlobalConstant.DefaultJsonNamingPolicy);
                 });
             });
 
@@ -267,7 +295,7 @@ namespace OnceMi.Framework.Api
             //健康检查
             app.UseHealthChecks();
             //跨域
-            app.UseCors(DefaultAppConfig.DefaultOriginsName);
+            app.UseCors(GlobalConstant.DefaultOriginsName);
             //消息队列
             app.UseMessageQuene();
 
@@ -282,16 +310,19 @@ namespace OnceMi.Framework.Api
 
             app.UseEndpoints(endpoints =>
             {
-                //MapHealthChecksUI应该统一写到UseHealthChecks中
-                //但是有bug，具体请看UseHealthChecks中注释
-                //issue：https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/716
-                endpoints.MapHealthChecksUI(options =>
+                if (config.AppSettings.HealthCheck.IsEnabledHealthCheckUI)
                 {
-                    options.UseRelativeResourcesPath = false;
-                    options.UseRelativeApiPath = false;
-                    options.UseRelativeWebhookPath = false;
-                    options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
-                }).AllowAnonymous();
+                    //MapHealthChecksUI应该统一写到UseHealthChecks中
+                    //但是有bug，具体请看UseHealthChecks中注释
+                    //issue：https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/716
+                    endpoints.MapHealthChecksUI(options =>
+                    {
+                        options.UseRelativeResourcesPath = false;
+                        options.UseRelativeApiPath = false;
+                        options.UseRelativeWebhookPath = false;
+                        options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
+                    }).AllowAnonymous();
+                }
 
                 endpoints.MapControllers();
             });

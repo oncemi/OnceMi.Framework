@@ -1,5 +1,6 @@
 ﻿using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Model.Dto;
+using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +43,7 @@ namespace OnceMi.Framework.IService.Admin
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<UserItemResponse> Query(long id);
+        Task<Users> Query(string inputInfo, bool isQueryEnabled = false);
 
         /// <summary>
         /// 新增

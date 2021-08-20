@@ -88,7 +88,7 @@ namespace OnceMi.Framework.Extension.Middlewares
             ConfigManager config = builder.ApplicationServices.GetRequiredService<ConfigManager>();
             if (config == null)
                 throw new Exception("Can not get ConfigManager from service collection.");
-            if (config.AppSettings.IsEnableRequestLog)
+            if (config.AppSettings.IsEnabledRequestLog)
             {
                 builder.UseMiddleware<RequestLogMiddleware>();
             }

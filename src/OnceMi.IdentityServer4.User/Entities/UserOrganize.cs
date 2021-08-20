@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.IdentityServer4.User.Entities
 {
+    [Table(Name = nameof(UserOrganize))]
     public class UserOrganize : IBaseEntity<long>
     {
         [Column(IsNullable = false)]

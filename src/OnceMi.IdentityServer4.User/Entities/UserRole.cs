@@ -2,6 +2,7 @@
 
 namespace OnceMi.IdentityServer4.User.Entities
 {
+    [Table(Name = nameof(UserRole))]
     public class UserRole : IBaseEntity<long>
     {
         [Column(IsNullable = false)]

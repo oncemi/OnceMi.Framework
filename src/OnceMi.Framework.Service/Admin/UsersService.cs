@@ -175,18 +175,23 @@ namespace OnceMi.Framework.Service.Admin
             };
         }
 
-        public async Task<UserItemResponse> Query(long id)
+        public async Task<Users> Query(string inputInfo, bool isQueryEnabled = false)
         {
+            Expression<Func<Users, bool>> exp = p => !p.IsDeleted && (p.Id.ToString() == inputInfo || p.UserName == inputInfo);
+            if (isQueryEnabled)
+            {
+                exp = exp.And(p => p.Status == UserStatus.Enable);
+            }
+
             //查询用户
-            Users user = await _repository.Where(p => p.Id == id && !p.IsDeleted)
-                .LeftJoin(u => u.CreateUser.Id == u.CreatedUserId)
+            Users user = await _repository.Where(exp)
                 .IncludeMany(u => u.Roles)
                 .IncludeMany(u => u.Organizes)
                 .NoTracking()
                 .ToOneAsync();
             if (user == null)
                 return null;
-            return _mapper.Map<UserItemResponse>(user);
+            return user;
         }
 
         [Transaction]

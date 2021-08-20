@@ -2,10 +2,10 @@
 using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
-using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
 using FreeSql;
+using Microsoft.Data.Sqlite;
 using MySql.Data.MySqlClient;
 using Npgsql;
 
@@ -76,7 +76,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
         public static FreeSqlBuilder CreateDatabaseIfNotExistsSqlite(this FreeSqlBuilder @this,
             string connectionString = "")
         {
-            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder(connectionString);
+            SqliteConnectionStringBuilder builder = new SqliteConnectionStringBuilder(connectionString);
             FileInfo file = new FileInfo(builder.DataSource);
             if (file.Exists)
             {
@@ -97,7 +97,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 connectionString = GetConnectionString(@this);
             }
             MySqlConnectionStringBuilder builder = new MySqlConnectionStringBuilder(connectionString);
-            string createDatabaseSql =$"USE mysql;CREATE DATABASE IF NOT EXISTS `{builder.Database}` CHARACTER SET '{builder.CharacterSet}' COLLATE 'utf8mb4_general_ci'";
+            string createDatabaseSql = $"USE mysql;CREATE DATABASE IF NOT EXISTS `{builder.Database}` CHARACTER SET '{builder.CharacterSet}' COLLATE 'utf8mb4_general_ci'";
             string queryDbSql = "SHOW DATABASES";
             using MySqlConnection cnn = new MySqlConnection(
                 $"Data Source={builder.Server};Port={builder.Port};User ID={builder.UserID};Password={builder.Password};Initial Catalog=;Charset=utf8;SslMode=none;Max pool size=1");
@@ -116,7 +116,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                     foreach (DataRow dr in rows)
                     {
                         string dbName = dr[0].ToString();
-                        if (dbName.Equals(builder.Database,StringComparison.OrdinalIgnoreCase))
+                        if (dbName.Equals(builder.Database, StringComparison.OrdinalIgnoreCase))
                             return @this;
                     }
                 }
@@ -231,7 +231,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 cmd.CommandText = queryDbSql;
                 using (NpgsqlDataAdapter adapter = new NpgsqlDataAdapter(cmd))
                 {
-                     using DataSet dataset = new DataSet();
+                    using DataSet dataset = new DataSet();
                     adapter.Fill(dataset);
 
                     using DataTable dt = dataset.Tables[0];

@@ -58,31 +58,39 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 //获取是否为调试模式
                 foreach (var item in connectionStrings)
                 {
-                    var fsql = new FreeSqlBuilder()
-                        .UseConnectionString(item.DbType, item.ConnectionString)
-                        .UseAutoSyncStructure(env.IsDevelopment())    //自动迁移
-                        .CreateDatabaseIfNotExists()   //如果数据库不存在，那么自动创建数据库
-                        .Build();
-                    //sql执行日志
-                    fsql.Aop.CurdAfter += (s, e) =>
+                    var registerResult = ib.TryRegister(item.Name, () =>
                     {
-                        logger.LogDebug($"{item.Name}(thread-{Thread.CurrentThread.ManagedThreadId}):\n  Namespace: {e.EntityType.FullName} \nElapsedTime: {e.ElapsedMilliseconds}ms \n        SQL: {e.Sql}");
-                    };
-                    //审计
-                    fsql.Aop.AuditValue += (s, e) =>
-                    {
-                        //插入操作，如果是long类型的主键为0，则生成雪花Id
-                        if ((e.AuditValueType == AuditValueType.Insert || e.AuditValueType == AuditValueType.InsertOrUpdate) 
-                        &&  e.Column.CsType == typeof(long) 
-                        && e.Value?.ToString().Equals("0") == true
-                        && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null
-                        || (e.Property.GetCustomAttribute<ColumnAttribute>(false) != null  && e.Property.GetCustomAttribute<ColumnAttribute>(false).IsPrimary)))
+                        var fsql = new FreeSqlBuilder()
+                            .UseConnectionString(item.DbType, item.ConnectionString)
+                            .UseAutoSyncStructure(env.IsDevelopment())    //自动迁移
+                            .CreateDatabaseIfNotExists()   //如果数据库不存在，那么自动创建数据库
+                            .Build();
+                        //sql执行日志
+                        fsql.Aop.CurdAfter += (s, e) =>
                         {
-                            //生成雪花Id
-                            e.Value = idGenerator.NewId();
-                        }
-                    };
-                    ib.Register(item.Name, () => fsql);
+                            logger.LogDebug($"{item.Name}(thread-{Thread.CurrentThread.ManagedThreadId}):\n  Namespace: {e.EntityType.FullName} \nElapsedTime: {e.ElapsedMilliseconds}ms \n        SQL: {e.Sql}");
+                        };
+                        //审计
+                        fsql.Aop.AuditValue += (s, e) =>
+                        {
+                            //插入操作，如果是long类型的主键为0，则生成雪花Id
+                            if ((e.AuditValueType == AuditValueType.Insert || e.AuditValueType == AuditValueType.InsertOrUpdate)
+                             && e.Column.CsType == typeof(long)
+                             && e.Value?.ToString().Equals("0") == true
+                             && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null
+                             || (e.Property.GetCustomAttribute<ColumnAttribute>(false) != null
+                             && e.Property.GetCustomAttribute<ColumnAttribute>(false).IsPrimary)))
+                            {
+                                //生成雪花Id
+                                e.Value = idGenerator.NewId();
+                            }
+                        };
+                        return fsql;
+                    });
+                    if (!registerResult)
+                    {
+                        throw new Exception($"Register db '{item.Name}' failed.");
+                    }
                 }
                 //同步数据库
                 List<IFreeSql> freeSqls = ib.GetAll();
@@ -114,7 +122,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             ConfigManager config = app.ApplicationServices.GetRequiredService<ConfigManager>();
             IWebHostEnvironment env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
             //配置文件中开启了初始化数据库，并开启了开发者模式
-            if (config.AppSettings.IsInitializeDb && env.IsDevelopment())
+            if (config.AppSettings.IsEnabledAutoSeedDb && env.IsDevelopment())
             {
                 foreach (var item in ib.GetAll())
                 {
@@ -131,26 +139,27 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             {
                 return;
             }
+            AssemblyLoader assemblyLoader = new AssemblyLoader();
             List<Type> tableAssembies = new List<Type>();
-            var entities = new AssemblyLoader().GetExportedTypesByInterface(typeof(IEntity));
+            var entities = assemblyLoader.GetExportedTypesByInterface(typeof(IEntity));
+            var userEntities = assemblyLoader.GetExportedTypesByInterface(typeof(IdentityServer4.User.Entities.IEntity));
+            if (userEntities != null && userEntities.Count > 0)
+            {
+                if (entities == null) entities = new List<Type>();
+                entities.AddRange(userEntities);
+            }
             foreach (Type type in entities)
             {
-                foreach (Attribute attribute in type.GetCustomAttributes())
+                if (type.GetCustomAttribute<TableAttribute>() != null
+                    && type.BaseType != null
+                    && (type.BaseType == typeof(IBaseEntity)
+                    || type.BaseType == typeof(IBaseEntity<long>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<long>)
+                    || type.BaseType == typeof(IBaseEntity<int>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<int>)
+                    || type.BaseType == typeof(IBaseEntity<short>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<short>)
+                    || type.BaseType == typeof(IBaseEntity<byte>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<byte>)
+                    || type.BaseType == typeof(IEntity) || type.BaseType == typeof(IdentityServer4.User.Entities.IEntity)))
                 {
-                    if (attribute is TableAttribute tableAttribute)
-                    {
-                        Type baseType = type.BaseType;
-                        if (baseType != null && baseType == typeof(IBaseEntity)
-                            || baseType == typeof(IBaseEntity<long>)
-                            || baseType == typeof(IBaseEntity<int>)
-                            || baseType == typeof(IBaseEntity<short>)
-                            || baseType == typeof(IBaseEntity<byte>)
-                            || baseType == typeof(IEntity))
-                        {
-                            tableAssembies.Add(type);
-                            break;
-                        }
-                    }
+                    tableAssembies.Add(type);
                 }
             }
             if (tableAssembies.Count == 0)

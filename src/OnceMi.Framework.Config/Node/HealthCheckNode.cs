@@ -8,6 +8,11 @@ namespace OnceMi.Framework.Config
 {
     public class HealthCheckNode
     {
+        /// <summary>
+        /// 是否开启HealthCheckUI
+        /// </summary>
+        public bool IsEnabledHealthCheckUI { get; set; }
+
         public string HealthCheckName { get; set; }
 
         private string _healthCheckUIPath = null;

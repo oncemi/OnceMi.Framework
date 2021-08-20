@@ -4,6 +4,26 @@
         <name>OnceMi.Framework.Api</name>
     </assembly>
     <members>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController.Login(OnceMi.Framework.Model.Dto.LoginRequest)">
+            <summary>
+            登录
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController.Refesh(OnceMi.Framework.Model.Dto.RefeshTokenRequest)">
+            <summary>
+            刷新token
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController.RevokeToken(OnceMi.Framework.Model.Dto.RevokeTokenRequest)">
+            <summary>
+            撤销token
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
         <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController">
             <summary>
             接口管理

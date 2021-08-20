@@ -11,6 +11,7 @@ namespace OnceMi.IdentityServer4.User.Entities
     /// <summary>
     /// 组织机构
     /// </summary>
+    [Table(Name = nameof(Organizes))]
     [Index("index_{TableName}_" + nameof(Name), nameof(Name), false)]
     [Index("index_{TableName}_" + nameof(Code), nameof(Code), false)]
     public class Organizes : IBaseEntity<long>

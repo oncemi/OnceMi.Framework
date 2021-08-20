@@ -124,5 +124,13 @@ namespace OnceMi.Framework.Config
                 return GetSection<TokenManagementNode>();
             }
         }
+
+        public IdentityServerNode IdentityServer
+        {
+            get
+            {
+                return GetSection<IdentityServerNode>();
+            }
+        }
     }
 }

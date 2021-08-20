@@ -148,6 +148,31 @@
             自定义数据 需要重载Data
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Model.Dto.LoginRequest.Username">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.LoginRequest.Password">
+            <summary>
+            密码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.LoginRequest.Captcha">
+            <summary>
+            验证码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RefeshTokenRequest.Token">
+            <summary>
+            RefeshToken
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.RevokeTokenRequest.Token">
+            <summary>
+            RefeshToken
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Model.Dto.CreateApiRequest.ParentId">
             <summary>
             父Id

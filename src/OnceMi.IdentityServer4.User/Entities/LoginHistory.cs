@@ -2,6 +2,7 @@
 
 namespace OnceMi.IdentityServer4.User.Entities
 {
+    [Table(Name = nameof(LoginHistory))]
     public class LoginHistory : IBaseEntity<long>
     {
         public long UserId { get; set; }
@@ -15,19 +16,19 @@ namespace OnceMi.IdentityServer4.User.Entities
         /// <summary>
         /// 浏览器
         /// </summary>
-        [Column(StringLength = 100, IsNullable = true)]
+        [Column(StringLength = -1, IsNullable = true)]
         public string Browser { get; set; }
 
         /// <summary>
         /// 操作系统
         /// </summary>
-        [Column(StringLength = 100, IsNullable = true)]
-        public string Os { get; set; }
+        [Column(StringLength = -1, IsNullable = true)]
+        public string OS { get; set; }
 
         /// <summary>
         /// 设备
         /// </summary>
-        [Column(StringLength = 50, IsNullable = true)]
+        [Column(StringLength = -1, IsNullable = true)]
         public string Device { get; set; }
 
         /// <summary>
