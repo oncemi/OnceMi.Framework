@@ -14,8 +14,40 @@ namespace OnceMi.Framework.Config
 
         public string Audience { get; set; }
 
-        public int AccessExpiration { get; set; }
+        private int _accessExpiration = 3600;
 
-        public int RefreshExpiration { get; set; }
+        public int AccessExpiration
+        {
+            get
+            {
+                return _accessExpiration;
+            }
+            set
+            {
+                if(value < 60)
+                {
+                    throw new Exception("Access expiration can not less than 60 seconds");
+                }
+                _accessExpiration = value;
+            }
+        }
+
+        private int _refreshExpiration = 604800;
+
+        public int RefreshExpiration
+        {
+            get
+            {
+                return _refreshExpiration;
+            }
+            set
+            {
+                if (value < 3600)
+                {
+                    throw new Exception("Refresh expiration can not less than 3600 seconds");
+                }
+                _refreshExpiration = value;
+            }
+        }
     }
 }

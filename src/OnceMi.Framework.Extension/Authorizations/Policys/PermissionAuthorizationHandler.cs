@@ -51,6 +51,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 context.Fail();
                 return;
             }
+
             //判断用户是否存在或被删除
             (string idStr, long? id) = context.User.GetSubject();
             if (id == null)

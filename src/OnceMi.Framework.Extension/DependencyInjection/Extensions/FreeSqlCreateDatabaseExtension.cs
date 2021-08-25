@@ -2,10 +2,10 @@
 using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
 using FreeSql;
-using Microsoft.Data.Sqlite;
 using MySql.Data.MySqlClient;
 using Npgsql;
 
@@ -76,7 +76,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
         public static FreeSqlBuilder CreateDatabaseIfNotExistsSqlite(this FreeSqlBuilder @this,
             string connectionString = "")
         {
-            SqliteConnectionStringBuilder builder = new SqliteConnectionStringBuilder(connectionString);
+            SQLiteConnectionStringBuilder builder = new SQLiteConnectionStringBuilder(connectionString);
             FileInfo file = new FileInfo(builder.DataSource);
             if (file.Exists)
             {

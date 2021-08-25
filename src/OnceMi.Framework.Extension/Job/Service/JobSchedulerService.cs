@@ -257,7 +257,7 @@ namespace OnceMi.Framework.Extension.Job
             // Trigger the job to run now, and then repeat every 10 seconds
             ITrigger trigger = CreateTrigger(job);
 
-            _scheduler.ListenerManager.AddJobListener(new JobListener(_loggerFactory.CreateLogger(job.Name)
+            _scheduler.ListenerManager.AddJobListener(new JobListener(_loggerFactory.CreateLogger<JobListener>()
                 , _jobsService
                 , _messageQuene
                 , _jobNoticeService

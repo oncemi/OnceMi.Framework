@@ -69,8 +69,7 @@ namespace OnceMi.Framework.Service.Admin
             //build response
             var response = await BuildJwtToken(user);
             //写登录日志
-            await WriteLoginHistory(response);
-
+            await WriteSignHistory(response.Profile.Id, LoginHistoryType.Login);
             return response;
         }
 
@@ -96,23 +95,32 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task RevokeToken(RevokeTokenRequest request)
         {
-            await _repository.Orm.Select<UserToken>()
+            UserToken token = await _repository.Orm.Select<UserToken>()
                 .Where(p => p.RefeshToken == request.Token && !p.IsDeleted)
+                .ToOneAsync();
+            if (token == null)
+            {
+                return;
+            }
+            await _repository.Orm.Select<UserToken>()
+                .Where(p => p.Id == token.Id)
                 .ToUpdate()
                 .Set(p => p.IsDeleted, true)
                 .ExecuteAffrowsAsync();
+            //写退出日志
+            await WriteSignHistory(token.UserId, LoginHistoryType.Logout);
         }
 
         private async Task<LoginResponse> BuildJwtToken(Users user)
         {
             long issuedAt = TimeUtil.Timestamp();
-            DateTime expiresTime = TimeUtil.UnixTimeStampToDateTime(issuedAt + _config.TokenManagement.AccessExpiration * 60);
+            DateTime expiresTime = TimeUtil.UnixTimeStampToDateTime(issuedAt + _config.TokenManagement.AccessExpiration);
 
             var claims = new List<Claim>
             {
                 //NotBefore指示在这之前此token无效
                 new Claim(JwtClaimTypes.NotBefore, issuedAt.ToString(), ClaimValueTypes.Integer64),
-                new Claim(JwtClaimTypes.Expiration,( issuedAt + _config.TokenManagement.AccessExpiration * 60).ToString(), ClaimValueTypes.Integer64),
+                new Claim(JwtClaimTypes.Expiration,( issuedAt + _config.TokenManagement.AccessExpiration).ToString(), ClaimValueTypes.Integer64),
                 new Claim(JwtClaimTypes.ClientId, _config.AppSettings.AppId.ToString()),
                 new Claim(JwtClaimTypes.Subject, user.Id.ToString()),
                 new Claim(JwtClaimTypes.AuthenticationTime, issuedAt.ToString(), ClaimValueTypes.Integer64),
@@ -150,7 +158,7 @@ namespace OnceMi.Framework.Service.Admin
                 AccessToken = token,
                 RefreshToken = refeshToken,
                 Profile = _mapper.Map<UserItemResponse>(user),
-                ExpiresAt = issuedAt + _config.TokenManagement.AccessExpiration * 60,
+                ExpiresAt = issuedAt + _config.TokenManagement.AccessExpiration,
             };
             return response;
         }
@@ -167,7 +175,7 @@ namespace OnceMi.Framework.Service.Admin
                     UserId = user.Id,
                     Token = token,
                     RefeshToken = refeshToken,
-                    RefeshTokenExpiration = DateTime.Now.AddDays(7),
+                    RefeshTokenExpiration = DateTime.Now.AddSeconds(_config.TokenManagement.RefreshExpiration),
                     CreatedTime = DateTime.Now,
                     UpdatedTime = DateTime.Now,
                     IsDeleted = false,
@@ -187,7 +195,7 @@ namespace OnceMi.Framework.Service.Admin
                     .ToUpdate()
                     .Set(p => p.Token, token)
                     .Set(p => p.RefeshToken, refeshToken)
-                    .Set(p => p.RefeshTokenExpiration, DateTime.Now.AddDays(7))
+                    .Set(p => p.RefeshTokenExpiration, DateTime.Now.AddSeconds(_config.TokenManagement.RefreshExpiration))
                     .Set(p => p.IsDeleted, false)
                     .ExecuteAffrowsAsync();
                 if (result <= 0)
@@ -198,40 +206,21 @@ namespace OnceMi.Framework.Service.Admin
             return refeshToken;
         }
 
-        private async Task WriteLoginHistory(LoginResponse response)
+        private async Task WriteSignHistory(long userId, LoginHistoryType type)
         {
-            if (response == null || response.Profile == null)
-                return;
-
-            //这个RequestHelper非常耗时，有待优化
-
-            //RequestHelper requestHelper = new RequestHelper(_accessor.HttpContext);
-            //var history = new LoginHistory()
-            //{
-            //    Id = _idGenerator.NewId(),
-            //    UserId = response.Profile.Id,
-            //    IP = requestHelper.GetRequestIpAddress(),
-            //    Browser = requestHelper.GetBrowser(),
-            //    OS = requestHelper.GetOSName(),
-            //    Device = requestHelper.GetDevice(),
-            //    UserAgent = _accessor.HttpContext.Request.Headers["User-Agent"],
-            //    Type = LoginHistoryType.Login,
-            //    Status = true,
-            //    Message = "登录成功",
-            //};
-
+            UserAgentParser parser = new UserAgentParser(_accessor.HttpContext);
             var history = new LoginHistory()
             {
                 Id = _idGenerator.NewId(),
-                UserId = response.Profile.Id,
-                IP = "",
-                Browser = "",
-                OS = "",
-                Device = "",
+                UserId = userId,
+                IP = parser.GetRequestIpAddress(),
+                Browser = parser.GetBrowser(),
+                OS = parser.GetOS(),
+                Device = parser.GetDevice(),
                 UserAgent = _accessor.HttpContext.Request.Headers["User-Agent"],
-                Type = LoginHistoryType.Login,
+                Type = type,
                 Status = true,
-                Message = "登录成功",
+                Message = type == LoginHistoryType.Login ? "登录成功" : "退出成功",
             };
             await _repository.Orm.Insert(history).ExecuteAffrowsAsync();
         }

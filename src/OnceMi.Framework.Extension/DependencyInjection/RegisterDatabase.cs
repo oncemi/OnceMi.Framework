@@ -77,8 +77,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                             if ((e.AuditValueType == AuditValueType.Insert || e.AuditValueType == AuditValueType.InsertOrUpdate)
                              && e.Column.CsType == typeof(long)
                              && e.Value?.ToString().Equals("0") == true
-                             && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null
-                             || (e.Property.GetCustomAttribute<ColumnAttribute>(false) != null
+                             && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null || (e.Property.GetCustomAttribute<ColumnAttribute>(false) != null
                              && e.Property.GetCustomAttribute<ColumnAttribute>(false).IsPrimary)))
                             {
                                 //生成雪花Id

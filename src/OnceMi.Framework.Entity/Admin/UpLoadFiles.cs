@@ -89,9 +89,15 @@ namespace OnceMi.Framework.Entity.Admin
         PublicWrite = 5,
 
         /// <summary>
-        /// 公共写
+        /// 私有
         /// </summary>
         [Description("私有")]
         Private = 7,
+
+        /// <summary>
+        /// 内部
+        /// </summary>
+        [Description("内部")]
+        Inside = 9,
     }
 }

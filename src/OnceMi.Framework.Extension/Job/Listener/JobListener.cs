@@ -13,14 +13,14 @@ namespace OnceMi.Framework.Extension.Job
 {
     public class JobListener : IJobListener
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<JobListener> _logger;
         private readonly IJobsService _jobsService;
         private readonly IMessageQueneService _messageQuene;
         private readonly IJobNoticeService _notice;
 
         public string Name { get; }
 
-        public JobListener(ILogger logger
+        public JobListener(ILogger<JobListener> logger
             , IJobsService jobsService
             , IMessageQueneService messageQuene
             , IJobNoticeService notice
@@ -52,7 +52,7 @@ namespace OnceMi.Framework.Extension.Job
         {
             try
             {
-                _logger.LogInformation($"作业{context.JobDetail.Description}开始执行。");
+                _logger.LogInformation($"作业【{context.JobDetail.Description}】开始执行。");
 
                 long jobId = context.JobDetail.Key.GetId();
                 //设置作业状态
@@ -80,7 +80,7 @@ namespace OnceMi.Framework.Extension.Job
             }
             catch (Exception ex)
             {
-                _logger.LogError($"设置作业启动状态失败，错误：{ex.Message}", ex);
+                _logger.LogError($"设置作业【{context.JobDetail.Description}】启动状态失败，错误：{ex.Message}", ex);
             }
         }
 
@@ -89,7 +89,7 @@ namespace OnceMi.Framework.Extension.Job
             try
             {
                 string resultStr = context.Result == null ? null : JsonUtil.SerializeToString(context.Result);
-                _logger.LogInformation($"作业{context.JobDetail.Description}{(isVetoed ? "被取消执行" : $"执行完成，结果：{resultStr}")}。");
+                _logger.LogInformation($"作业【{context.JobDetail.Description}】{(isVetoed ? "被取消执行" : $"执行完成，结果：{resultStr}")}。");
 
                 object endTimeObj = context.JobDetail.JobDataMap.Get(JobConstant.EndTime);
                 if (endTimeObj == null || endTimeObj is not DateTime)
@@ -119,7 +119,7 @@ namespace OnceMi.Framework.Extension.Job
                 JobExcuteResult result = (context.Result != null && context.Result is JobExcuteResult) ? (context.Result as JobExcuteResult) : null;
                 if (result == null)
                 {
-                    throw new Exception("获取作业执行结果失败");
+                    throw new Exception($"获取作业【{context.JobDetail.Description}】执行结果失败");
                 }
                 //发送通知，需要在更新记录之前，避免记录更新异常了就无法发送通知
                 await _notice.Send(jobId, result);
@@ -143,7 +143,7 @@ namespace OnceMi.Framework.Extension.Job
             }
             catch (Exception ex)
             {
-                _logger.LogError($"设置作业结束状态失败，错误：{ex.Message}", ex);
+                _logger.LogError($"设置作业【{context.JobDetail.Description}】结束状态失败，错误：{ex.Message}", ex);
             }
         }
     }

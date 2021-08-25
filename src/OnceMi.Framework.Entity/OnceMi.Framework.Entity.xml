@@ -481,7 +481,12 @@
         </member>
         <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.Private">
             <summary>
-            公共写
+            私有
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.Inside">
+            <summary>
+            内部
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Views.Path">

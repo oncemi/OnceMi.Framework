@@ -30,6 +30,19 @@ namespace OnceMi.Framework.Extension.Filters
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
+            //if (context.HttpContext.Request.Path.Value.Contains("login", StringComparison.OrdinalIgnoreCase)
+            //    || context.HttpContext.Request.Path.Value.Contains("QueryUserRolePermission", StringComparison.OrdinalIgnoreCase)
+            //    || context.HttpContext.Request.Path.Value.Contains("QueryViewMenu", StringComparison.OrdinalIgnoreCase))
+            //{
+
+            //}
+            //else
+            //{
+            //    context.Result = new UnauthorizedResult();
+            //    return;
+            //}
+
+
             //检查是否为作业请求
             var isJobRequest = context.ActionDescriptor.EndpointMetadata?.Any(p => p is JobAttribute);
             if (isJobRequest == true)
