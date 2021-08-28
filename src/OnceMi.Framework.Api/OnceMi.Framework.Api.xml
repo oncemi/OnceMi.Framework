@@ -98,6 +98,17 @@
             <param name="request"></param>
             <returns></returns>
         </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.ConfigController">
+            <summary>
+            配置管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ConfigController.SystemHardwareInfo">
+            <summary>
+            获取应用程序信息
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController">
             <summary>
             字典管理

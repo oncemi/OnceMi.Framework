@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Hardware.Info;
+using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
@@ -22,6 +23,29 @@ namespace OnceMi.Framework.Service.Admin
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
+        public Task<SystemHardwareInfo> SystemHardwareInfo()
+        {
+            SystemHardwareInfo hardwareInfo = new SystemHardwareInfo();
+
+            IHardwareInfo hardwareInfoHandler = new HardwareInfo();
+            hardwareInfoHandler.RefreshMemoryStatus();
+            hardwareInfoHandler.RefreshCPUList(includePercentProcessorTime: false);
+
+            hardwareInfo.TotalPhysicalMemory = hardwareInfoHandler.MemoryStatus.TotalPhysical / 1024 / 1024;
+            hardwareInfo.AvailablePhysicalMemory = hardwareInfoHandler.MemoryStatus.AvailablePhysical / 1024 / 1024;
+            for (int i = 0; i < hardwareInfoHandler.CpuList.Count; i++)
+            {
+                hardwareInfo.CpuInfos.Add(new SystemCpuHardwareInfo()
+                {
+                    Num = i + 1,
+                    Name = hardwareInfoHandler.CpuList[i].Name,
+                    MaxClockSpeed = hardwareInfoHandler.CpuList[i].MaxClockSpeed/1000.0,
+                    NumberOfCores = hardwareInfoHandler.CpuList[i].NumberOfCores,
+                });
+            }
+            return Task.FromResult(hardwareInfo);
         }
 
         /// <summary>

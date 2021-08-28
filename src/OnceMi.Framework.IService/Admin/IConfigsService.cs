@@ -9,5 +9,11 @@ namespace OnceMi.Framework.IService.Admin
     public interface IConfigsService : IBaseService<Configs, long>
     {
         Task<Stream> ExportMaintainData();
+
+        /// <summary>
+        /// 获取应用程序信息
+        /// </summary>
+        /// <returns></returns>
+        Task<SystemHardwareInfo> SystemHardwareInfo();
     }
 }
