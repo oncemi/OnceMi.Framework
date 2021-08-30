@@ -35,15 +35,21 @@ namespace OnceMi.Framework.Service.Admin
 
             hardwareInfo.TotalPhysicalMemory = hardwareInfoHandler.MemoryStatus.TotalPhysical / 1024 / 1024;
             hardwareInfo.AvailablePhysicalMemory = hardwareInfoHandler.MemoryStatus.AvailablePhysical / 1024 / 1024;
+            //cpu
             for (int i = 0; i < hardwareInfoHandler.CpuList.Count; i++)
             {
-                hardwareInfo.CpuInfos.Add(new SystemCpuHardwareInfo()
+                var cpuInfo = new SystemCpuHardwareInfo()
                 {
                     Num = i + 1,
                     Name = hardwareInfoHandler.CpuList[i].Name,
-                    MaxClockSpeed = hardwareInfoHandler.CpuList[i].MaxClockSpeed/1000.0,
+                    MaxClockSpeed = hardwareInfoHandler.CpuList[i].MaxClockSpeed / 1000.0,
                     NumberOfCores = hardwareInfoHandler.CpuList[i].NumberOfCores,
-                });
+                };
+                if (cpuInfo.NumberOfCores == 0)
+                {
+                    cpuInfo.NumberOfCores = (uint)Environment.ProcessorCount;
+                }
+                hardwareInfo.CpuInfos.Add(cpuInfo);
             }
             return Task.FromResult(hardwareInfo);
         }
@@ -69,7 +75,7 @@ namespace OnceMi.Framework.Service.Admin
                 UserRole = await _repository.Orm.Select<UserRole>().ToListAsync()
             };
             string json = JsonUtil.SerializeToString(data);
-            if(json == null)
+            if (json == null)
             {
                 throw new Exception("Convert data to json failed.");
             }

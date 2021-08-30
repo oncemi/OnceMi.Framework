@@ -1,5 +1,6 @@
 ﻿using EasyNetQ;
 using Microsoft.Extensions.Logging;
+using OnceMi.AspNetCore.MQ.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,15 +30,18 @@ namespace OnceMi.AspNetCore.MQ
 
         public override async Task Publish<T>(T obj) where T : class
         {
-            await _ibus.PubSub.PublishAsync(obj);
+            if (obj == null)
+                return;
+            string channel = MqHelper.CreateQueneNmae<T>(_options.AppId);
+            await _ibus.SendReceive.SendAsync(channel, obj);
         }
 
         public override async Task<IDisposable> Subscribe<T>(string subscriptionId, Action<T> onMessage, CancellationToken cancellationToken = default) where T : class
         {
-            var result = await _ibus.PubSub.SubscribeAsync<T>(subscriptionId, onMessage, cancellationToken);
-            if(result != null)
+            var result = await _ibus.SendReceive.ReceiveAsync<T>(subscriptionId, onMessage, cancellationToken);
+            if (result != null)
             {
-                return result.ConsumerCancellation;
+                return result;
             }
             return null;
         }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Unicode;
 
-namespace OnceMi.AspNetCore.MQ.Utils
+namespace OnceMi.AspNetCore.MQ
 {
     class JsonUtil
     {
@@ -29,6 +30,8 @@ namespace OnceMi.AspNetCore.MQ.Utils
             {
                 options.Converters.Add(new DateTimeConverter());
                 options.Converters.Add(new DateTimeNullableConverter());
+                options.Converters.Add(new ExceptionConverter());
+                options.Converters.Add(new TypeConverter());
             }
             else
             {
@@ -47,7 +50,16 @@ namespace OnceMi.AspNetCore.MQ.Utils
                     options.Converters.Add(new DateTimeConverter());
                     options.Converters.Add(new DateTimeNullableConverter());
                 }
+                if (!options.Converters.Any(p => p.GetType() == typeof(ExceptionConverter)))
+                {
+                    options.Converters.Add(new ExceptionConverter());
+                }
+                if (!options.Converters.Any(p => p.GetType() == typeof(TypeConverter)))
+                {
+                    options.Converters.Add(new TypeConverter());
+                }
             }
+            
             //忽略大小写
             options.PropertyNameCaseInsensitive = true;
             //允许注释
@@ -59,6 +71,30 @@ namespace OnceMi.AspNetCore.MQ.Utils
             //包含公共字段
             options.IncludeFields = true;
             return options;
+        }
+
+        /// <summary>
+        /// 验证是否为json字符串
+        /// 并返回重新序列化之后的json
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="formatJson"></param>
+        /// <returns></returns>
+        public static (bool isJson, string json) IsJson(string source, bool formatJson = false)
+        {
+            try
+            {
+                object obj = DeserializeStringToObject<JsonElement>(source);
+                if (obj == null)
+                {
+                    return (false, null);
+                }
+                return (true, formatJson ? SerializeToFormatString(obj) : SerializeToString(obj));
+            }
+            catch
+            {
+                return (false, null);
+            }
         }
 
         /// <summary>
@@ -126,7 +162,7 @@ namespace OnceMi.AspNetCore.MQ.Utils
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="json">json字符串(eg.{"ID":"112","Name":"石子儿"})</param>
         /// <returns>对象实体</returns>
-        public static T DeserializeStringToObject<T>(string json) where T : class
+        public static T DeserializeStringToObject<T>(string json)
         {
             return JsonSerializer.Deserialize<T>(json, BuildJsonSerializerOptions(null));
         }
@@ -149,7 +185,7 @@ namespace OnceMi.AspNetCore.MQ.Utils
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="json">json数组字符串(eg.[{"ID":"112","Name":"石子儿"}])</param>
         /// <returns>对象实体集合</returns>
-        public static List<T> DeserializeStringToList<T>(string json) where T : class
+        public static List<T> DeserializeStringToList<T>(string json)
         {
             return JsonSerializer.Deserialize<List<T>>(json, BuildJsonSerializerOptions(null));
         }
@@ -160,7 +196,7 @@ namespace OnceMi.AspNetCore.MQ.Utils
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="json">json字符串(eg.{"ID":"112","Name":"石子儿"})</param>
         /// <returns>对象实体</returns>
-        public static T DeserializeByteToObject<T>(byte[] json) where T : class
+        public static T DeserializeByteToObject<T>(byte[] json)
         {
             return JsonSerializer.Deserialize<T>(json, BuildJsonSerializerOptions(null));
         }
@@ -182,7 +218,7 @@ namespace OnceMi.AspNetCore.MQ.Utils
         /// <typeparam name="T">对象类型</typeparam>
         /// <param name="json">json数组字符串(eg.[{"ID":"112","Name":"石子儿"}])</param>
         /// <returns>对象实体集合</returns>
-        public static List<T> DeserializeByteToList<T>(byte[] json) where T : class
+        public static List<T> DeserializeByteToList<T>(byte[] json)
         {
             return JsonSerializer.Deserialize<List<T>>(json, BuildJsonSerializerOptions(null));
         }

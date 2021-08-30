@@ -19,7 +19,6 @@ using OnceMi.Framework.Extension.DependencyInjection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Extension.Middlewares;
-using OnceMi.Framework.Model;
 using OnceMi.Framework.Util.Json;
 using System;
 using System.Text;
@@ -128,11 +127,6 @@ namespace OnceMi.Framework.Api
 
             #region 认证与授权
 
-            //Json序列化处理
-            services.Configure<CustumJsonSerializerOptions>(option =>
-            {
-                option.JsonNamingPolicy = GlobalConstant.DefaultJsonNamingPolicy;
-            });
             var tokenConfig = Configuration.GetSection("TokenManagement").Get<TokenManagementNode>();
             var identityServerConfig = Configuration.GetSection("IdentityServer").Get<IdentityServerNode>();
 
@@ -170,8 +164,12 @@ namespace OnceMi.Framework.Api
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfig.Secret)),
                             ValidIssuer = tokenConfig.Issuer,
                             ValidAudience = tokenConfig.Audience,
-                            ValidateIssuer = false,
-                            ValidateAudience = false
+                            ValidateIssuer = true,
+                            ValidateAudience = true,
+                            RoleClaimType = JwtClaimTypes.Role,
+                            NameClaimType = JwtClaimTypes.Name,
+                            RequireExpirationTime = true, //过期时间
+                            ClockSkew = TimeSpan.FromMinutes(5),
                         };
 
                         #endregion

@@ -26,7 +26,7 @@ namespace OnceMi.AspNetCore.MQ
             if (obj == null)
                 return Task.CompletedTask;
 
-            string channel = MD5.Encrypt($"{typeof(T).FullName}_{_options.AppId}");
+            string channel = MqHelper.CreateQueneNmae<T>(_options.AppId);
             string data = JsonUtil.SerializeToString(obj);
 
             _client.Publish(channel, data);

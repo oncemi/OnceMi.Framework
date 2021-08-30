@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OnceMi.AspNetCore.MQ.Utils
+namespace OnceMi.AspNetCore.MQ
 {
     class DateTimeConverter : JsonConverter<DateTime>
     {

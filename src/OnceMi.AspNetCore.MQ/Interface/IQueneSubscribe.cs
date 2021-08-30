@@ -13,6 +13,7 @@ namespace OnceMi.AspNetCore.MQ
 
         public IMessageQueneService MqService { get; private set; }
 
+        private bool isDisposed = false;
         private readonly ILogger _logger;
         private Task _task;
         private IDisposable _subDisposable;
@@ -23,7 +24,12 @@ namespace OnceMi.AspNetCore.MQ
             MqService = mqService ?? throw new ArgumentNullException(nameof(IMessageQueneService));
             _logger = logger ?? throw new ArgumentNullException(nameof(ILogger));
 
-            this.SubId = MD5.Encrypt($"{typeof(T).FullName}_{MqService.Options.AppId}");
+            this.SubId = MqHelper.CreateQueneNmae<T>(MqService.Options.AppId);
+        }
+
+        ~IQueneSubscribe()
+        {
+            Dispose(false);
         }
 
         public Task Excute()
@@ -50,26 +56,39 @@ namespace OnceMi.AspNetCore.MQ
 
         public void Dispose()
         {
-            if (_subDisposable != null)
-            {
-                _subDisposable.Dispose();
-            }
-            _tokenSource.Cancel();
-
-            int timeout = 3000;
-            Stopwatch sw = Stopwatch.StartNew();
-            while (_task.Status == TaskStatus.Running)
-            {
-                if (sw.ElapsedMilliseconds > timeout)
-                {
-                    break;
-                }
-                Thread.Sleep(1);
-            }
-            sw.Stop();
-            _tokenSource.Dispose();
-            _task.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!isDisposed)
+            {
+                _subDisposable?.Dispose();
+                _tokenSource?.Cancel();
+
+                int timeout = 3000;
+                Stopwatch sw = Stopwatch.StartNew();
+                while (_task != null && _task.Status == TaskStatus.Running)
+                {
+                    if (sw.ElapsedMilliseconds > timeout)
+                    {
+                        break;
+                    }
+                    Thread.Sleep(1);
+                }
+                sw.Stop();
+
+                _tokenSource?.Dispose();
+                _task?.Dispose();
+
+                if (disposing)
+                {
+                    //GC自动释放
+                }
+
+                isDisposed = true;
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OnceMi.AspNetCore.MQ.Utils
+namespace OnceMi.AspNetCore.MQ
 {
     /// <summary>
     /// 数字序列化为字符串
@@ -18,15 +18,19 @@ namespace OnceMi.AspNetCore.MQ.Utils
     {
         public override bool CanConvert(Type typeToConvert)
         {
-            return typeof(string) == typeToConvert;
+            var result = typeof(long) == typeToConvert
+                || typeof(int) == typeToConvert
+                || typeof(long?) == typeToConvert
+                || typeof(int?) == typeToConvert;
+            return result;
         }
 
         public override object Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.Number)
             {
-                return reader.TryGetInt64(out long l) ?
-                    l.ToString() :
+                return reader.TryGetInt64(out long n) ?
+                    n.ToString() :
                     reader.GetDouble().ToString();
             }
             if (reader.TokenType == JsonTokenType.String)
@@ -41,7 +45,10 @@ namespace OnceMi.AspNetCore.MQ.Utils
 
         public override void Write(Utf8JsonWriter writer, object value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToString());
+            if (value == null)
+                writer.WriteNullValue();
+            else
+                writer.WriteStringValue(value.ToString());
         }
     }
 }

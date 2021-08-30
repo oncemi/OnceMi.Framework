@@ -2,7 +2,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace OnceMi.Framework.Model.Common
+namespace OnceMi.Framework.Model.Dto
 {
     public class UploadFileInfo
     {
