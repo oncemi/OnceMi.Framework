@@ -11,8 +11,8 @@ if unzip -h > /dev/null 2>&1; then
     echo "unzip exist, skip install unzip."
 else
     echo "unzip not exist, install it!"
-	sudo apt update
-	sudo apt install unzip -y
+    sudo apt update
+    sudo apt install unzip -y
 fi
 #delete old
 sudo rm -rf libSQLite.Interop.so SQLite.Interop.dll
