@@ -6,7 +6,7 @@ namespace OnceMi.Framework.IService.Admin
 {
     public interface IOrganizesService : IBaseService
     {
-        Task<List<ISelectResponse<int>>> QueryOrganizeTypes();
+        List<ISelectResponse<int>> QueryOrganizeTypes();
 
         Task<OrganizeItemResponse> Query(long id);
 

@@ -83,7 +83,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 return;
             }
             //判断是否包含自定义授权
-            if(requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is NoPermissionAttribute) == true)
+            if(requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is NoAuthorizeAttribute) == true)
             {
                 context.Succeed(requirement);
                 return;

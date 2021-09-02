@@ -48,7 +48,7 @@ namespace OnceMi.Framework.Service.Admin
         /// 获取组织类型
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ISelectResponse<int>>> QueryOrganizeTypes()
+        public List<ISelectResponse<int>> QueryOrganizeTypes()
         {
             List<EnumModel> enumModels = EnumUtil.EnumToList<OrganizeType>();
             if (enumModels == null || enumModels.Count == 0)
@@ -63,7 +63,7 @@ namespace OnceMi.Framework.Service.Admin
                     Value = p.Value,
                 })
                 .ToList();
-            return await Task.FromResult(result);
+            return result;
         }
 
         /// <summary>

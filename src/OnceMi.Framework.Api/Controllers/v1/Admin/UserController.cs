@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
@@ -40,9 +41,10 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<List<ISelectResponse<string>>> UserStatusSelectList()
+        [NoAuthorize]
+        public List<ISelectResponse<string>> UserStatusSelectList()
         {
-            return await _service.GetUserStatus();
+            return _service.GetUserStatus();
         }
 
         /// <summary>
@@ -51,9 +53,10 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<List<ISelectResponse<string>>> UserGenderSelectList()
+        [NoAuthorize]
+        public List<ISelectResponse<string>> UserGenderSelectList()
         {
-            return await _service.GetUserGender();
+            return _service.GetUserGender();
         }
 
         /// <summary>
@@ -167,10 +170,14 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpGet]
         [Route("[action]/{name}")]
         [AllowAnonymous]
-        public async Task<IActionResult> Avatar(string name, int size)
+        public IActionResult Avatar(string name, int size)
         {
-            byte[] avatarBytes = await _service.GetAvatar(name, size);
-            return File(new MemoryStream(avatarBytes), "image/png", "avatar.png");
+            if(size == 0)
+            {
+                size = 250;
+            }
+            byte[] avatarBytes = _service.GetAvatar(name, size);
+            return File(avatarBytes, "image/png", "avatar.png");
         }
     }
 }

@@ -15,13 +15,13 @@ namespace OnceMi.Framework.IService.Admin
         /// 查询用户状态
         /// </summary>
         /// <returns></returns>
-        Task<List<ISelectResponse<string>>> GetUserStatus();
+        List<ISelectResponse<string>> GetUserStatus();
 
         /// <summary>
         /// 查询用户性别
         /// </summary>
         /// <returns></returns>
-        Task<List<ISelectResponse<string>>> GetUserGender();
+        List<ISelectResponse<string>> GetUserGender();
 
         /// <summary>
         /// 查询用户下拉
@@ -86,6 +86,6 @@ namespace OnceMi.Framework.IService.Admin
         /// <param name="name"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        Task<byte[]> GetAvatar(string name, int size = 100);
+        byte[] GetAvatar(string name, int size = 100);
     }
 }

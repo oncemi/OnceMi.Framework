@@ -55,7 +55,7 @@ namespace OnceMi.Framework.Service.Admin
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<List<ISelectResponse<string>>> QueryAccessModes()
+        public List<ISelectResponse<string>> QueryAccessModes()
         {
             List<EnumModel> enumModels = EnumUtil.EnumToList<FileAccessMode>();
             if (enumModels == null || enumModels.Count == 0)
@@ -70,7 +70,7 @@ namespace OnceMi.Framework.Service.Admin
                     Value = p.Name,
                 })
                 .ToList();
-            return await Task.FromResult(result);
+            return result;
         }
 
         public async Task<IPageResponse<FileItemResponse>> Query(IPageRequest request)

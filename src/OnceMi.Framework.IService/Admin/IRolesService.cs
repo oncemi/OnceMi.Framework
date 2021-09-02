@@ -12,7 +12,7 @@ namespace OnceMi.Framework.IService.Admin
         /// </summary>
         /// <param name="parentId"></param>
         /// <returns></returns>
-        Task<int> QueryNextSortValue(long? parentId);
+        ValueTask<int> QueryNextSortValue(long? parentId);
 
         /// <summary>
         /// 分页查询

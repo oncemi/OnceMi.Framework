@@ -11,14 +11,14 @@ namespace OnceMi.Framework.IService.Admin
         /// 获取菜单类型
         /// </summary>
         /// <returns></returns>
-        Task<List<ISelectResponse<int>>> QueryMenuTypes();
+        List<ISelectResponse<int>> QueryMenuTypes();
 
         /// <summary>
         /// 查询当前菜单的下溢菜单Id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<int> QueryNextSortValue(long? parentId);
+        ValueTask<int> QueryNextSortValue(long? parentId);
 
         /// <summary>
         /// 查询详细信息

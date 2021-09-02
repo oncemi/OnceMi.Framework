@@ -2,12 +2,12 @@
 using System;
 using System.Collections.Generic;
 using OnceMi.Framework.IService;
-using OnceMi.Framework.Entity;
-using OnceMi.Framework.Util.Reflection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using OnceMi.Framework.Model.Attributes;
 using System.Linq;
+using OnceMi.AspNetCore.AutoInjection;
+using OnceMi.Framework.Config;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -15,8 +15,8 @@ namespace OnceMi.Framework.Extension.DependencyInjection
     {
         public static IServiceCollection AddService(this IServiceCollection services)
         {
-            Dictionary<Type, Type> registerDic = new AssemblyLoader()
-                .GetInheritInterfaceTypes(typeof(IBaseService), typeof(IBaseService<IEntity<long>, long>));
+            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                .GetInheritInterfaceTypes(typeof(IServiceDependency));
             if (registerDic == null)
             {
                 return services;

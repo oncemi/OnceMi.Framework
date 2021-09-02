@@ -42,7 +42,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(CascaderList))]
+        [Route("[action]")]
         public async Task<List<ICascaderResponse>> CascaderList()
         {
             var data = await _service.Query(new IPageRequest()

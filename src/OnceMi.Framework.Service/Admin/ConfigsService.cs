@@ -25,33 +25,36 @@ namespace OnceMi.Framework.Service.Admin
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public Task<SystemHardwareInfo> SystemHardwareInfo()
+        public async Task<SystemHardwareInfo> SystemHardwareInfo()
         {
-            SystemHardwareInfo hardwareInfo = new SystemHardwareInfo();
-
-            IHardwareInfo hardwareInfoHandler = new HardwareInfo();
-            hardwareInfoHandler.RefreshMemoryStatus();
-            hardwareInfoHandler.RefreshCPUList(includePercentProcessorTime: false);
-
-            hardwareInfo.TotalPhysicalMemory = hardwareInfoHandler.MemoryStatus.TotalPhysical / 1024 / 1024;
-            hardwareInfo.AvailablePhysicalMemory = hardwareInfoHandler.MemoryStatus.AvailablePhysical / 1024 / 1024;
-            //cpu
-            for (int i = 0; i < hardwareInfoHandler.CpuList.Count; i++)
+            return await Task.Run(() =>
             {
-                var cpuInfo = new SystemCpuHardwareInfo()
+                SystemHardwareInfo hardwareInfo = new SystemHardwareInfo();
+
+                IHardwareInfo hardwareInfoHandler = new HardwareInfo();
+                hardwareInfoHandler.RefreshMemoryStatus();
+                hardwareInfoHandler.RefreshCPUList(includePercentProcessorTime: false);
+
+                hardwareInfo.TotalPhysicalMemory = hardwareInfoHandler.MemoryStatus.TotalPhysical / 1024 / 1024;
+                hardwareInfo.AvailablePhysicalMemory = hardwareInfoHandler.MemoryStatus.AvailablePhysical / 1024 / 1024;
+                //cpu
+                for (int i = 0; i < hardwareInfoHandler.CpuList.Count; i++)
                 {
-                    Num = i + 1,
-                    Name = hardwareInfoHandler.CpuList[i].Name,
-                    MaxClockSpeed = hardwareInfoHandler.CpuList[i].MaxClockSpeed / 1000.0,
-                    NumberOfCores = hardwareInfoHandler.CpuList[i].NumberOfCores,
-                };
-                if (cpuInfo.NumberOfCores == 0)
-                {
-                    cpuInfo.NumberOfCores = (uint)Environment.ProcessorCount;
+                    var cpuInfo = new SystemCpuHardwareInfo()
+                    {
+                        Num = i + 1,
+                        Name = hardwareInfoHandler.CpuList[i].Name,
+                        MaxClockSpeed = hardwareInfoHandler.CpuList[i].MaxClockSpeed / 1000.0,
+                        NumberOfCores = hardwareInfoHandler.CpuList[i].NumberOfCores,
+                    };
+                    if (cpuInfo.NumberOfCores == 0)
+                    {
+                        cpuInfo.NumberOfCores = (uint)Environment.ProcessorCount;
+                    }
+                    hardwareInfo.CpuInfos.Add(cpuInfo);
                 }
-                hardwareInfo.CpuInfos.Add(cpuInfo);
-            }
-            return Task.FromResult(hardwareInfo);
+                return hardwareInfo;
+            });
         }
 
         /// <summary>

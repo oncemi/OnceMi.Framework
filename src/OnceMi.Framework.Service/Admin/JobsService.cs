@@ -113,7 +113,7 @@ namespace OnceMi.Framework.Service.Admin
             //默认排序
             if(request.OrderByModels == null || request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(Jobs.CreatedTime)},desc" };
+                request.OrderBy = new string[] { $"{nameof(Jobs.Id)},desc" };
             }
             //get order result
             var selector = allJobs

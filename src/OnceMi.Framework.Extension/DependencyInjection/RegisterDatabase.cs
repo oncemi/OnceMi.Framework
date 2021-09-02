@@ -8,12 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Entity;
 using OnceMi.Framework.Extension.Database;
 using OnceMi.Framework.IRepository;
-using OnceMi.Framework.Util.Reflection;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -138,10 +138,12 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             {
                 return;
             }
-            AssemblyLoader assemblyLoader = new AssemblyLoader();
+            AssemblyLoader assemblyLoader = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase));
             List<Type> tableAssembies = new List<Type>();
+
             var entities = assemblyLoader.GetExportedTypesByInterface(typeof(IEntity));
             var userEntities = assemblyLoader.GetExportedTypesByInterface(typeof(IdentityServer4.User.Entities.IEntity));
+
             if (userEntities != null && userEntities.Count > 0)
             {
                 if (entities == null) entities = new List<Type>();

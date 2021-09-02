@@ -3,7 +3,7 @@ using OnceMi.Framework.Entity.Admin;
 
 namespace OnceMi.Framework.IRepository
 {
-    public interface IViewsRepository : IBaseRepository<Views, long>, IFrameRepository
+    public interface IViewsRepository : IBaseRepository<Views, long>, IRepositoryDependency
     {
 
     }

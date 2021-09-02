@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using HealthChecks.UI.Client;
 using OnceMi.Framework.Config;
@@ -8,15 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using OnceMi.Framework.Util.Reflection;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using System.Net.Http;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
-using System.Net;
-using Microsoft.AspNetCore.Hosting;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Hosting;
+using OnceMi.AspNetCore.AutoInjection;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -33,7 +26,8 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 var checksBuilder = services.AddHealthChecks();
                 List<Type> hasRegisted = new List<Type>();
                 //自动注入实现IHealthCheck的类
-                List<Type> allHealthCheckTypes = new AssemblyLoader().GetExportedTypesByInterface(typeof(IHealthCheck));
+                List<Type> allHealthCheckTypes = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                    .GetExportedTypesByInterface(typeof(IHealthCheck));
                 foreach (var item in allHealthCheckTypes)
                 {
                     checksBuilder.AddCheck(item);

@@ -23,6 +23,11 @@
             首字母小写
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Config.GlobalConstant.FirstNamespace">
+            <summary>
+            当前项目第一个命名空间
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Config.HealthCheckNode.IsEnabledHealthCheckUI">
             <summary>
             是否开启HealthCheckUI

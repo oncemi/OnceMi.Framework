@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using OnceMi.Framework.Util.Reflection;
+using OnceMi.AspNetCore.AutoInjection;
+using OnceMi.Framework.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Helpers
 {
@@ -12,7 +12,7 @@ namespace OnceMi.Framework.Extension.Helpers
         public static List<ApiVersion> GetAllApiVersions()
         {
             List<ApiVersion> result = new List<ApiVersion>();
-            List<Type> types = new AssemblyLoader().DomainAllTypes;
+            List<Type> types = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase)).DomainAllTypes;
             if (types == null || types.Count == 0)
                 return result;
             foreach (var item in types)

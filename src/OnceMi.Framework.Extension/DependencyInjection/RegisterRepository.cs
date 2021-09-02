@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
-using OnceMi.Framework.Entity;
-using FreeSql;
-using OnceMi.Framework.Util.Reflection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using System.Linq;
 using OnceMi.Framework.Model.Attributes;
+using OnceMi.AspNetCore.AutoInjection;
+using OnceMi.Framework.Config;
+using OnceMi.Framework.IRepository;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -15,8 +15,8 @@ namespace OnceMi.Framework.Extension.DependencyInjection
     {
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            Dictionary<Type, Type> registerDic = new AssemblyLoader()
-                .GetInheritInterfaceTypes(typeof(IRepository.IFrameRepository), typeof(IBaseRepository<IEntity, long>));
+            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                .GetInheritInterfaceTypes(typeof(IRepositoryDependency));
             if (registerDic == null)
             {
                 return services;

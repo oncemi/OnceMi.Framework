@@ -46,10 +46,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(GetMenuTypes))]
-        public async Task<List<ISelectResponse<int>>> GetMenuTypes()
+        [Route("[action]")]
+        [NoAuthorize]
+        public List<ISelectResponse<int>> GetMenuTypes()
         {
-            return await _service.QueryMenuTypes();
+            return _service.QueryMenuTypes();
         }
 
         /// <summary>
@@ -58,8 +59,9 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="parentId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(GetNextSortValue))]
-        public async Task<int> GetNextSortValue([FromQuery] long? parentId)
+        [Route("[action]")]
+        [NoAuthorize]
+        public async ValueTask<int> GetNextSortValue([FromQuery] long? parentId)
         {
             return await _service.QueryNextSortValue(parentId);
         }
@@ -69,8 +71,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(QueryViewMenu))]
-        [NoPermission]
+        [Route("[action]")]
+        [NoAuthorize]
         public async Task<List<UserMenuResponse>> QueryViewMenu()
         {
             List<long> ids = HttpContext.User.GetRoles()?.Distinct().ToList();
@@ -86,7 +88,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(CascaderList))]
+        [Route("[action]")]
         public async Task<List<ICascaderResponse>> CascaderList()
         {
             var data = await _service.Query(new IPageRequest()

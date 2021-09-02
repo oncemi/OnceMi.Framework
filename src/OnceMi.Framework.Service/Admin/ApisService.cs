@@ -57,14 +57,14 @@ namespace OnceMi.Framework.Service.Admin
             _accessor = accessor;
         }
 
-        public async Task<List<ISelectResponse<string>>> QueryApiVersions()
+        public List<ISelectResponse<string>> QueryApiVersions()
         {
             List<ISelectResponse<string>> result = _repository.Select.GroupBy(p => p.Version).Select(p => new ISelectResponse<string>
             {
                 Value = p.Key,
                 Name = p.Key
             }).ToList();
-            return await Task.FromResult(result);
+            return result;
         }
 
         public async Task<IPageResponse<ApiItemResponse>> Query(QueryApiPageRequest request, bool onlyQueryEnabled = false)

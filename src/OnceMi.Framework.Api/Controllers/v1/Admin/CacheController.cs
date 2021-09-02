@@ -35,9 +35,9 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="queryString">模糊匹配</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<CacheKeyItemResponse>> Get([FromQuery] string queryString)
+        public List<CacheKeyItemResponse> Get([FromQuery] string queryString)
         {
-            return await _cacheService.GetCacheKeys(queryString);
+            return _cacheService.GetCacheKeys(queryString);
         }
 
         /// <summary>
@@ -46,9 +46,9 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpDelete()]
-        public async Task<DeleteCachesResponse> Delete(DeleteCachesRequest request)
+        public DeleteCachesResponse Delete(DeleteCachesRequest request)
         {
-            return await _cacheService.DeleteCaches(request);
+            return _cacheService.DeleteCaches(request);
         }
     }
 }

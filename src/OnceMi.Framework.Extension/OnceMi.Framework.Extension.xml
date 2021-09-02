@@ -34,9 +34,10 @@
             属性拦截器接口
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Extension.Authorizations.NoPermissionAttribute">
+        <member name="T:OnceMi.Framework.Extension.Authorizations.NoAuthorizeAttribute">
             <summary>
             用于保护API资源，被保护的接口在用户登录后即可访问
+            无需授权，但是需要登录后才能访问
             </summary>
         </member>
         <member name="M:OnceMi.Framework.Extension.Authorizations.PermissionAuthorizationHandler.CompareMenu(OnceMi.Framework.Entity.Admin.Menus,System.String,System.String)">

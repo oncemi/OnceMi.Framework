@@ -63,7 +63,7 @@ namespace OnceMi.Framework.Extension.Job
             _logger.LogInformation("Start loading jobs...");
 
             //清除job缓存
-            await _cacheService.DeleteCaches(new DeleteCachesRequest() { Value = AdminCacheKey.SystemJobKey });
+            _cacheService.DeleteCaches(new DeleteCachesRequest() { Value = AdminCacheKey.SystemJobKey });
             //更新到期的任务为停止
             await _jobsService.UpdateEndTimeJob();
             //重新加载任务
@@ -135,7 +135,7 @@ namespace OnceMi.Framework.Extension.Job
             //等待任务结束
             while ((await _scheduler.GetCurrentlyExecutingJobs())?.Any(p => p.JobDetail.Key.GetId() == job.Id) == true)
             {
-                Thread.Sleep(10);
+                await Task.Delay(10);
             }
             await _jobsService.UpdateJobStatus(job.Id, JobStatus.Paused, true);
         }

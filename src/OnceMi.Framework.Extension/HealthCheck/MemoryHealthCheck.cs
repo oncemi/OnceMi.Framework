@@ -19,7 +19,7 @@ namespace OnceMi.Framework.Extension.HealthCheck
 
         public string Name => this.GetType().Name;
 
-        public async Task<HealthCheckResult> CheckHealthAsync(
+        public Task<HealthCheckResult> CheckHealthAsync(
             HealthCheckContext context, 
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -37,7 +37,7 @@ namespace OnceMi.Framework.Extension.HealthCheck
             var status = (allocated < options.Threshold) ? 
                 HealthStatus.Healthy : context.Registration.FailureStatus;
 
-            return await Task.FromResult(new HealthCheckResult(
+            return Task.FromResult(new HealthCheckResult(
                 status,
                 description: "Reports degraded status if allocated bytes " +
                     $">= {options.Threshold} bytes.",

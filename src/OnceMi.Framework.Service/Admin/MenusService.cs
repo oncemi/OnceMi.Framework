@@ -46,7 +46,7 @@ namespace OnceMi.Framework.Service.Admin
             _accessor = accessor;
         }
 
-        public async Task<List<ISelectResponse<int>>> QueryMenuTypes()
+        public List<ISelectResponse<int>> QueryMenuTypes()
         {
             List<EnumModel> enumModels = EnumUtil.EnumToList<MenuType>();
             if (enumModels == null || enumModels.Count == 0)
@@ -61,10 +61,10 @@ namespace OnceMi.Framework.Service.Admin
                     Value = p.Value,
                 })
                 .ToList();
-            return await Task.FromResult(result);
+            return result;
         }
 
-        public async Task<int> QueryNextSortValue(long? parentId)
+        public async ValueTask<int> QueryNextSortValue(long? parentId)
         {
             parentId = parentId == 0 ? null : parentId;
             var maxValueMenuObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)

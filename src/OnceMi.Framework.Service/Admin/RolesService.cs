@@ -50,7 +50,7 @@ namespace OnceMi.Framework.Service.Admin
             _accessor = accessor;
         }
 
-        public async Task<int> QueryNextSortValue(long? parentId)
+        public async ValueTask<int> QueryNextSortValue(long? parentId)
         {
             parentId = parentId == 0 ? null : parentId;
             var maxValueMenuObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)

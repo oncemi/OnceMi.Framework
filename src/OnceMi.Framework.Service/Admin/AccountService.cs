@@ -12,6 +12,7 @@ using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Date;
 using OnceMi.Framework.Util.Http;
+using OnceMi.Framework.Util.Security;
 using OnceMi.IdentityServer4.User;
 using OnceMi.IdentityServer4.User.Entities;
 using System;
@@ -139,7 +140,6 @@ namespace OnceMi.Framework.Service.Admin
             {
                 claims.Add(new Claim("organize", item.Id.ToString(), ClaimValueTypes.Integer64));
             }
-
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.TokenManagement.Secret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var jwtToken = new JwtSecurityToken(issuer: _config.TokenManagement.Issuer
@@ -165,7 +165,7 @@ namespace OnceMi.Framework.Service.Admin
 
         private async Task<string> GenerateRefreshToken(Users user, string token)
         {
-            string refeshToken = Guid.NewGuid().ToString("N");
+            string refeshToken = Encrypt.AESEncrypt($"{Guid.NewGuid():N}_{user.Id}_{TimeUtil.Timestamp()}", _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
             UserToken userToken = await _repository.Orm.Select<UserToken>().Where(p => p.UserId == user.Id).ToOneAsync();
             if (userToken == null)
             {

@@ -31,16 +31,16 @@ namespace OnceMi.Framework.Service.Admin
             _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         }
 
-        public async Task<DeleteCachesResponse> DeleteCaches(DeleteCachesRequest request)
+        public DeleteCachesResponse DeleteCaches(DeleteCachesRequest request)
         {
             //remove memery cache
             long removeCount = RemoveMemeryCache(request.Value);
             //remove redis cache
             removeCount += RemoveRedisCache(request.Value);
-            return await Task.FromResult(new DeleteCachesResponse(removeCount));
+            return new DeleteCachesResponse(removeCount);
         }
 
-        public async Task<List<CacheKeyItemResponse>> GetCacheKeys(string queryString)
+        public List<CacheKeyItemResponse> GetCacheKeys(string queryString)
         {
             List<CacheKeyItemResponse> result = new List<CacheKeyItemResponse>();
             var fields = typeof(AdminCacheKey).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
@@ -62,7 +62,7 @@ namespace OnceMi.Framework.Service.Admin
                     Description = description.Description
                 });
             }
-            return await Task.FromResult(result);
+            return result;
         }
 
         #region private

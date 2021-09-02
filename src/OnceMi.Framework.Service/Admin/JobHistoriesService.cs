@@ -34,7 +34,7 @@ namespace OnceMi.Framework.Service.Admin
             IPageResponse<JobHistoryItemResponse> response = new IPageResponse<JobHistoryItemResponse>();
             if (request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(JobHistories.CreatedTime)},desc" };
+                request.OrderBy = new string[] { $"{nameof(JobHistories.Id)},desc" };
             }
             Expression<Func<JobHistories, bool>> exp = p => !p.IsDeleted && p.JobId == request.JobId;
             //get count

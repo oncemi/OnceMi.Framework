@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace OnceMi.Framework.Util.Reflection
+namespace OnceMi.AspNetCore.AutoInjection
 {
     public sealed class AssemblyLoader
     {
@@ -12,8 +12,31 @@ namespace OnceMi.Framework.Util.Reflection
 
         public List<Assembly> DomainAllAssemblies { get; set; }
 
-        public AssemblyLoader()
+        private readonly string[] _ignoreNamespaces = { "dotnet-"
+            , "Microsoft."
+            , "mscorlib"
+            , "netstandard"
+            , "System"
+            , "Windows"
+            , "Castle"
+            , "AutoMapper"
+            , "Quartz"
+            , "Swashbuckle"
+            , "Newtonsoft.Json"
+            , "NLog"
+            , "FreeSql"
+            , "HealthChecks"
+        };
+
+        private readonly Func<AssemblyName, bool> _filter = null;
+
+        public AssemblyLoader(Func<AssemblyName, bool> filter = null)
         {
+            if (filter != null)
+                _filter = p => p.Name != null && !_ignoreNamespaces.Any(m => p.Name.StartsWith(m)) && filter(p);
+            else
+                _filter = p => p.Name != null && !_ignoreNamespaces.Any(m => p.Name.StartsWith(m));
+
             this.DomainAllAssemblies = this.GetDomainAssemblies();
             this.DomainAllTypes = this.GetExportedTypes();
         }
@@ -196,15 +219,19 @@ namespace OnceMi.Framework.Util.Reflection
         /// <param name="interfaceBaseType"></param>
         /// <param name="baseEntityType"></param>
         /// <returns></returns>
-        public Dictionary<Type, Type> GetInheritInterfaceTypes(Type interfaceBaseType, Type baseEntityType)
+        public Dictionary<Type, Type> GetInheritInterfaceTypes(Type interfaceBaseType)
         {
+            if (!interfaceBaseType.IsInterface)
+            {
+                throw new Exception("Only allow interface");
+            }
             Dictionary<Type, Type> registerDic = new Dictionary<Type, Type>();
-            //获取IBusService程序集中所有Service的接口
+            //程序集所有继承了接口的类
             List<Type> allBusInterfaceTypes = GetExportedTypesByInterface(interfaceBaseType, true)
                 ?.Where(p => p.IsInterface
                     && !string.IsNullOrEmpty(p.FullName)
                     && p != interfaceBaseType
-                    && !p.Name.StartsWith("IBaseService"))
+                    && p.GetCustomAttribute<IgnoreDependencyAttribute>() == null)
                 ?.ToList();
             if (allBusInterfaceTypes.Count == 0)
             {
@@ -230,30 +257,25 @@ namespace OnceMi.Framework.Util.Reflection
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
-        private List<Assembly> GetDomainAssemblies(string filter = null)
+        private List<Assembly> GetDomainAssemblies(Func<AssemblyName, bool> filter = null)
         {
-            string mainDomainName = AppDomain.CurrentDomain.FriendlyName;
-            if (string.IsNullOrEmpty(mainDomainName))
-            {
-                throw new Exception("Get current domain friendly name.");
-            }
-            string firstNamespace = mainDomainName.Split('.')[0];
-            List<Assembly> assemblies = DependencyContext.Default.RuntimeLibraries
-                .Where(o => o.Name.StartsWith(firstNamespace))
-                .Select(o => Assembly.Load(new AssemblyName(o.Name)))
-                ?.Where(p =>
+            List<Assembly> assemblies = DependencyContext.Default.GetDefaultAssemblyNames()
+                .Where(_filter)
+                .Select(o =>
                 {
-                    if (!string.IsNullOrEmpty(filter))
+                    try
                     {
-                        return p.GetName().Name.Equals(filter, StringComparison.OrdinalIgnoreCase);
+                        return Assembly.Load(new AssemblyName(o.Name));
                     }
-                    else
+                    catch
                     {
-                        return p.GetName().Name.StartsWith(firstNamespace);
+                        return null;
                     }
                 })
+                .Where(p => p != null)
                 .ToList();
-            if (assemblies == null || (string.IsNullOrEmpty(filter) && assemblies.Count() == 0))
+
+            if (assemblies == null || assemblies.Count() == 0)
             {
                 throw new Exception("Get assemblies failed.");
             }

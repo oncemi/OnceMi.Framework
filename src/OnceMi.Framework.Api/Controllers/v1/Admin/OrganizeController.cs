@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
@@ -42,10 +43,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(OrganizeTypeSelectList))]
-        public async Task<List<ISelectResponse<int>>> OrganizeTypeSelectList()
+        [Route("[action]")]
+        [NoAuthorize]
+        public List<ISelectResponse<int>> OrganizeTypeSelectList()
         {
-            return await _service.QueryOrganizeTypes();
+            return _service.QueryOrganizeTypes();
         }
 
         /// <summary>
@@ -53,7 +55,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(UserSelectList))]
+        [Route("[action]")]
+        [NoAuthorize]
         public async Task<List<ISelectResponse<long>>> UserSelectList(string query)
         {
             return await _usersService.GetUserSelectList(query);
@@ -64,7 +67,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(CascaderList))]
+        [Route("[action]")]
         public async Task<List<ICascaderResponse>> CascaderList()
         {
             var data = await _service.Query(new OrganizePageRequest()
@@ -85,7 +88,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(OrganizeTreeList))]
+        [Route("[action]")]
         public async Task<IEnumerable<OrganizeItemResponse>> OrganizeTreeList()
         {
             var data = await _service.Query(new OrganizePageRequest()

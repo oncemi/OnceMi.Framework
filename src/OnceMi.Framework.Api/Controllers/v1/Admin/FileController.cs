@@ -47,10 +47,10 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoPermission]
-        public async Task<List<ISelectResponse<string>>> AccessModeSelectList()
+        [NoAuthorize]
+        public List<ISelectResponse<string>> AccessModeSelectList()
         {
-            return await _service.QueryAccessModes();
+            return _service.QueryAccessModes();
         }
 
         /// <summary>

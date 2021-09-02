@@ -23,7 +23,7 @@ namespace OnceMi.Framework.Extension.HealthCheck
 
         public string Name => this.GetType().Name;
 
-        public async Task<HealthCheckResult> CheckHealthAsync(
+        public Task<HealthCheckResult> CheckHealthAsync(
             HealthCheckContext context,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -48,19 +48,19 @@ namespace OnceMi.Framework.Extension.HealthCheck
                 }
                 if (failedDb.Count == 0)
                 {
-                    return await Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, "Success"));
+                    return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, "Success"));
                 }
                 else
                 {
                     string failedDbStr = string.Join('|', failedDb);
-                    return await Task.FromResult(new HealthCheckResult(
+                    return Task.FromResult(new HealthCheckResult(
                         status: HealthStatus.Degraded
                         , description: $"There are problems with these database connections.({failedDbStr})"));
                 }
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, ex.Message));
+                return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, ex.Message));
             }
         }
     }

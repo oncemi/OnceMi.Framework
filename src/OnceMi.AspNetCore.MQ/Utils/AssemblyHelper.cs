@@ -53,7 +53,25 @@ namespace OnceMi.AspNetCore.MQ
         /// <returns></returns>
         private static List<Type> GetExportedTypes()
         {
-            List<Assembly> assemblies = DependencyContext.Default.RuntimeLibraries
+            string[] filters = { "dotnet-"
+                    , "Microsoft."
+                    , "mscorlib"
+                    , "netstandard"
+                    , "System"
+                    , "Windows"
+                    , "Castle"
+                    , "AutoMapper"
+                    , "Quartz"
+                    , "Swashbuckle"
+                    , "Newtonsoft.Json"
+                    ,"NLog"
+                    ,"FreeSql"
+                    ,"HealthChecks"
+            };
+            bool filter(AssemblyName p) => p.Name != null && !filters.Any(m => p.Name.StartsWith(m));
+
+            List<Assembly> assemblies = DependencyContext.Default.GetDefaultAssemblyNames()
+                .Where(filter)
                 .Select(o =>
                 {
                     try
@@ -73,7 +91,7 @@ namespace OnceMi.AspNetCore.MQ
                 throw new Exception("Get assemblies exported types failed.");
             }
             List<Type> result = new List<Type>();
-            foreach(var amItem in assemblies)
+            foreach (var amItem in assemblies)
             {
                 try
                 {

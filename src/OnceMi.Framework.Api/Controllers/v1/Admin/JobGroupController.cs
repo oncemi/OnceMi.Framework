@@ -67,7 +67,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(SelectList))]
+        [Route("[action]")]
         public async Task<List<ISelectResponse<long>>> SelectList(long id)
         {
             var data = await _service.Query(new IPageRequest()

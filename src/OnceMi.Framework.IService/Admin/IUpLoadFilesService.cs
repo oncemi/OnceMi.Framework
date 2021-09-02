@@ -119,7 +119,7 @@ namespace OnceMi.Framework.IService.Admin
         /// 查询访问权限Select
         /// </summary>
         /// <returns></returns>
-        Task<List<ISelectResponse<string>>> QueryAccessModes();
+        List<ISelectResponse<string>> QueryAccessModes();
 
         /// <summary>
         /// 分页查询

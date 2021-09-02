@@ -196,7 +196,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route(nameof(Stop))]
+        [Route("[action]")]
         public async Task Stop(JobOperationRequest request)
         {
             var job = await _service.QueryJobById(request.Id);
@@ -217,7 +217,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route(nameof(Pause))]
+        [Route("[action]")]
         public async Task Pause(JobOperationRequest request)
         {
             var job = await _service.QueryJobById(request.Id);
@@ -234,7 +234,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route(nameof(Resume))]
+        [Route("[action]")]
         public async Task Resume(JobOperationRequest request)
         {
             var job = await _service.QueryJobById(request.Id);
@@ -251,7 +251,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route(nameof(Trigger))]
+        [Route("[action]")]
         public async Task Trigger(JobOperationRequest request)
         {
             var job = await _service.QueryJobById(request.Id);

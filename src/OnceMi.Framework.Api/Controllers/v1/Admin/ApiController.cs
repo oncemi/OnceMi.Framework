@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
@@ -41,10 +42,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(GetApiVersions))]
-        public async Task<List<ISelectResponse<string>>> GetApiVersions()
+        [Route("[action]")]
+        [NoAuthorize]
+        public List<ISelectResponse<string>> GetApiVersions()
         {
-            return await _service.QueryApiVersions();
+            return _service.QueryApiVersions();
         }
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route(nameof(CascaderList))]
+        [Route("[action]")]
         public async Task<List<ICascaderResponse>> CascaderList()
         {
             var data = await _service.Query(new QueryApiPageRequest()
@@ -166,7 +168,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// 同步
         /// </summary>
         [HttpPost]
-        [Route(nameof(Resolve))]
+        [Route("[action]")]
         public async Task Resolve()
         {
             await _service.AutoResolve();

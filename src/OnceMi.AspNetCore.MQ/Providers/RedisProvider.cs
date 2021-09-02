@@ -10,7 +10,7 @@ namespace OnceMi.AspNetCore.MQ
     /// <summary>
     /// Redis消息队列
     /// </summary>
-    class RedisProvider : IBaseProvider
+    sealed class RedisProvider : IBaseProvider
     {
         private readonly RedisClient _client;
 

@@ -11,7 +11,7 @@ namespace OnceMi.Framework.IService.Admin
         /// 查询Api的版本
         /// </summary>
         /// <returns></returns>
-        Task<List<ISelectResponse<string>>> QueryApiVersions();
+        List<ISelectResponse<string>> QueryApiVersions();
 
         /// <summary>
         /// 自动解析当前项目的API

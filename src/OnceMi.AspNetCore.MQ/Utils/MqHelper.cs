@@ -14,8 +14,7 @@ namespace OnceMi.AspNetCore.MQ.Utils
             {
                 throw new ArgumentNullException("Error appid");
             }
-            string name = $"APP-{appId}-{typeof(T).FullName}";
-            return name;
+            return $"APP-{appId}-{typeof(T).FullName}";
         }
     }
 }

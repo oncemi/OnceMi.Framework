@@ -1,4 +1,5 @@
 ﻿using FreeSql;
+using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Entity;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,13 @@ namespace OnceMi.Framework.IService
     /// <summary>
     /// 继承该接口的Service将被自动注入
     /// </summary>
-    public interface IBaseService
+    [IgnoreDependency]
+    public interface IBaseService : IServiceDependency
     {
 
     }
 
+    [IgnoreDependency]
     public interface IBaseService<TEntity, TKey> : IBaseService
         where TEntity : IEntity<TKey>
         where TKey : struct

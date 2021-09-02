@@ -9,8 +9,8 @@ namespace OnceMi.Framework.IService.Admin
 {
     public interface ICacheService : IBaseService
     {
-        public Task<List<CacheKeyItemResponse>> GetCacheKeys(string queryString);
+        public List<CacheKeyItemResponse> GetCacheKeys(string queryString);
 
-        public Task<DeleteCachesResponse> DeleteCaches(DeleteCachesRequest request);
+        public DeleteCachesResponse DeleteCaches(DeleteCachesRequest request);
     }
 }

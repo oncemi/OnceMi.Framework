@@ -6,7 +6,6 @@ using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Attributes;
-using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Dto.Request.Admin.User;
 using OnceMi.Framework.Model.Exception;
@@ -52,7 +51,7 @@ namespace OnceMi.Framework.Service.Admin
             _accessor = accessor;
         }
 
-        public async Task<List<ISelectResponse<string>>> GetUserStatus()
+        public List<ISelectResponse<string>> GetUserStatus()
         {
             List<EnumModel> enumModels = EnumUtil.EnumToList<UserStatus>();
             if (enumModels == null || enumModels.Count == 0)
@@ -67,10 +66,10 @@ namespace OnceMi.Framework.Service.Admin
                     Value = p.Name,
                 })
                 .ToList();
-            return await Task.FromResult(result);
+            return result;
         }
 
-        public async Task<List<ISelectResponse<string>>> GetUserGender()
+        public List<ISelectResponse<string>> GetUserGender()
         {
             List<EnumModel> enumModels = EnumUtil.EnumToList<UserGender>();
             if (enumModels == null || enumModels.Count == 0)
@@ -85,7 +84,7 @@ namespace OnceMi.Framework.Service.Admin
                     Value = p.Name,
                 })
                 .ToList();
-            return await Task.FromResult(result);
+            return result;
         }
 
         public async Task<List<ISelectResponse<long>>> GetUserSelectList(string query)
@@ -144,7 +143,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(Users.CreatedTime)},desc" };
+                request.OrderBy = new string[] { $"{nameof(Users.Id)},desc" };
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
@@ -415,7 +414,7 @@ namespace OnceMi.Framework.Service.Admin
                 .ExecuteAffrowsAsync();
         }
 
-        public Task<byte[]> GetAvatar(string name, int size = 100)
+        public byte[] GetAvatar(string name, int size = 250)
         {
             if (!string.IsNullOrEmpty(name) && name.Length > 2)
             {
@@ -423,10 +422,14 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (size < 30 || size > 1500)
             {
-                size = 80;
+                size = 120;
             }
-            var bytes = RandomAvatarBuilder.Build(size).SetPadding(4).FixedSeed(!string.IsNullOrEmpty(name), name).ToBytes();
-            return Task.FromResult(bytes);
+            var bytes = RandomAvatarBuilder
+                .Build(size)
+                .SetPadding(4)
+                .FixedSeed(!string.IsNullOrEmpty(name), name)
+                .ToBytes();
+            return bytes;
         }
 
         private void BuildOrganizeWithChildList(List<Organizes> allOrganizes, long parentId, List<long> dest)

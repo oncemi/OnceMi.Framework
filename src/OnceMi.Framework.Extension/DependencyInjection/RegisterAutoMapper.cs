@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using OnceMi.AspNetCore.AutoInjection;
+using OnceMi.Framework.Config;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Util.Extensions;
-using OnceMi.Framework.Util.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,8 @@ namespace OnceMi.Framework.Extension.DependencyInjection
         public static IServiceCollection AddMapper(this IServiceCollection services)
         {
             //自动注入Profile
-            List<Type> profileTypes = new AssemblyLoader().GetExportedTypesByBaseType(typeof(Profile));
+            List<Type> profileTypes = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                .GetExportedTypesByBaseType(typeof(Profile));
             List<MapperEntityConfig> mapperList = GetMapperFrom();
             List<MapperEntityConfig> mapperToList = GetMapperTo();
             foreach (var item in mapperToList)

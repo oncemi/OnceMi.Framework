@@ -20,21 +20,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void Injection(IServiceCollection services)
         {
-            List<Assembly> assemblies = DependencyContext.Default.RuntimeLibraries
-                .Select(o =>
-                {
-                    try
-                    {
-                        return Assembly.Load(new AssemblyName(o.Name));
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                })
-                .Where(p => p != null)
-                .ToList();
-
+            List<Assembly> assemblies = new AssemblyLoader().DomainAllAssemblies;
             if (assemblies == null || assemblies.Count() == 0)
             {
                 throw new Exception("Get assemblies failed.");
@@ -64,7 +50,10 @@ namespace Microsoft.Extensions.DependencyInjection
                         poolDic.Add(item, attr);
                     }
                 }
-                catch { }
+                catch
+                {
+                    throw;
+                }
             }
             foreach (var item in poolDic)
             {

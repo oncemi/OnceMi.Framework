@@ -13,7 +13,7 @@ namespace OnceMi.AspNetCore.MQ
     /// <summary>
     /// RabbitMq消息队列
     /// </summary>
-    class RabbitMQProvider : IBaseProvider
+    sealed class RabbitMQProvider : IBaseProvider
     {
         private readonly IBus _ibus = null;
 
@@ -32,13 +32,24 @@ namespace OnceMi.AspNetCore.MQ
         {
             if (obj == null)
                 return;
+
             string channel = MqHelper.CreateQueneNmae<T>(_options.AppId);
-            await _ibus.SendReceive.SendAsync(channel, obj);
+            string data = JsonUtil.SerializeToString(obj);
+
+            await _ibus.SendReceive.SendAsync(channel, data);
         }
 
         public override async Task<IDisposable> Subscribe<T>(string subscriptionId, Action<T> onMessage, CancellationToken cancellationToken = default) where T : class
         {
-            var result = await _ibus.SendReceive.ReceiveAsync<T>(subscriptionId, onMessage, cancellationToken);
+            var result = await _ibus.SendReceive.ReceiveAsync<string>(subscriptionId, (data) =>
+            {
+                if (string.IsNullOrEmpty(data))
+                {
+                    onMessage(null);
+                }
+                T obj = JsonUtil.DeserializeStringToObject<T>(data);
+                onMessage(obj);
+            }, cancellationToken);
             if (result != null)
             {
                 return result;

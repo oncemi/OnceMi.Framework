@@ -24,7 +24,7 @@ namespace OnceMi.Framework.Extension.HealthCheck
 
         public string Name => this.GetType().Name;
 
-        public async Task<HealthCheckResult> CheckHealthAsync(
+        public Task<HealthCheckResult> CheckHealthAsync(
             HealthCheckContext context,
             CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -35,16 +35,16 @@ namespace OnceMi.Framework.Extension.HealthCheck
                 long count = _redisClient.Del(key);
                 if (count == 1)
                 {
-                    return await Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, "Success"));
+                    return Task.FromResult(new HealthCheckResult(HealthStatus.Healthy, "Success"));
                 }
                 else
                 {
-                    return await Task.FromResult(new HealthCheckResult(HealthStatus.Degraded, "Too long execution time."));
+                    return Task.FromResult(new HealthCheckResult(HealthStatus.Degraded, "Too long execution time."));
                 }
             }
             catch (Exception ex)
             {
-                return await Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, ex.Message));
+                return Task.FromResult(new HealthCheckResult(HealthStatus.Unhealthy, ex.Message));
             }
         }
     }
