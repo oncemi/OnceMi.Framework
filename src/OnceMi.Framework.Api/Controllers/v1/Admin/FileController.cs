@@ -14,6 +14,7 @@ using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.User;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -69,10 +70,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// 下载文件（需要认证）
         /// </summary>
         /// <param name="key"></param>
+        /// <param name="responseType"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IActionResult> Download(string key)
+        public async Task<IActionResult> Download(string key, FileResponseType responseType = FileResponseType.Binary)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -93,16 +95,18 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     throw new BusException(-1, "对不起，您没有改文件的访问权限");
                 }
             }
-            return await FileDownload(fileInfo);
+            return await FileDownload(fileInfo, responseType);
         }
 
         /// <summary>
         /// 下载文件
         /// </summary>
+        /// <param name="key"></param>
+        /// <param name="responseType"></param>
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Get(string key)
+        public async Task<IActionResult> Get(string key, FileResponseType responseType = FileResponseType.Binary)
         {
             if (string.IsNullOrEmpty(key))
             {
@@ -111,18 +115,20 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             //解码
             UploadFileInfo fileInfo = _service.DecodeFileKey(key);
             //判断访问权限，暂不支持，没找到覆盖重新授权策略的方式
-            if (fileInfo.AccessMode == FileAccessMode.Private)
+            if (fileInfo.AccessMode != FileAccessMode.PublicRead
+                && fileInfo.AccessMode != FileAccessMode.PublicReadAndWrite)
             {
                 return RedirectToAction("Download", new { key = key });
             }
-            return await FileDownload(fileInfo);
+            return await FileDownload(fileInfo, responseType);
         }
 
         /// <summary>
-        /// 文件上传
+        /// 文件上传，文件上传限制为：2147483648 Byte(2G)
         /// </summary>
         /// <param name="request">请求参数</param>
         [HttpPost]
+        [RequestSizeLimit(2147483648)]
         public async Task<List<UploadFileInfo>> Post([FromForm] FileUploadRequest request)
         {
             if (request.AccessMode == 0)
@@ -154,7 +160,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
 
         #region private
 
-        private async Task<IActionResult> FileDownload(UploadFileInfo file)
+        private async Task<IActionResult> FileDownload(UploadFileInfo file, FileResponseType responseType)
         {
             if (string.IsNullOrEmpty(file.Path))
             {
@@ -172,12 +178,24 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                         {
                             throw new BusException(-1, "获取文件参数失败，找不到指定的文件存储位置！");
                         }
-                        string contentType = "application/octet-stream";
-                        if (!new FileExtensionContentTypeProvider().TryGetContentType(file.Path, out contentType))
+                        if (responseType == FileResponseType.Blob)
                         {
-                            contentType = "application/octet-stream";
+                            using (FileStream stream = System.IO.File.OpenRead(file.Path))
+                            {
+                                byte[] data = new byte[stream.Length];
+                                await stream.ReadAsync(data);
+
+                                return File(data, "application/octet-stream", file.OldName);
+                            }
                         }
-                        return File(System.IO.File.OpenRead(file.Path), contentType, file.OldName);
+                        else
+                        {
+                            if (!new FileExtensionContentTypeProvider().TryGetContentType(file.Path, out string contentType))
+                            {
+                                contentType = "application/octet-stream";
+                            }
+                            return File(System.IO.File.OpenRead(file.Path), contentType, file.OldName);
+                        }
                     }
                 case StorageType.OSS:
                     {

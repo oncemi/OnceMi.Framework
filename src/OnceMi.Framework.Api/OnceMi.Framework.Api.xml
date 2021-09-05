@@ -184,22 +184,25 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Download(System.String)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Download(System.String,OnceMi.Framework.Model.Enums.FileResponseType)">
             <summary>
             下载文件（需要认证）
             </summary>
             <param name="key"></param>
+            <param name="responseType"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Get(System.String)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Get(System.String,OnceMi.Framework.Model.Enums.FileResponseType)">
             <summary>
             下载文件
             </summary>
+            <param name="key"></param>
+            <param name="responseType"></param>
             <returns></returns>
         </member>
         <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Post(OnceMi.Framework.Model.Dto.FileUploadRequest)">
             <summary>
-            文件上传
+            文件上传，文件上传限制为：2147483648 Byte(2G)
             </summary>
             <param name="request">请求参数</param>
         </member>
