@@ -18,8 +18,8 @@ using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.Extension.DependencyInjection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
-using OnceMi.Framework.Extension.Middlewares;
 using OnceMi.Framework.Util.Json;
+using OnceMi.Framework.Extension.Middlewares;
 using System;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -98,7 +98,7 @@ namespace OnceMi.Framework.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy(GlobalConstant.DefaultOriginsName, policy =>
+                options.AddPolicy(ConfigConstant.DefaultOriginsName, policy =>
                  {
                      policy.AllowAnyHeader()
                      .AllowAnyMethod()
@@ -222,6 +222,19 @@ namespace OnceMi.Framework.Api
 
             #endregion
 
+            #region 请求日志
+
+            //在.net6中将会启用此api
+            //services.AddHttpLogging(logging =>
+            //{
+            //    // Customize HTTP logging here.
+            //    logging.LoggingFields = HttpLoggingFields.All;
+            //    logging.RequestBodyLogLimit = 4096;
+            //    logging.ResponseBodyLogLimit = 4096;
+            //});
+
+            #endregion
+
             #region Controller
 
             services.AddHttpContextAccessor();
@@ -254,7 +267,9 @@ namespace OnceMi.Framework.Api
                     options.JsonSerializerOptions.Converters.Add(new ExceptionConverter());
                     options.JsonSerializerOptions.Converters.Add(new TypeConverter());
                     //小驼峰
-                    options.JsonSerializerOptions.PropertyNamingPolicy = GlobalConstant.DefaultJsonNamingPolicy;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = ConfigConstant.DefaultJsonNamingPolicy;
+                    //循环引用
+                    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 });
 
             //ApiBehaviorOptions必须在AddControllers之后
@@ -281,9 +296,18 @@ namespace OnceMi.Framework.Api
             {
                 builder.Run(async context =>
                 {
-                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, GlobalConstant.DefaultJsonNamingPolicy);
+                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, ConfigConstant.DefaultJsonNamingPolicy);
                 });
             });
+
+            #endregion
+
+            #region 请求日志
+
+            //请求日志，将在.net6中启用此api
+            //app.UseHttpLogging();
+            //请求日志
+            app.UseRequestLogging();
 
             #endregion
 
@@ -294,7 +318,7 @@ namespace OnceMi.Framework.Api
             //健康检查
             app.UseHealthChecks();
             //跨域
-            app.UseCors(GlobalConstant.DefaultOriginsName);
+            app.UseCors(ConfigConstant.DefaultOriginsName);
             //消息队列
             app.UseMessageQuene();
 
@@ -303,9 +327,6 @@ namespace OnceMi.Framework.Api
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            //写请求日志
-            app.UseRequestLogging();
 
             app.UseEndpoints(endpoints =>
             {

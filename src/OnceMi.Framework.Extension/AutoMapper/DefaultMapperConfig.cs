@@ -1,13 +1,7 @@
 ﻿using AutoMapper;
+using OnceMi.Framework.Entity.Article;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Util.Extensions;
-using OnceMi.IdentityServer4.User.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.AutoMapper
 {
@@ -21,6 +15,13 @@ namespace OnceMi.Framework.Extension.AutoMapper
             CreateMap<CreateOrganizeRequest, Organizes>()
                 .ForMember(dest => dest.DepartLeaders, opts => opts.Ignore())
                 .ForMember(dest => dest.HeadLeaders, opts => opts.Ignore());
+
+            CreateMap<Articles, ArticleResponse>()
+                .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.ArticleCategories == null ? null : src.ArticleCategories))
+                .ForMember(dest => dest.Comments, opts => opts.MapFrom(src => src.ArticleComments == null ? null : src.ArticleComments))
+                .ForMember(dest => dest.Tags, opts => opts.MapFrom(src => src.ArticleTags == null ? null : src.ArticleTags))
+                .ForMember(dest => dest.Covers, opts => opts.MapFrom(src => src.ArticleCovers == null ? null : src.ArticleCovers))
+                .ForMember(dest => dest.Author, opts => opts.MapFrom(src => src.CreateUser == null ? null : src.CreateUser.NickName));
         }
     }
 }

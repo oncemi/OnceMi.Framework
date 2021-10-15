@@ -1,10 +1,6 @@
 ﻿using OnceMi.Framework.Entity.Admin;
-using OnceMi.IdentityServer4.User.Entities;
-using System;
+using OnceMi.Framework.Entity.Article;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
@@ -31,5 +27,7 @@ namespace OnceMi.Framework.Model.Dto
         public List<UserRole> UserRole { get; set; }
 
         public List<RolePermissions> RolePermissions { get; set; }
+
+        public List<ArticleCategories> ArticleCategories { get; set; }
     }
 }

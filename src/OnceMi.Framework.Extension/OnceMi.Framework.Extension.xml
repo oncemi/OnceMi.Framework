@@ -34,7 +34,7 @@
             属性拦截器接口
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Extension.Authorizations.NoAuthorizeAttribute">
+        <member name="T:OnceMi.Framework.Extension.Authorizations.SkipAuthorizationAttribute">
             <summary>
             用于保护API资源，被保护的接口在用户登录后即可访问
             无需授权，但是需要登录后才能访问
@@ -95,6 +95,11 @@
         <member name="T:OnceMi.Framework.Extension.Filters.GolbalTranActionFilter">
             <summary>
             重复请求
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Filters.TrimStringsFilterAttribute">
+            <summary>
+            去除请求string中前后空格
             </summary>
         </member>
         <member name="T:OnceMi.Framework.Extension.Helpers.RewriteHelper">

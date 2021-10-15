@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
@@ -9,9 +10,13 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v1.Admin
 {
+    /// <summary>
+    /// 用户登录/注册
+    /// </summary>
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/[controller]")]
+    [TrimStringsFilter]
     public class AccountController : ControllerBase
     {
         private readonly ILogger<AccountController> _logger;

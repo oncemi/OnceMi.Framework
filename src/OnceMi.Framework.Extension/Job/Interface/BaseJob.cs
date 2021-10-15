@@ -12,10 +12,10 @@ namespace OnceMi.Framework.Extension.Job
     [DisallowConcurrentExecution]
     public abstract class BaseJob : IJob
     {
-        private readonly IJobsService _jobsService;
+        private readonly IJobService _jobsService;
         private readonly ILogger _logger;
 
-        public BaseJob(IJobsService jobsService
+        public BaseJob(IJobService jobsService
             , ILogger logger)
         {
             _jobsService = jobsService ?? throw new ArgumentNullException(nameof(jobsService));

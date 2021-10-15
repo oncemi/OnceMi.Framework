@@ -23,13 +23,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class OrganizeController : ControllerBase
     {
         private readonly ILogger<OrganizeController> _logger;
-        private readonly IOrganizesService _service;
-        private readonly IUsersService _usersService;
+        private readonly IOrganizeService _service;
+        private readonly IUserService _usersService;
         private readonly IMapper _mapper;
 
         public OrganizeController(ILogger<OrganizeController> logger
-            , IOrganizesService rolesService
-            , IUsersService usersService
+            , IOrganizeService rolesService
+            , IUserService usersService
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -44,7 +44,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
+        [SkipAuthorization]
         public List<ISelectResponse<int>> OrganizeTypeSelectList()
         {
             return _service.QueryOrganizeTypes();
@@ -56,7 +56,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
+        [SkipAuthorization]
         public async Task<List<ISelectResponse<long>>> UserSelectList(string query)
         {
             return await _usersService.GetUserSelectList(query);

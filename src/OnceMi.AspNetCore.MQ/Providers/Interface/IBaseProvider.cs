@@ -26,6 +26,8 @@ namespace OnceMi.AspNetCore.MQ
 
         public abstract Task Publish<T>(T obj) where T : class;
 
+        public abstract Task Publish<T>(T obj, TimeSpan ts) where T : class;
+
         public abstract Task<IDisposable> Subscribe<T>(string subscriptionId, Action<T> onMessage, CancellationToken cancellationToken = default) where T : class;
     }
 }

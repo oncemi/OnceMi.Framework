@@ -4,13 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
-using OnceMi.IdentityServer4.User.Extensions;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v1.Admin
@@ -24,11 +23,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class UserController : ControllerBase
     {
         private readonly ILogger<UserController> _logger;
-        private readonly IUsersService _service;
+        private readonly IUserService _service;
         private readonly IMapper _mapper;
 
         public UserController(ILogger<UserController> logger
-            , IUsersService service
+            , IUserService service
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -41,7 +40,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
+        [SkipAuthorization]
         public List<ISelectResponse<string>> UserStatusSelectList()
         {
             return _service.GetUserStatus();
@@ -53,7 +52,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
+        [SkipAuthorization]
         public List<ISelectResponse<string>> UserGenderSelectList()
         {
             return _service.GetUserGender();
@@ -98,10 +97,6 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             {
                 request.EmailConfirmed = false;
             }
-            if (!UserHelpers.IsUserName(request.UserName))
-            {
-                throw new BusException(-1, "用户名只能由数字和字母组成");
-            }
             return await _service.Insert(request);
         }
 
@@ -121,10 +116,6 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             {
                 request.EmailConfirmed = false;
             }
-            if (!UserHelpers.IsUserName(request.UserName))
-            {
-                throw new BusException(-1, "用户名只能由数字和字母组成");
-            }
             await _service.Update(request);
         }
 
@@ -137,7 +128,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [Route("UpdateUserStatus")]
         public async Task Put(UpdateUserStatusRequest request)
         {
-            await _service.UpdateUserStatus(request);
+            await _service.UpdateStatus(request);
         }
 
         /// <summary>
@@ -149,7 +140,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [Route("UpdateUserPassword")]
         public async Task Put(UpdateUserPasswordRequest request)
         {
-            await _service.UpdateUserPassword(request);
+            await _service.UpdatePassword(request);
         }
 
         /// <summary>

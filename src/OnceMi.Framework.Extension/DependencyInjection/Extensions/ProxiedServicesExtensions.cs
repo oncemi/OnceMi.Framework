@@ -13,7 +13,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
     /// <summary>
     /// 注入AOP代理扩展
     /// </summary>
-    public static class ProxiedServicesExtensions
+    internal static class ProxiedServicesExtensions
     {
         #region AddScoped
 

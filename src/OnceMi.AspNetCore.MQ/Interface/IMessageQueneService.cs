@@ -20,6 +20,14 @@ namespace OnceMi.AspNetCore.MQ
         public Task Publish<T>(T obj) where T : class;
 
         /// <summary>
+        /// 发布（延时队列）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public Task Publish<T>(T obj, TimeSpan ts) where T : class;
+
+        /// <summary>
         /// 订阅
         /// </summary>
         /// <typeparam name="T"></typeparam>

@@ -8,6 +8,7 @@ using OnceMi.Framework.Model.Attributes;
 using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.IRepository;
+using OnceMi.Framework.Repository;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -15,7 +16,13 @@ namespace OnceMi.Framework.Extension.DependencyInjection
     {
         public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+            //为了引入OnceMi.Framework.IRepository的实现，不然可能无法正确的获取仓储实现
+            Type configRepository = typeof(ConfigRepository);
+            if (configRepository == null)
+            {
+                throw new Exception("Can not load repository realization");
+            }
+            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                 .GetInheritInterfaceTypes(typeof(IRepositoryDependency));
             if (registerDic == null)
             {

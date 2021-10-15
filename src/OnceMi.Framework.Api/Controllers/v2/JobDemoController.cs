@@ -1,24 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnceMi.AspNetCore.MQ;
-using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.IService;
 using OnceMi.Framework.Model.Attributes;
-using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using OnceMi.IdentityServer4.User;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v2
 {
     /// <summary>
-    /// Job Demo
+    /// 定时任务Demo
     /// </summary>
     [ApiController]
     [ApiVersion(ApiVersions.V2)]
@@ -35,6 +27,14 @@ namespace OnceMi.Framework.Api.Controllers.v2
             _messageQuene = messageQuene ?? throw new ArgumentNullException(nameof(messageQuene));
         }
 
+        /// <summary>
+        /// 执行定时任务
+        /// </summary>
+        /// <remarks>
+        /// 定时任务接口需要加上[Job]特性
+        /// </remarks>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         [Job]

@@ -1,5 +1,4 @@
 ﻿using FreeSql.DataAnnotations;
-using OnceMi.IdentityServer4.User.Entities;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -79,13 +78,13 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 公共读写
         /// </summary>
-        [Description("公共读写")]
+        [Description("公共读写（暂不支持）")]
         PublicReadAndWrite = 3,
 
         /// <summary>
         /// 公共写
         /// </summary>
-        [Description("公共写")]
+        [Description("公共写（暂不支持）")]
         PublicWrite = 5,
 
         /// <summary>

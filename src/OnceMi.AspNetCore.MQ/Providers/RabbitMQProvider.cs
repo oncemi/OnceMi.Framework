@@ -36,12 +36,25 @@ namespace OnceMi.AspNetCore.MQ
             string channel = MqHelper.CreateQueneNmae<T>(_options.AppId);
             string data = JsonUtil.SerializeToString(obj);
 
-            await _ibus.SendReceive.SendAsync(channel, data);
+            await _ibus.PubSub.PublishAsync(data, channel);
+        }
+
+        public override Task Publish<T>(T obj, TimeSpan ts) where T : class
+        {
+            if (obj == null)
+                return Task.CompletedTask;
+
+            string channel = MqHelper.CreateQueneNmae<T>(_options.AppId);
+            string data = JsonUtil.SerializeToString(obj);
+
+            _ibus.Scheduler.FuturePublish(data, TimeSpan.FromSeconds(ts.TotalSeconds), channel);
+
+            return Task.CompletedTask;
         }
 
         public override async Task<IDisposable> Subscribe<T>(string subscriptionId, Action<T> onMessage, CancellationToken cancellationToken = default) where T : class
         {
-            var result = await _ibus.SendReceive.ReceiveAsync<string>(subscriptionId, (data) =>
+            var result = await _ibus.PubSub.SubscribeAsync<string>(subscriptionId, (data) =>
             {
                 if (string.IsNullOrEmpty(data))
                 {
@@ -49,7 +62,12 @@ namespace OnceMi.AspNetCore.MQ
                 }
                 T obj = JsonUtil.DeserializeStringToObject<T>(data);
                 onMessage(obj);
-            }, cancellationToken);
+            }
+            , x =>
+            {
+                x.WithTopic(subscriptionId);
+            }
+            , cancellationToken);
             if (result != null)
             {
                 return result;

@@ -5,7 +5,10 @@ using System.Data;
 namespace OnceMi.Framework.Model.Attributes
 {
     /// <summary>
-    /// 方法执行完成之后清理指定key的缓存
+    /// 数据库数据
+    /// <remark>
+    /// 不支持跨库事务和分布式事务，请注意
+    /// </remark>
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class TransactionAttribute : IAopAttribute

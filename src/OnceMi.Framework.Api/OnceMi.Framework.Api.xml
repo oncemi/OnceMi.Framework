@@ -4,6 +4,11 @@
         <name>OnceMi.Framework.Api</name>
     </assembly>
     <members>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController">
+            <summary>
+            用户登录/注册
+            </summary>
+        </member>
         <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController.Login(OnceMi.Framework.Model.Dto.LoginRequest)">
             <summary>
             登录
@@ -31,7 +36,7 @@
         </member>
         <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.GetApiVersions">
             <summary>
-            获取所有Api版本
+            获取Api版本
             </summary>
             <returns></returns>
         </member>
@@ -126,7 +131,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.GetNextSortValue(System.Nullable{System.Int64})">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.NextSortValue(System.Nullable{System.Int64})">
             <summary>
             获取下一排序顺序
             </summary>
@@ -184,25 +189,24 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Download(System.String,OnceMi.Framework.Model.Enums.FileResponseType)">
-            <summary>
-            下载文件（需要认证）
-            </summary>
-            <param name="key"></param>
-            <param name="responseType"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Get(System.String,OnceMi.Framework.Model.Enums.FileResponseType)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Get(System.String,System.String)">
             <summary>
             下载文件
             </summary>
+            <remarks>
+            这种携带token的方式其实是非常不安全的，截获token之后就可以使用改token下载其它文件或通过解析jwttoken知道谁在下载文件 <br />
+            其它解决方案 <br />
+            1、针对改文件生成一个临时的url，提供用户下载 <br />
+            2、使用blob，但是问题是OSS中的文件无法通过这种方式下载 <br />
+            3、下载文件之前请求一次获取一个临时的token，然后通过临时token来下载文件，缺点就是实在太复杂 <br />
+            </remarks>
             <param name="key"></param>
-            <param name="responseType"></param>
+            <param name="token"></param>
             <returns></returns>
         </member>
         <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.Post(OnceMi.Framework.Model.Dto.FileUploadRequest)">
             <summary>
-            文件上传，文件上传限制为：2147483648 Byte(2G)
+            文件上传
             </summary>
             <param name="request">请求参数</param>
         </member>
@@ -211,18 +215,6 @@
             删除文件
             </summary>
             <param name="ids"></param>
-        </member>
-        <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.GrantController">
-            <summary>
-            软件注册
-            </summary>
-        </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.GrantController.Get(OnceMi.Framework.Model.Dto.SoftGrantRequest)">
-            <summary>
-            根据机器码获取注册码
-            </summary>
-            <param name="requestModel"></param>
-            <returns></returns>
         </member>
         <member name="T:OnceMi.Framework.Api.Controllers.v1.Admin.JobController">
             <summary>
@@ -351,20 +343,20 @@
             菜单管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.GetMenuTypes">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.MenuTypes">
             <summary>
             获取菜单类型
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.GetNextSortValue(System.Nullable{System.Int64})">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.NextSortValue(System.Nullable{System.Int64})">
             <summary>
             获取下一排序顺序
             </summary>
             <param name="parentId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.QueryViewMenu">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.UserMenu">
             <summary>
             根据角色查询菜单
             </summary>
@@ -489,7 +481,7 @@
             <param name="roleId">角色Id</param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.QueryUserRolePermission">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.UserRolePermission">
             <summary>
             获取用户角色操作权限
             </summary>
@@ -506,7 +498,7 @@
             角色管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.GetNextSortValue(System.Nullable{System.Int64})">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.NextSortValue(System.Nullable{System.Int64})">
             <summary>
             获取下一排序顺序
             </summary>
@@ -668,20 +660,131 @@
             根据Id删除
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController">
+            <summary>
+            文章分类
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.CascaderList">
+            <summary>
+            查询分类树
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Post(OnceMi.Framework.Model.Dto.CreateArticleCategoryRequest)">
+            <summary>
+            新增文章分类
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Put(OnceMi.Framework.Model.Dto.UpdateArticleCategoryRequest)">
+            <summary>
+            修改文章分类
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController">
+            <summary>
+            文章管理
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.AllTags">
+            <summary>
+            查询所有标签
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Get(OnceMi.Framework.Model.Dto.QueryArticlePageRequest)">
+            <summary>
+            分页查询
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Get(System.Int64)">
+            <summary>
+            根据ID查询
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Post(OnceMi.Framework.Model.Dto.CreateOrUpdateArticleRequest)">
+            <summary>
+            新增文章
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Put(OnceMi.Framework.Model.Dto.CreateOrUpdateArticleRequest)">
+            <summary>
+            修改文章
+            </summary>
+            <param name="request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Delete(System.Collections.Generic.List{System.Int64})">
+            <summary>
+            根据Id删除
+            </summary>
+        </member>
         <member name="T:OnceMi.Framework.Api.Controllers.v2.JobDemoController">
             <summary>
-            Job Demo
+            定时任务Demo
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Api.Controllers.v2.MaintainController">
+        <member name="M:OnceMi.Framework.Api.Controllers.v2.JobDemoController.Get(System.String)">
             <summary>
-            维护
+            执行定时任务
             </summary>
+            <remarks>
+            定时任务接口需要加上[Job]特性
+            </remarks>
+            <param name="id"></param>
+            <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v2.MaintainController.Export">
+        <member name="T:OnceMi.Framework.Api.Controllers.v2.TestController">
             <summary>
-            导出基础数据
+            测试接口
             </summary>
+            <remarks>
+            用于测试一些功能，不需要可以直接删除
+            </remarks>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v2.TestController.ExportTestData">
+            <summary>
+            导出测试数据
+            </summary>
+            <remarks>
+            不需要可以直接注释掉
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v2.TestController.PublishTest(OnceMi.Framework.Api.Controllers.v2.InputVal)">
+            <summary>
+            消息队列测试/Demo
+            </summary>
+            <param name="val"></param>
             <returns></returns>
         </member>
     </members>

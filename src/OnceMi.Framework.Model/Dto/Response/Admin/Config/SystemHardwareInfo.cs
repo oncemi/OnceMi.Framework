@@ -33,7 +33,15 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 开机时间 分钟
         /// </summary>
-        public double OSTickMins => Environment.TickCount / 1000.0 / 60.0;
+        public double OSTickMins
+        {
+            get
+            {
+                double val = Environment.TickCount / 1000.0 / 60.0;
+                if (val < 0) val = -val;
+                return val;
+            }
+        }
 
         /// <summary>
         /// 进程的架构，可点击 <see cref="Architecture" /> 获取详细的信息

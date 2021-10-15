@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FreeSql.Repository" Version="2.5.200" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.9" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\OnceMi.AspNetCore.AutoInjection\OnceMi.AspNetCore.AutoInjection.csproj" />
     <ProjectReference Include="..\OnceMi.Framework.Entity\OnceMi.Framework.Entity.csproj" />
     <ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />

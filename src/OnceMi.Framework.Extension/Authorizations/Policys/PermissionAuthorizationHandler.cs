@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using OnceMi.Framework.Config;
 using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.IService.Admin;
-using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Util.User;
-using OnceMi.IdentityServer4.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,17 +15,17 @@ namespace OnceMi.Framework.Extension.Authorizations
     {
         private readonly ILogger<PermissionAuthorizationHandler> _logger;
         private readonly IHttpContextAccessor _accessor;
-        private readonly IRolesService _rolesService;
+        private readonly IRoleService _rolesService;
         private readonly IPermissionService _permissionService;
-        private readonly IMenusService _menusService;
-        private readonly IUsersService _usersService;
+        private readonly IMenuService _menusService;
+        private readonly IUserService _usersService;
 
         public PermissionAuthorizationHandler(ILogger<PermissionAuthorizationHandler> logger
             , IHttpContextAccessor accessor
-            , IRolesService rolesService
+            , IRoleService rolesService
             , IPermissionService permissionService
-            , IMenusService menusService
-            , IUsersService usersService)
+            , IMenuService menusService
+            , IUserService usersService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
@@ -83,7 +79,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 return;
             }
             //判断是否包含自定义授权
-            if(requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is NoAuthorizeAttribute) == true)
+            if(requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is SkipAuthorizationAttribute) == true)
             {
                 context.Succeed(requirement);
                 return;

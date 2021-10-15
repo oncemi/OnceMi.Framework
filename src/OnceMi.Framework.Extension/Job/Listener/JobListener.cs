@@ -14,14 +14,14 @@ namespace OnceMi.Framework.Extension.Job
     public class JobListener : IJobListener
     {
         private readonly ILogger<JobListener> _logger;
-        private readonly IJobsService _jobsService;
+        private readonly IJobService _jobsService;
         private readonly IMessageQueneService _messageQuene;
         private readonly IJobNoticeService _notice;
 
         public string Name { get; }
 
         public JobListener(ILogger<JobListener> logger
-            , IJobsService jobsService
+            , IJobService jobsService
             , IMessageQueneService messageQuene
             , IJobNoticeService notice
             , string jobListenerName)

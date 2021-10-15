@@ -54,7 +54,7 @@ namespace OnceMi.Framework.Extension.Filters
                     context.Result = BadJobResult("请求被拒绝，此接口仅允许作业管理器请求。");
                     return;
                 }
-                string jobValue = _redisClient.Get(AdminCacheKey.GetJobApiKey(jobKey));
+                string jobValue = _redisClient.Get(CacheConstant.GetJobApiKey(jobKey));
                 if (string.IsNullOrEmpty(jobValue) || !DateTime.TryParse(jobValue, out DateTime _))
                 {
                     context.Result = BadJobResult("请求被拒绝，此接口仅允许作业管理器请求。");

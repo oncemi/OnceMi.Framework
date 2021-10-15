@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
@@ -25,11 +26,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class ViewController : ControllerBase
     {
         private readonly ILogger<ViewController> _logger;
-        private readonly IViewsService _service;
+        private readonly IViewService _service;
         private readonly IMapper _mapper;
 
         public ViewController(ILogger<ViewController> logger
-            , IViewsService service
+            , IViewService service
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -90,23 +91,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (!string.IsNullOrEmpty(request.Query))
             {
-                if (request.Query[0] != '{' || request.Query[^0] != '}')
+                if (!JsonUtil.TryParse(request.Query, out string json))
                 {
-                    throw new BusException(-1, "参数必须是合法的Json字符串");
+                    throw new BusException(ResultCodeConstant.VIEW_PARAMS_MUST_JSON, "参数必须是合法的Json字符串");
                 }
-                try
-                {
-                    var (isJson, json) = JsonUtil.IsJson(request.Query);
-                    if (isJson)
-                    {
-                        throw new BusException(-1, "参数必须是合法的Json字符串");
-                    }
-                    request.Query = json;
-                }
-                catch
-                {
-                    throw new BusException(-1, "参数必须是合法的Json字符串");
-                }
+                request.Query = json;
             }
 
             return await _service.Insert(request);
@@ -122,23 +111,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (!string.IsNullOrEmpty(request.Query))
             {
-                if (request.Query[0] != '{' || request.Query[^1] != '}')
+                if (!JsonUtil.TryParse(request.Query, out string json))
                 {
-                    throw new BusException(-1, "参数必须是合法的Json字符串");
+                    throw new BusException(ResultCodeConstant.VIEW_PARAMS_MUST_JSON, "参数必须是合法的Json字符串");
                 }
-                try
-                {
-                    object queryObj = JsonUtil.DeserializeStringToObject<JsonElement>(request.Query);
-                    if (queryObj == null)
-                    {
-                        throw new BusException(-1, "参数必须是合法的Json字符串");
-                    }
-                    request.Query = JsonUtil.SerializeToString(queryObj);
-                }
-                catch
-                {
-                    throw new BusException(-1, "参数必须是合法的Json字符串");
-                }
+                request.Query = json;
             }
 
             await _service.Update(request);

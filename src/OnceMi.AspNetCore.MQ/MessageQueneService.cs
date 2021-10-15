@@ -55,6 +55,11 @@ namespace OnceMi.AspNetCore.MQ
             await _provider.Publish(obj);
         }
 
+        public async Task Publish<T>(T obj, TimeSpan ts) where T : class
+        {
+            await _provider.Publish(obj, ts);
+        }
+
         public async Task<IDisposable> Subscribe<T>(string subscriptionId, Action<T> onMessage, CancellationToken cancellationToken = default) where T : class
         {
             return await _provider.Subscribe(subscriptionId, onMessage, cancellationToken);

@@ -34,6 +34,7 @@ namespace OnceMi.Framework.Model.Dto
         /// 名称
         /// </summary>
         [Required(ErrorMessage = "菜单名称不能为空")]
+        [MaxLength(10, ErrorMessage = "菜单名称不能超过10个字")]
         public string Name { get; set; }
 
         /// <summary>

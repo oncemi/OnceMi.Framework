@@ -23,11 +23,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class RoleController : ControllerBase
     {
         private readonly ILogger<RoleController> _logger;
-        private readonly IRolesService _service;
+        private readonly IRoleService _service;
         private readonly IMapper _mapper;
 
         public RoleController(ILogger<RoleController> logger
-            , IRolesService rolesService
+            , IRoleService rolesService
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -42,8 +42,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
-        public async ValueTask<int> GetNextSortValue([FromQuery] long? parentId)
+        [SkipAuthorization]
+        public async ValueTask<int> NextSortValue([FromQuery] long? parentId)
         {
             return await _service.QueryNextSortValue(parentId);
         }

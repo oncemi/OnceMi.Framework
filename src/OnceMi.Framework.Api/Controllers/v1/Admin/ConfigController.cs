@@ -18,13 +18,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class ConfigController : ControllerBase
     {
         private readonly ILogger<ConfigController> _logger;
-        private readonly IConfigsService _configsService;
+        private readonly IConfigService _configsService;
 
         public ConfigController(ILogger<ConfigController> logger
-            , IConfigsService configsService)
+            , IConfigService configsService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(ILogger<ConfigController>));
-            _configsService = configsService ?? throw new ArgumentNullException(nameof(IConfigsService));
+            _configsService = configsService ?? throw new ArgumentNullException(nameof(IConfigService));
         }
 
         /// <summary>

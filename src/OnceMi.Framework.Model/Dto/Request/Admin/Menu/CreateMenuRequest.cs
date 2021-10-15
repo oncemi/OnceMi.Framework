@@ -14,7 +14,7 @@ namespace OnceMi.Framework.Model.Dto
     public class CreateMenuRequest : IRequest
     {
         private long? _parentId;
-        
+
         /// <summary>
         /// 父Id
         /// </summary>
@@ -35,6 +35,7 @@ namespace OnceMi.Framework.Model.Dto
         /// 名称
         /// </summary>
         [Required(ErrorMessage = "菜单名称不能为空")]
+        [MaxLength(10, ErrorMessage = "菜单名称不能超过10个字")]
         public string Name { get; set; }
 
         /// <summary>
@@ -89,7 +90,7 @@ namespace OnceMi.Framework.Model.Dto
         public bool? IsOpenInNewWindow { get; set; } = false;
 
         private long? _viewId;
-        
+
         /// <summary>
         /// 视图Id
         /// </summary>

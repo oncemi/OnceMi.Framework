@@ -26,7 +26,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 var checksBuilder = services.AddHealthChecks();
                 List<Type> hasRegisted = new List<Type>();
                 //自动注入实现IHealthCheck的类
-                List<Type> allHealthCheckTypes = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                List<Type> allHealthCheckTypes = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                     .GetExportedTypesByInterface(typeof(IHealthCheck));
                 foreach (var item in allHealthCheckTypes)
                 {

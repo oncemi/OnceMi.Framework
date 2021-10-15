@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
@@ -60,13 +61,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
-        public async Task<List<UserRolePermissionResponse>> QueryUserRolePermission()
+        [SkipAuthorization]
+        public async Task<List<UserRolePermissionResponse>> UserRolePermission()
         {
             List<long> ids = HttpContext.User.GetRoles()?.Distinct().ToList();
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(-1, "获取用户角色失败！");
+                throw new BusException(ResultCodeConstant.PERM_GET_ROLE_FAILED, "获取用户角色失败");
             }
             return await _service.QueryUserRolePermission(ids);
         }

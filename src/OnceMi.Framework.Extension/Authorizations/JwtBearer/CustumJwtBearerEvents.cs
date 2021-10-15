@@ -60,7 +60,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 Message = message,
             }, new JsonSerializerOptions()
             {
-                PropertyNamingPolicy = GlobalConstant.DefaultJsonNamingPolicy
+                PropertyNamingPolicy = ConfigConstant.DefaultJsonNamingPolicy
             }));
         }
     }

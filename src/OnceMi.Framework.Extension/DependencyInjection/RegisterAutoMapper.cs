@@ -25,7 +25,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
         public static IServiceCollection AddMapper(this IServiceCollection services)
         {
             //自动注入Profile
-            List<Type> profileTypes = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+            List<Type> profileTypes = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                 .GetExportedTypesByBaseType(typeof(Profile));
             List<MapperEntityConfig> mapperList = GetMapperFrom();
             List<MapperEntityConfig> mapperToList = GetMapperTo();

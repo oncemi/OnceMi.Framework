@@ -1,5 +1,6 @@
 ﻿using FreeRedis;
 using Microsoft.Extensions.Logging;
+using OnceMi.AspNetCore.MQ.Providers.RediskDelayTask;
 using OnceMi.AspNetCore.MQ.Utils;
 using System;
 using System.Threading;
@@ -13,12 +14,18 @@ namespace OnceMi.AspNetCore.MQ
     sealed class RedisProvider : IBaseProvider
     {
         private readonly RedisClient _client;
+        private readonly RedisDelayTaskService _delayTaskService;
 
         public RedisProvider(MqOptions options
             , ILoggerFactory logger
             , RedisClient client) : base(options, logger)
         {
             this._client = client;
+            this._delayTaskService = new RedisDelayTaskService(logger, client);
+            if (!_delayTaskService.Status)
+            {
+                _delayTaskService.Start(_client.Publish);
+            }
         }
 
         public override Task Publish<T>(T obj) where T : class
@@ -30,6 +37,22 @@ namespace OnceMi.AspNetCore.MQ
             string data = JsonUtil.SerializeToString(obj);
 
             _client.Publish(channel, data);
+            return Task.CompletedTask;
+        }
+
+        public override Task Publish<T>(T obj, TimeSpan ts) where T : class
+        {
+            if (obj == null)
+                return Task.CompletedTask;
+            if (ts == TimeSpan.Zero || ts.TotalMilliseconds == 0)
+            {
+                return Publish(obj);
+            }
+
+            string channel = MqHelper.CreateQueneNmae<T>(_options.AppId);
+            string data = JsonUtil.SerializeToString(obj);
+
+            _delayTaskService.JobAdd(channel, data, ts);
             return Task.CompletedTask;
         }
 

@@ -2,11 +2,9 @@
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
-using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Job
@@ -14,12 +12,12 @@ namespace OnceMi.Framework.Extension.Job
     public class JobNoticeService : IJobNoticeService
     {
         private readonly ILogger<JobNoticeService> _logger;
-        private readonly IJobsService _jobsService;
-        private readonly IRolesService _rolesService;
+        private readonly IJobService _jobsService;
+        private readonly IRoleService _rolesService;
 
         public JobNoticeService(ILogger<JobNoticeService> logger
-            , IJobsService jobsService
-            , IRolesService rolesService)
+            , IJobService jobsService
+            , IRoleService rolesService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _jobsService = jobsService ?? throw new ArgumentNullException(nameof(jobsService));

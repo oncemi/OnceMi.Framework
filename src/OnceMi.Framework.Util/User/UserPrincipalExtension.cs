@@ -30,6 +30,25 @@ namespace OnceMi.Framework.Util.User
             }
         }
 
+        public static (string idStr, long? id) GetSubject(this IEnumerable<Claim> claims)
+        {
+            if (claims == null || claims.Count() == 0)
+                return (null, null);
+            var subjectClaim = claims.Where(a => (a.Type == ClaimTypes.NameIdentifier || a.Type == JwtClaimTypes.Subject) && !string.IsNullOrEmpty(a.Value))
+                .FirstOrDefault();
+            if (subjectClaim == null)
+                return (null, null);
+            string idStr = subjectClaim.Value;
+            if (long.TryParse(idStr, out long id))
+            {
+                return (idStr, id);
+            }
+            else
+            {
+                return (idStr, null);
+            }
+        }
+
         public static List<long> GetRoles(this ClaimsPrincipal principal)
         {
             if (principal == null || principal.Claims == null || principal.Claims.Count() == 0)

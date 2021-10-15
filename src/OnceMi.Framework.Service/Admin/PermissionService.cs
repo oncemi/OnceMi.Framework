@@ -12,7 +12,6 @@ using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Cache;
 using OnceMi.Framework.Util.Json;
 using OnceMi.Framework.Util.User;
-using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,9 +27,9 @@ namespace OnceMi.Framework.Service.Admin
         private readonly IIdGeneratorService _idGenerator;
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
-        private readonly IMenusService _menusService;
-        private readonly IRolesService _rolesService;
-        private readonly IRolesRepository _roleRepository;
+        private readonly IMenuService _menuService;
+        private readonly IRoleService _roleService;
+        private readonly IRoleRepository _roleRepository;
         private readonly IMemoryCache _cache;
 
         public PermissionService(IPermissionRepository repository
@@ -38,9 +37,9 @@ namespace OnceMi.Framework.Service.Admin
             , IIdGeneratorService idGenerator
             , IHttpContextAccessor accessor
             , IMapper mapper
-            , IMenusService menusService
-            , IRolesService rolesService
-            , IRolesRepository roleRepository
+            , IMenuService menuService
+            , IRoleService roleService
+            , IRoleRepository roleRepository
             , IMemoryCache cache) : base(repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -48,8 +47,8 @@ namespace OnceMi.Framework.Service.Admin
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _accessor = accessor;
-            _menusService = menusService ?? throw new ArgumentNullException(nameof(menusService));
-            _rolesService = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
+            _menuService = menuService ?? throw new ArgumentNullException(nameof(menuService));
+            _roleService = roleService ?? throw new ArgumentNullException(nameof(roleService));
             _roleRepository = roleRepository ?? throw new ArgumentNullException(nameof(roleRepository));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
         }
@@ -58,7 +57,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             PermissionViewModel vm = new PermissionViewModel();
             //查询角色
-            var pageResult = await _rolesService.Query(new IPageRequest()
+            var pageResult = await _roleService.Query(new IPageRequest()
             {
                 Page = 1,
                 Size = int.MaxValue,
@@ -68,7 +67,7 @@ namespace OnceMi.Framework.Service.Admin
                 vm.Roles = pageResult.PageData.ToList();
             }
             //查询全部菜单
-            var menuResult = await _menusService.Query(new IPageRequest()
+            var menuResult = await _menuService.Query(new IPageRequest()
             {
                 Page = 1,
                 Size = int.MaxValue,
@@ -143,7 +142,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 return new List<UserMenuResponse>();
             }
-            List<Menus> allMenus = await _menusService.Query(menuIds);
+            List<Menus> allMenus = await _menuService.Query(menuIds);
             if (allMenus == null || allMenus.Count == 0)
             {
                 return new List<UserMenuResponse>();
@@ -174,10 +173,10 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (!await _roleRepository.Select.AnyAsync(p => p.Id == request.RoleId && !p.IsDeleted && p.IsEnabled))
             {
-                throw new BusException(-1, "更新的角色不存在或已被禁用。");
+                throw new BusException(ResultCodeConstant.PERM_UPDATE_ROLE_NOT_EXISTS, "更新的角色不存在或已被禁用。");
             }
             //获取全部的菜单
-            List<Menus> allMenus = await _menusService.Where(p => !p.IsDeleted && p.IsEnabled).ToListAsync();
+            List<Menus> allMenus = await _menuService.Where(p => !p.IsDeleted && p.IsEnabled).ToListAsync();
             if (allMenus == null)
             {
                 allMenus = new List<Menus>();
@@ -208,7 +207,7 @@ namespace OnceMi.Framework.Service.Admin
                 await _repository.InsertAsync(permissions);
             }
             //清空角色权限缓存
-            _cache.Remove(AdminCacheKey.RolePermissionsKey);
+            _cache.Remove(CacheConstant.RolePermissionsKey);
         }
 
         #region private
@@ -216,7 +215,7 @@ namespace OnceMi.Framework.Service.Admin
         private async Task<List<RolePermissions>> QueryRolePermissionsFromCache()
         {
             //从缓存中取出所有菜单
-            List<RolePermissions> allPermissions = await _cache.GetOrCreateAsync(AdminCacheKey.RolePermissionsKey, async (cache) =>
+            List<RolePermissions> allPermissions = await _cache.GetOrCreateAsync(CacheConstant.RolePermissionsKey, async (cache) =>
             {
                 List<RolePermissions> permissions = await _repository.Select
                     .LeftJoin(p => p.Menu.Id == p.MenuId)

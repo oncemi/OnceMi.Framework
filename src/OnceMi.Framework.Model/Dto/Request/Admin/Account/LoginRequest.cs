@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Model.Dto
 {
@@ -12,12 +7,14 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 用户名
         /// </summary>
+        [MaxLength(50)]
         [Required(ErrorMessage = "用户Id/名称不能为空")]
         public string Username { get; set; }
 
         /// <summary>
         /// 密码
         /// </summary>
+        [MaxLength(100)]
         [Required(ErrorMessage = "密码不能为空")]
         public string Password { get; set; }
 
@@ -25,6 +22,7 @@ namespace OnceMi.Framework.Model.Dto
         /// 验证码
         /// </summary>
         [Required(ErrorMessage = "验证码不能为空")]
+        [MaxLength(15)]
         public string Captcha { get; set; }
     }
 }

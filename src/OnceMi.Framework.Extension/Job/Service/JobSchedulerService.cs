@@ -22,14 +22,14 @@ namespace OnceMi.Framework.Extension.Job
         private readonly ILoggerFactory _loggerFactory;
         private readonly IScheduler _scheduler;
         private readonly ISchedulerFactory _schedulerFactory;
-        private readonly IJobsService _jobsService;
+        private readonly IJobService _jobsService;
         private readonly IMessageQueneService _messageQuene;
         private readonly ICacheService _cacheService;
         private readonly IJobNoticeService _jobNoticeService;
 
         public JobSchedulerService(ILoggerFactory loggerFactory
             , ISchedulerFactory schedulerFactory
-            , IJobsService jobsService
+            , IJobService jobsService
             , IMessageQueneService messageQuene
             , ICacheService cacheService
             , IJobNoticeService jobNoticeService)
@@ -63,7 +63,7 @@ namespace OnceMi.Framework.Extension.Job
             _logger.LogInformation("Start loading jobs...");
 
             //清除job缓存
-            _cacheService.DeleteCaches(new DeleteCachesRequest() { Value = AdminCacheKey.SystemJobKey });
+            _cacheService.DeleteCaches(new DeleteCachesRequest() { Value = CacheConstant.SystemJobKey });
             //更新到期的任务为停止
             await _jobsService.UpdateEndTimeJob();
             //重新加载任务
@@ -157,7 +157,7 @@ namespace OnceMi.Framework.Extension.Job
                 {
                     await _jobsService.UpdateJobStatus(job.Id, JobStatus.Stopped, true);
                 }
-                throw new BusException(-1, $"任务{job.Name}已过期");
+                throw new BusException(ResultCodeConstant.JOB_OUT_OF_DATE, $"任务{job.Name}已过期");
             }
             //停止状态时，job被禁用，先设置job为启用状态
             if (!job.IsEnabled)
@@ -316,11 +316,11 @@ namespace OnceMi.Framework.Extension.Job
         {
             if (jobItem.EndTime != null && jobItem.EndTime < DateTime.Now)
             {
-                throw new BusException(-1, "任务终止时间不能小于当前时间");
+                throw new BusException(ResultCodeConstant.JOB_END_TIME_LOWER_THAN_NOW, "任务结束时间不能小于当前时间");
             }
             if (jobItem.StartTime != null && jobItem.EndTime != null && jobItem.EndTime.Value < jobItem.StartTime.Value)
             {
-                throw new BusException(-1, "任务终止时间不能小于起始时间");
+                throw new BusException(ResultCodeConstant.JOB_END_TIME_LOWER_THAN_START, "任务结束时间必须大于任务开始时间");
             }
             DateTime nowTime = DateTime.Now;
             DateTime? startTime = jobItem.StartTime;

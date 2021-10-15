@@ -1,11 +1,5 @@
 ﻿using FreeSql.DataAnnotations;
-using OnceMi.Framework.Util.Date;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {

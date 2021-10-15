@@ -364,6 +364,51 @@
             等待中
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.IP">
+            <summary>
+            IP
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.Browser">
+            <summary>
+            浏览器
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.OS">
+            <summary>
+            操作系统
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.Device">
+            <summary>
+            设备
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.UserAgent">
+            <summary>
+            浏览器信息
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.ElapsedMilliseconds">
+            <summary>
+            耗时（毫秒）
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.Type">
+            <summary>
+            操作类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.Status">
+            <summary>
+            操作状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.Message">
+            <summary>
+            操作消息
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Menus.Name">
             <summary>
             名称
@@ -429,6 +474,131 @@
             子条目
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.OrganizeManagers">
+            <summary>
+            组织机构管理人员（领导，分管领导）
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.OrganizeManagers.OrganizeId">
+            <summary>
+            组织Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.OrganizeManagers.UserId">
+            <summary>
+            人员Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.OrganizeManagers.ManagerType">
+            <summary>
+            领导类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.OrganizeManagers.Remark">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.OrganizeManagers.Organize">
+            <summary>
+            关联的组织结构
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.OrganizeManagers.User">
+            <summary>
+            关联的用户
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeManagerType.DepartLeader">
+            <summary>
+            部门领导
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeManagerType.HeadLeader">
+            <summary>
+            分管领导
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Organizes">
+            <summary>
+            组织机构
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.Name">
+            <summary>
+            组织机构名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.Code">
+            <summary>
+            组织机构编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.OrganizeType">
+            <summary>
+            组织类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.IsEnabled">
+            <summary>
+            是否激活
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.DepartLeaders">
+            <summary>
+            部门领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.HeadLeaders">
+            <summary>
+            分管领导
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.Users">
+            <summary>
+            Users导航属性
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Organizes.Roles">
+            <summary>
+            Roles导航属性
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeType.GroupCompany">
+            <summary>
+            集团
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeType.Company">
+            <summary>
+            总公司
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeType.BranchCompany">
+            <summary>
+            分公司
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeType.Office">
+            <summary>
+            办事处
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeType.Department">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Entity.Admin.OrganizeType.WorkGroup">
+            <summary>
+            工作组
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.RoleId">
             <summary>
             角色Id
@@ -447,6 +617,51 @@
         <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.Menu">
             <summary>
             菜单
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Roles">
+            <summary>
+            角色表
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.Code">
+            <summary>
+            角色编码
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.OrganizeId">
+            <summary>
+            组织Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.Sort">
+             <summary>
+            排序
+             </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.IsEnabled">
+            <summary>
+            是否激活
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.Organize">
+            <summary>
+            本角色所属组织机构
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Roles.Users">
+            <summary>
+            Users导航属性
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.Content">
@@ -489,6 +704,137 @@
             内部
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.UserName">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.NickName">
+            <summary>
+            昵称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Avatar">
+            <summary>
+            头像
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Status">
+            <summary>
+            状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Gender">
+            <summary>
+            性别
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.BirthDay">
+            <summary>
+            出生日期
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Address">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.PhoneNumberConfirmed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.PhoneNumber">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Password">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.EmailConfirmed">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Email">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.ProviderName">
+            <summary>
+            Gets or sets the provider name.
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.ProviderId">
+            <summary>
+            Gets or sets the provider subject identifier.
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.UserToken">
+            <summary>
+            用户Token
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Roles">
+            <summary>
+            所属角色
+            通过导航关系配置
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.Organizes">
+            <summary>
+            所属组织
+            通过导航关系配置
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.CreateUser">
+            <summary>
+            创建用户
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Users.UpdateUser">
+            <summary>
+            更新用户
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Entity.Admin.Users.CreatePassword(System.String)">
+            <summary>
+            创建密码
+            </summary>
+            <param name="passwd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Entity.Admin.Users.AuthenticatePassword(System.String)">
+            <summary>
+            验证密码
+            </summary>
+            <param name="passwd"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.UserGender">
+            <summary>
+            用户性别
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.UserToken.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.UserToken.RefeshToken">
+            <summary>
+            RefeshToken
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.UserToken.RefeshTokenExpiration">
+            <summary>
+            RefeshToken到期时间
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Views.Path">
             <summary>
             路径
@@ -522,6 +868,186 @@
         <member name="P:OnceMi.Framework.Entity.Admin.Views.IsEnabled">
             <summary>
             是否启用
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Article.ArticleCategories">
+            <summary>
+            文章分类
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCategories.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCategories.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCategories.IsEnabled">
+            <summary>
+            是否启用
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCategories.IsLocked">
+            <summary>
+            能否被锁定（锁定分组无法被删除）
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCategories.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Article.ArticleCategoriesMiddle">
+            <summary>
+            文章分组（中间表）
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Article.ArticleComments">
+            <summary>
+            文章评论
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.ParentId">
+            <summary>
+            父Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.ArticleId">
+            <summary>
+            文章Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.Content">
+            <summary>
+            评论内容
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.Like">
+            <summary>
+            点赞数量
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.IsReview">
+            <summary>
+            是否审核
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.ReviewerId">
+            <summary>
+            审核人Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.ReviewerTime">
+            <summary>
+            审核时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleComments.Children">
+            <summary>
+            子条目
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Article.ArticleCovers">
+            <summary>
+            文章封面
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCovers.ArticleId">
+            <summary>
+            文章Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleCovers.Url">
+            <summary>
+            链接
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.Title">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.SubTitle">
+            <summary>
+            副标题
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.Summary">
+            <summary>
+            摘要
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.Content">
+            <summary>
+            文章内容
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.ViewNum">
+            <summary>
+            浏览次数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.IsAllowComment">
+            <summary>
+            是否允许评论
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.IsDraw">
+            <summary>
+            是否为草稿
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.IsTop">
+            <summary>
+            是否置顶
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.CommentNum">
+            <summary>
+            评论数量
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.ArticleCategories">
+            <summary>
+            文章分类
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.ArticleComments">
+            <summary>
+            评论
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.ArticleTags">
+            <summary>
+            标签
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.ArticleCovers">
+            <summary>
+            封面
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.Articles.CreateUser">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Article.ArticleTags">
+            <summary>
+            文章标签
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleTags.ArticleId">
+            <summary>
+            文章Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Entity.Article.ArticleTags.Tag">
+            <summary>
+            标签
             </summary>
         </member>
         <member name="T:OnceMi.Framework.Entity.IBaseEntity`1">

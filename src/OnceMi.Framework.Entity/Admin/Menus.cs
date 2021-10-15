@@ -75,7 +75,7 @@ namespace OnceMi.Framework.Entity.Admin
         [Column(IsNullable = true)]
         public long? ViewId { get; set; }
 
-        //[Navigate(nameof(ApiId))]
+        [Navigate(nameof(ViewId))]
         public Views View { get; set; }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace OnceMi.Framework.Entity.Admin
         [Column(IsNullable = true)]
         public long? ApiId { get; set; }
 
-        //[Navigate(nameof(ApiId))]
+        [Navigate(nameof(ApiId))]
         public Apis Api { get; set; }
 
         /// <summary>

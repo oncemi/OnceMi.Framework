@@ -8,6 +8,7 @@ using OnceMi.Framework.Model.Attributes;
 using System.Linq;
 using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
+using OnceMi.Framework.Service.Admin;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -15,7 +16,13 @@ namespace OnceMi.Framework.Extension.DependencyInjection
     {
         public static IServiceCollection AddService(this IServiceCollection services)
         {
-            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+            //为了引入OnceMi.Framework.Service的实现，不然可能无法正确的获取业务逻辑实现
+            Type configService = typeof(ConfigService);
+            if(configService == null)
+            {
+                throw new Exception("Can not load service realization");
+            }
+            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                 .GetInheritInterfaceTypes(typeof(IServiceDependency));
             if (registerDic == null)
             {

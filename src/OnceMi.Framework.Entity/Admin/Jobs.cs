@@ -1,5 +1,4 @@
 ﻿using FreeSql.DataAnnotations;
-using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -128,7 +127,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// </summary>
         public int AppId { get; set; }
 
-        [Column(IsIgnore = true)]
+        [Navigate(nameof(Admin.JobHistories.JobId))]
         public List<JobHistories> JobHistories { get; set; }
     }
 

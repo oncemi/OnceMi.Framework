@@ -27,11 +27,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class JobGroupController : ControllerBase
     {
         private readonly ILogger<JobGroupController> _logger;
-        private readonly IJobGroupsService _service;
+        private readonly IJobGroupService _service;
         private readonly IMapper _mapper;
 
         public JobGroupController(ILogger<JobGroupController> logger
-            , IJobGroupsService service
+            , IJobGroupService service
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

@@ -59,8 +59,8 @@ namespace OnceMi.Framework.Entity.Admin
         /// </summary>
         public HistoryStage Stage { get; set; }
 
-        [Navigate(nameof(JobId))]
-        public Jobs Jobs { get; set; }
+        //[Navigate(nameof(JobId))]
+        //public Jobs Jobs { get; set; }
     }
 
     public enum HistoryStatus

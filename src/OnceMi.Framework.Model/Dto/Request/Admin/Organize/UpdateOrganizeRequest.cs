@@ -1,10 +1,6 @@
-﻿using OnceMi.IdentityServer4.User.Entities;
-using System;
+﻿using OnceMi.Framework.Entity.Admin;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {

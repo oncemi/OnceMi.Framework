@@ -1,6 +1,5 @@
 ﻿using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Model.Attributes;
-using OnceMi.IdentityServer4.User.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Model.Dto

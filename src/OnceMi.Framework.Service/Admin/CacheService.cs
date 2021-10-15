@@ -43,7 +43,7 @@ namespace OnceMi.Framework.Service.Admin
         public List<CacheKeyItemResponse> GetCacheKeys(string queryString)
         {
             List<CacheKeyItemResponse> result = new List<CacheKeyItemResponse>();
-            var fields = typeof(AdminCacheKey).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
+            var fields = typeof(CacheConstant).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
             foreach (var item in fields)
             {
                 if (item.FieldType != typeof(string))

@@ -20,11 +20,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class JobHistoryController : ControllerBase
     {
         private readonly ILogger<JobHistoryController> _logger;
-        private readonly IJobHistoriesService _service;
+        private readonly IJobHistoryService _service;
         private readonly IMapper _mapper;
 
         public JobHistoryController(ILogger<JobHistoryController> logger
-            , IJobHistoriesService service
+            , IJobHistoryService service
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));

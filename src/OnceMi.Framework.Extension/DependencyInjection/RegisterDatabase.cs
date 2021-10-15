@@ -62,7 +62,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                     {
                         var fsql = new FreeSqlBuilder()
                             .UseConnectionString(item.DbType, item.ConnectionString)
-                            .UseAutoSyncStructure(env.IsDevelopment())    //自动迁移
+                            .UseAutoSyncStructure(IsEnabledAutoSeedDatabase(configuration, env))    //自动迁移
                             .CreateDatabaseIfNotExists()   //如果数据库不存在，那么自动创建数据库
                             .Build();
                         //sql执行日志
@@ -118,11 +118,12 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             {
                 throw new Exception("Get idlebus service failed.");
             }
-            ConfigManager config = app.ApplicationServices.GetRequiredService<ConfigManager>();
+            IConfiguration configuration = app.ApplicationServices.GetRequiredService<IConfiguration>();
             IWebHostEnvironment env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
             //配置文件中开启了初始化数据库，并开启了开发者模式
-            if (config.AppSettings.IsEnabledAutoSeedDb && env.IsDevelopment())
+            if (IsEnabledAutoSeedDatabase(configuration, env))
             {
+                logger.CreateLogger(nameof(UseDbSeed)).LogInformation($"Automatic database seed is turned on, start seeding database...");
                 foreach (var item in ib.GetAll())
                 {
                     InitializeDatabase seed = new InitializeDatabase(item, logger);
@@ -138,27 +139,18 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             {
                 return;
             }
-            AssemblyLoader assemblyLoader = new AssemblyLoader(p => p.Name.StartsWith(GlobalConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase));
+            AssemblyLoader assemblyLoader = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase));
             List<Type> tableAssembies = new List<Type>();
-
             var entities = assemblyLoader.GetExportedTypesByInterface(typeof(IEntity));
-            var userEntities = assemblyLoader.GetExportedTypesByInterface(typeof(IdentityServer4.User.Entities.IEntity));
-
-            if (userEntities != null && userEntities.Count > 0)
-            {
-                if (entities == null) entities = new List<Type>();
-                entities.AddRange(userEntities);
-            }
             foreach (Type type in entities)
             {
                 if (type.GetCustomAttribute<TableAttribute>() != null
                     && type.BaseType != null
                     && (type.BaseType == typeof(IBaseEntity)
-                    || type.BaseType == typeof(IBaseEntity<long>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<long>)
-                    || type.BaseType == typeof(IBaseEntity<int>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<int>)
-                    || type.BaseType == typeof(IBaseEntity<short>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<short>)
-                    || type.BaseType == typeof(IBaseEntity<byte>) || type.BaseType == typeof(IdentityServer4.User.Entities.IBaseEntity<byte>)
-                    || type.BaseType == typeof(IEntity) || type.BaseType == typeof(IdentityServer4.User.Entities.IEntity)))
+                    || type.BaseType == typeof(IBaseEntity<long>)
+                    || type.BaseType == typeof(IBaseEntity<int>)
+                    || type.BaseType == typeof(IBaseEntity<short>) 
+                    || type.BaseType == typeof(IBaseEntity<byte>)))
                 {
                     tableAssembies.Add(type);
                 }
@@ -168,6 +160,18 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 return;
             }
             fsql.CodeFirst.SyncStructure(tableAssembies.ToArray());
+        }
+
+        private static bool IsEnabledAutoSeedDatabase(IConfiguration config, IWebHostEnvironment env)
+        {
+            string seedDbEnvVal = Environment.GetEnvironmentVariable("ASPNETCORE_INITDB");
+            bool isEnabledAutoSeedDb = config.GetValue<bool>("AppSettings:IsEnabledAutoSeedDb");
+            if (isEnabledAutoSeedDb
+                && (env.IsDevelopment() || !string.IsNullOrEmpty(seedDbEnvVal) && seedDbEnvVal.Equals("true", StringComparison.OrdinalIgnoreCase)))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

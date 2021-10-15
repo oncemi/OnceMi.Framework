@@ -15,7 +15,7 @@ namespace OnceMi.Framework.Extension.Subscribers
     public class JobHistorySubscribeService : IQueneSubscribe<JobHistories>
     {
         private readonly ILogger<JobHistorySubscribeService> _logger;
-        private IJobHistoriesService _jobHistoriesService;
+        private IJobHistoryService _jobHistoriesService;
         private readonly IServiceProvider _serviceProvider;
         private static readonly object locker = new object();
 
@@ -40,7 +40,7 @@ namespace OnceMi.Framework.Extension.Subscribers
                         {
                             using (var scope = _serviceProvider.CreateScope())
                             {
-                                _jobHistoriesService = scope.ServiceProvider.GetRequiredService<IJobHistoriesService>();
+                                _jobHistoriesService = scope.ServiceProvider.GetRequiredService<IJobHistoryService>();
                             }
                         }
                     }

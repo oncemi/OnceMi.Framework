@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
@@ -25,11 +26,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class ApiController : ControllerBase
     {
         private readonly ILogger<ApiController> _logger;
-        private readonly IApisService _service;
+        private readonly IApiService _service;
         private readonly IMapper _mapper;
 
         public ApiController(ILogger<ApiController> logger
-            , IApisService service
+            , IApiService service
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -38,12 +39,12 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 获取所有Api版本
+        /// 获取Api版本
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
+        [SkipAuthorization]
         public List<ISelectResponse<string>> GetApiVersions()
         {
             return _service.QueryApiVersions();
@@ -103,27 +104,27 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (!request.Version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
             {
-                throw new BusException(-1, "Api版本必须使用‘v’开头。");
+                throw new BusException(ResultCodeConstant.API_VERSION_NAME_MUST_STARTWITH_V, "Api版本必须使用‘v’开头。");
             }
             if (!double.TryParse(request.Version.Replace("v", ""), out double _))
             {
-                throw new BusException(-1, "Api版本号必须为数字。");
+                throw new BusException(ResultCodeConstant.API_VERSION_MUST_NUMBER, "Api版本号必须为数字。");
             }
             if (!string.IsNullOrEmpty(request.Method))
             {
                 if (!Enum.TryParse(request.Method, true, out OperationType method))
                 {
-                    throw new BusException(-1, $"不允许的操作类型：{request.Method}。");
+                    throw new BusException(ResultCodeConstant.API_NOT_SUPPORT_REQUEST_TYPE, $"不允许的操作类型：{request.Method}。");
                 }
                 request.Method = method.ToString();
             }
             if (request.Path == "/")
             {
-                throw new BusException(-1, $"请求路径不能为根目录。");
+                throw new BusException(ResultCodeConstant.API_REQUEST_PATH_CANNOT_ROOT, $"请求路径不能为根目录。");
             }
             if (string.IsNullOrEmpty(request.Method) && request.ParentId != null)
             {
-                throw new BusException(-1, "当Api不为个根节点（控制器）时，请求方式不能为空");
+                throw new BusException(ResultCodeConstant.API_NOT_ROOT_REQUEST_METHOD_CANNOT_NULL, "当Api不为个根节点（控制器）时，请求方式不能为空");
             }
             return await _service.Insert(request);
         }
@@ -138,27 +139,27 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (!request.Version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
             {
-                throw new BusException(-1, "Api版本必须使用‘v’开头。");
+                throw new BusException(ResultCodeConstant.API_VERSION_NAME_MUST_STARTWITH_V, "Api版本必须使用‘v’开头。");
             }
             if (!double.TryParse(request.Version.Replace("v", ""), out double _))
             {
-                throw new BusException(-1, "Api版本号必须为数字。");
+                throw new BusException(ResultCodeConstant.API_VERSION_MUST_NUMBER, "Api版本号必须为数字。");
             }
             if (!string.IsNullOrEmpty(request.Method))
             {
                 if (!Enum.TryParse(request.Method, true, out OperationType method))
                 {
-                    throw new BusException(-1, $"不允许的操作类型：{request.Method}。");
+                    throw new BusException(ResultCodeConstant.API_NOT_SUPPORT_REQUEST_TYPE, $"不允许的操作类型：{request.Method}。");
                 }
                 request.Method = method.ToString();
             }
             if (request.Path == "/")
             {
-                throw new BusException(-1, $"请求路径不能为根目录。");
+                throw new BusException(ResultCodeConstant.API_REQUEST_PATH_CANNOT_ROOT, $"请求路径不能为根目录。");
             }
             if (string.IsNullOrEmpty(request.Method) && request.ParentId != null)
             {
-                throw new BusException(-1, "当Api不为个根节点（控制器）时，请求方式不能为空");
+                throw new BusException(ResultCodeConstant.API_NOT_ROOT_REQUEST_METHOD_CANNOT_NULL, "当Api不为个根节点（控制器）时，请求方式不能为空");
             }
 
             await _service.Update(request);

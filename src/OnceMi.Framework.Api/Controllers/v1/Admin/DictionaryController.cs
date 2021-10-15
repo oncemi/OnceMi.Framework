@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
@@ -24,11 +25,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     public class DictionaryController : ControllerBase
     {
         private readonly ILogger<DictionaryController> _logger;
-        private readonly IDictionariesService _service;
+        private readonly IDictionaryService _service;
         private readonly IMapper _mapper;
 
         public DictionaryController(ILogger<DictionaryController> logger
-            , IDictionariesService service
+            , IDictionaryService service
             , IMapper mapper)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -85,8 +86,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        [NoAuthorize]
-        public async ValueTask<int> GetNextSortValue([FromQuery] long? parentId)
+        [SkipAuthorization]
+        public async ValueTask<int> NextSortValue([FromQuery] long? parentId)
         {
             return await _service.QueryNextSortValue(parentId);
         }
@@ -113,7 +114,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if(string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
             {
-                throw new BusException(-1, "查询条件Id和编码不能同时为空");
+                throw new BusException(ResultCodeConstant.DIC_ID_AND_CODE_CANNOT_ALL_EMPTY, "查询条件Id和编码不能同时为空");
             }
             return await _service.Query(request);
         }

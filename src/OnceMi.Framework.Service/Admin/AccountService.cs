@@ -5,16 +5,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.Framework.Config;
+using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Attributes;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Date;
 using OnceMi.Framework.Util.Http;
 using OnceMi.Framework.Util.Security;
-using OnceMi.IdentityServer4.User;
-using OnceMi.IdentityServer4.User.Entities;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -27,16 +27,16 @@ namespace OnceMi.Framework.Service.Admin
     public class AccountService : IAccountService
     {
         private readonly ILogger<AccountService> _logger;
-        private readonly IUsersService _userService;
-        private readonly IUsersRepository _repository;
+        private readonly IUserService _userService;
+        private readonly IUserRepository _repository;
         private readonly IIdGeneratorService _idGenerator;
         private readonly ConfigManager _config;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
 
         public AccountService(ILogger<AccountService> logger
-            , IUsersService userService
-            , IUsersRepository repository
+            , IUserService userService
+            , IUserRepository repository
             , IIdGeneratorService idGenerator
             , ConfigManager config
             , IMapper mapper
@@ -56,16 +56,16 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (_config.IdentityServer.IsEnabledIdentityServer)
             {
-                throw new Exception("当前应用启用了IdentityServer认证中心，此功能被禁用");
+                throw new BusException(ResultCodeConstant.ACT_FUNCTION_DISABLED_NOT_SUPPORT, "当前应用启用了IdentityServer认证中心，此功能被禁用");
             }
             Users user = await _userService.Query(request.Username, true);
             if (user == null)
             {
-                throw new BusException(-1, "用户名或密码错误");
+                throw new BusException(ResultCodeConstant.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
             }
-            if (!user.Authenticate(request.Password))
+            if (!user.AuthenticatePassword(request.Password))
             {
-                throw new BusException(-1, "用户名或密码错误");
+                throw new BusException(ResultCodeConstant.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
             }
             //build response
             var response = await BuildJwtToken(user);
@@ -83,12 +83,12 @@ namespace OnceMi.Framework.Service.Admin
                 .ToOneAsync();
             if (userToken == null)
             {
-                throw new BusException(-1, "Invalid_grant");
+                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_PARAMS_ERROR, "参数错误");
             }
             Users user = await _userService.Query(userToken.UserId.ToString(), true);
             if (user == null)
             {
-                throw new BusException(-1, "User deleted or disabled");
+                throw new BusException(ResultCodeConstant.ACT_USER_DISABLED, "用户被删除或停用");
             }
             LoginResponse response = await BuildJwtToken(user);
             return response;

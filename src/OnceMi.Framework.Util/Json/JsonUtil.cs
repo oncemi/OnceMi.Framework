@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 
 namespace OnceMi.Framework.Util.Json
 {
@@ -13,19 +12,18 @@ namespace OnceMi.Framework.Util.Json
     {
         private static JsonSerializerOptions BuildJsonSerializerOptions(JsonSerializerOptions options)
         {
-            if (options != null)
-            {
-                if (options.Encoder == null)
-                    options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
-            }
-            else
+            if (options == null)
             {
                 options = new JsonSerializerOptions()
                 {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 };
             }
-            //DateTimeConverter
+            else
+            {
+                if (options.Encoder == null)
+                    options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+            }
             if (options.Converters.Count == 0)
             {
                 options.Converters.Add(new DateTimeConverter());
@@ -59,7 +57,7 @@ namespace OnceMi.Framework.Util.Json
                     options.Converters.Add(new TypeConverter());
                 }
             }
-            
+
             //忽略大小写
             options.PropertyNameCaseInsensitive = true;
             //允许注释
@@ -73,6 +71,39 @@ namespace OnceMi.Framework.Util.Json
             return options;
         }
 
+        public static bool TryParse(string source, bool formatJson, out string json)
+        {
+            json = null;
+            if (string.IsNullOrEmpty(source))
+            {
+                return false;
+            }
+            char start = source[0];
+            if (start != '{' && start != '[')
+            {
+                return false;
+            }
+            char end = source[^1];
+            if (end != '}' && end != ']')
+            {
+                return false;
+            }
+            try
+            {
+                object obj = DeserializeStringToObject<JsonElement>(source);
+                if (obj == null)
+                {
+                    return false;
+                }
+                json = formatJson ? SerializeToFormatString(obj) : SerializeToString(obj);
+                return true;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// 验证是否为json字符串
         /// 并返回重新序列化之后的json
@@ -80,21 +111,9 @@ namespace OnceMi.Framework.Util.Json
         /// <param name="source"></param>
         /// <param name="formatJson"></param>
         /// <returns></returns>
-        public static (bool isJson, string json) IsJson(string source, bool formatJson = false)
+        public static bool TryParse(string source, out string json)
         {
-            try
-            {
-                object obj = DeserializeStringToObject<JsonElement>(source);
-                if (obj == null)
-                {
-                    return (false, null);
-                }
-                return (true, formatJson ? SerializeToFormatString(obj) : SerializeToString(obj));
-            }
-            catch
-            {
-                return (false, null);
-            }
+            return TryParse(source, false, out json);
         }
 
         /// <summary>

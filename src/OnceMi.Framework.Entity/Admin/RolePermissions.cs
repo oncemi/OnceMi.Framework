@@ -1,10 +1,4 @@
 ﻿using FreeSql.DataAnnotations;
-using OnceMi.IdentityServer4.User.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {
@@ -24,11 +18,13 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 角色
         /// </summary>
+        [Navigate(nameof(RoleId))]
         public Roles Role { get; set; }
 
         /// <summary>
         /// 菜单
         /// </summary>
+        [Navigate(nameof(MenuId))]
         public Menus Menu { get; set; }
     }
 }

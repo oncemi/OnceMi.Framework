@@ -29,7 +29,7 @@ namespace OnceMi.Framework.Extension.Job
         private readonly RedisClient _redis;
 
         public HttpExcuteJob(ILogger<HttpExcuteJob> logger
-            , IJobsService jobsService
+            , IJobService jobsService
             , IServer server
             , RedisClient redis) : base(jobsService, logger)
         {
@@ -119,7 +119,7 @@ namespace OnceMi.Framework.Extension.Job
             return new UriBuilder(httpEndpoint.Scheme, httpEndpoint.Host, httpEndpoint.Port, jobPath).ToString();
         }
 
-        private Dictionary<string, string> ParseJsonToDictionary(string header)
+        private Dictionary<string, string> DeserializeJsonToDictionary(string header)
         {
             Dictionary<string, string> values = new Dictionary<string, string>();
             if (string.IsNullOrEmpty(header))
@@ -170,17 +170,17 @@ namespace OnceMi.Framework.Extension.Job
             //处理header
             if (!string.IsNullOrEmpty(headers))
             {
-                Dictionary<string, string> headersDic = ParseJsonToDictionary(headers);
+                Dictionary<string, string> headersDic = DeserializeJsonToDictionary(headers);
                 request.AddHeaders(headersDic);
             }
-            request.AddHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0");
+            request.AddHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36");
             request.AddHeader("Accept", "text/html,application/json,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
             if (isInnerRequest)
             {
                 string jobApiKey = Guid.NewGuid().ToString("N");
                 request.AddHeader("JobKey", jobApiKey);
                 //cache set
-                _redis.Set(AdminCacheKey.GetJobApiKey(jobApiKey), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TimeSpan.FromSeconds((8 + new Random().Next(5))));
+                _redis.Set(CacheConstant.GetJobApiKey(jobApiKey), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TimeSpan.FromSeconds((8 + new Random().Next(5))));
             }
             //处理参数
             if (!string.IsNullOrEmpty(@params))
@@ -189,7 +189,7 @@ namespace OnceMi.Framework.Extension.Job
                 {
                     case Method.GET:
                         {
-                            Dictionary<string, string> requestParams = ParseJsonToDictionary(@params);
+                            Dictionary<string, string> requestParams = DeserializeJsonToDictionary(@params);
                             foreach (var item in requestParams)
                             {
                                 request.AddQueryParameter(item.Key, item.Value, true);
