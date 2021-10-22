@@ -7,9 +7,7 @@ using OnceMi.AspNetCore.MQ;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using OnceMi.Framework.Util.Security;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v2
@@ -28,16 +26,13 @@ namespace OnceMi.Framework.Api.Controllers.v2
         private readonly IMessageQueneService _queneService;
         private readonly IConfigService _service;
         private readonly IWebHostEnvironment _env;
-        private readonly IUserService _userService;
 
         public TestController(IMessageQueneService queneService
             , IConfigService service
-            , IUserService userService
             , IWebHostEnvironment env)
         {
             _queneService = queneService;
             _service = service ?? throw new ArgumentNullException(nameof(service));
-            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _env = env ?? throw new ArgumentNullException(nameof(env));
         }
 
@@ -79,27 +74,6 @@ namespace OnceMi.Framework.Api.Controllers.v2
             }, TimeSpan.FromSeconds(val.Time));
 
             return "发送成功";
-        }
-
-        [HttpGet]
-        [Route("[action]")]
-        [AllowAnonymous]
-        public async Task<string> UpdatePwd()
-        {
-            List<long> ids = new List<long>()
-            {
-                68176475668423,68176475668424,78353217507397
-            };
-            foreach(var item in ids)
-            {
-                await _userService.UpdatePassword(new UpdateUserPasswordRequest()
-                {
-                    Id = item,
-                    OldPassword = "1",
-                    Password = Encrypt.SHA256("123456")
-                });
-            }
-            return "OK";
         }
     }
 

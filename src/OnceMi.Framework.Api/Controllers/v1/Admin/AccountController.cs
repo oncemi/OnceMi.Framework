@@ -49,7 +49,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpPost]
         [Route("[action]")]
         [AllowAnonymous]
-        public async Task<LoginResponse> Refesh(RefeshTokenRequest request)
+        public async Task<LoginResponse> RefeshToken(RefeshTokenRequest request)
         {
             return await _service.RefreshToken(request);
         }
