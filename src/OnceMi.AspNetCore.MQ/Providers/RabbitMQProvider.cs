@@ -68,11 +68,7 @@ namespace OnceMi.AspNetCore.MQ
                 x.WithTopic(subscriptionId);
             }
             , cancellationToken);
-            if (result != null)
-            {
-                return result;
-            }
-            return null;
+            return result;
         }
 
         public override void Dispose()

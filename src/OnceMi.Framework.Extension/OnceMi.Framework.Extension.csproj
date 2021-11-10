@@ -1,50 +1,56 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="OnceMi.Framework.Extension.xml" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="OnceMi.Framework.Extension.xml" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.0.0" />
-    <PackageReference Include="FreeSql.Provider.MySql" Version="2.6.100" />
-    <PackageReference Include="FreeSql.Provider.Sqlite" Version="2.6.100" />
-    <PackageReference Include="FreeSql.Provider.PostgreSQL" Version="2.6.100" />
-    <PackageReference Include="FreeSql.Provider.SqlServer" Version="2.6.100" />
-    <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.11" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-    <PackageReference Include="MySql.Data" Version="8.0.26" />
-    <PackageReference Include="System.Data.Odbc" Version="5.0.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
-    <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.2" />
-    <PackageReference Include="Quartz" Version="3.3.3" />
-    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
-    <PackageReference Include="Quartz.Plugins" Version="3.3.3" />
-    <PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.3.3" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.0.0" />
+		<PackageReference Include="FreeSql.Provider.MySql" Version="2.6.100" />
+		<PackageReference Include="FreeSql.Provider.Sqlite" Version="2.6.100" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="2.6.100" />
+		<PackageReference Include="FreeSql.Provider.SqlServer" Version="2.6.100" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
+		<PackageReference Include="MySql.Data" Version="8.0.27" />
+		<PackageReference Include="System.Data.Odbc" Version="6.0.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="Quartz" Version="3.3.3" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
+		<PackageReference Include="Quartz.Plugins" Version="3.3.3" />
+		<PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.3.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OnceMi.AspNetCore.MQ\OnceMi.AspNetCore.MQ.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Config\OnceMi.Framework.Config.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.IRepository\OnceMi.Framework.IRepository.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Repository\OnceMi.Framework.Repository.csproj">
-      <TreatAsUsed>true</TreatAsUsed>
-    </ProjectReference>
-    <ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Service\OnceMi.Framework.Service.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OnceMi.AspNetCore.MQ\OnceMi.AspNetCore.MQ.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.Config\OnceMi.Framework.Config.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.IRepository\OnceMi.Framework.IRepository.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.Repository\OnceMi.Framework.Repository.csproj">
+			<TreatAsUsed>true</TreatAsUsed>
+		</ProjectReference>
+		<ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.Service\OnceMi.Framework.Service.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />
+	</ItemGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>.\OnceMi.Framework.Extension.xml</DocumentationFile>
-    <NoWarn>1701;1702;CS1591</NoWarn>
-  </PropertyGroup>
+	<ItemGroup>
+	  <Folder Include="Middlewares\" />
+	</ItemGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>.\OnceMi.Framework.Extension.xml</DocumentationFile>
+		<NoWarn>1701;1702;CS1591</NoWarn>
+	</PropertyGroup>
 
 </Project>

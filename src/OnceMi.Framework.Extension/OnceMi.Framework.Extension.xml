@@ -49,44 +49,6 @@
             <param name="requestMethod"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.DependencyInjection.FreeSqlCreateDatabaseExtension.CreateDatabaseIfNotExists(FreeSql.FreeSqlBuilder)">
-            <summary>
-            请在UseConnectionString配置后调用此方法
-            </summary>
-            <param name="this"></param>
-            <returns></returns>
-        </member>
-        <member name="T:OnceMi.Framework.Extension.DependencyInjection.ProxiedServicesExtensions">
-            <summary>
-            注入AOP代理扩展
-            </summary>
-        </member>
-        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterAutoMapper.GetMapperFrom">
-            <summary>
-            自动注入包含MapperFromAttribute的类
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterAutoMapper.GetMapperTo">
-            <summary>
-            自动注入包含MapperToAttribute的类
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterDatabase.UseDbSeed(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
-            <summary>
-            初始化数据库
-            </summary>
-            <param name="app"></param>
-            <returns></returns>
-        </member>
-        <member name="M:OnceMi.Framework.Extension.DependencyInjection.RegisterRedisCache.AddRedisCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
-            <summary>
-            注入缓存服务
-            </summary>
-            <param name="services"></param>
-            <returns></returns>
-        </member>
         <member name="T:OnceMi.Framework.Extension.Filters.GlobalPermissionFilter">
             <summary>
             全局授权过滤器
@@ -106,6 +68,44 @@
             <summary>
             一些重写规则
             </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Injection.FreeSqlCreateDatabaseExtension.CreateDatabaseIfNotExists(FreeSql.FreeSqlBuilder)">
+            <summary>
+            请在UseConnectionString配置后调用此方法
+            </summary>
+            <param name="this"></param>
+            <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Extension.Injection.ProxiedServicesExtensions">
+            <summary>
+            注入AOP代理扩展
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Injection.RegisterAutoMapper.GetMapperFrom">
+            <summary>
+            自动注入包含MapperFromAttribute的类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Injection.RegisterAutoMapper.GetMapperTo">
+            <summary>
+            自动注入包含MapperToAttribute的类
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Injection.RegisterDatabase.UseDbSeed(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            初始化数据库
+            </summary>
+            <param name="app"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Injection.RegisterRedisCache.AddRedisCache(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            注入缓存服务
+            </summary>
+            <param name="services"></param>
+            <returns></returns>
         </member>
         <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Jobs)">
             <summary>

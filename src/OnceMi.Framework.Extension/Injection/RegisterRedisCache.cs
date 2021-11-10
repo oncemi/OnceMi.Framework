@@ -7,7 +7,7 @@ using OnceMi.Framework.Util.Json;
 using System;
 using System.Collections.Generic;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterRedisCache
     {

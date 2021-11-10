@@ -49,7 +49,7 @@ namespace OnceMi.AspNetCore.MQ
                 foreach (var serviceItem in services)
                 {
                     ISubscribe sub = (ISubscribe)serviceItem;
-                    sub.Excute();
+                    sub?.Excute();
                 }
             }
             return app;

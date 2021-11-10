@@ -8,11 +8,8 @@ using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Util.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterAutoMapper
     {
@@ -25,7 +22,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
         public static IServiceCollection AddMapper(this IServiceCollection services)
         {
             //自动注入Profile
-            List<Type> profileTypes = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+            List<Type> profileTypes = new AssemblyLoader(p => p.Name.StartsWith(GlobalConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                 .GetExportedTypesByBaseType(typeof(Profile));
             List<MapperEntityConfig> mapperList = GetMapperFrom();
             List<MapperEntityConfig> mapperToList = GetMapperTo();

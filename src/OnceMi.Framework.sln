@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31205.134
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31825.309
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnceMi.Framework.Api", "OnceMi.Framework.Api\OnceMi.Framework.Api.csproj", "{CEEE820D-6A86-4151-BDC8-E37286F852DC}"
 EndProject
@@ -17,21 +17,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnceMi.Framework.Service", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnceMi.Framework.Model", "OnceMi.Framework.Model\OnceMi.Framework.Model.csproj", "{4A250CCC-B5DE-4C3D-B900-61C7DE8EE895}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.app", "1.app", "{B61528F9-DA00-4E16-B037-8D1D337ADECD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Application", "1.Application", "{B61528F9-DA00-4E16-B037-8D1D337ADECD}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.service", "2.service", "{3E54E6DB-2B9D-4DB1-B74C-F984773F7BD6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Service", "2.Service", "{3E54E6DB-2B9D-4DB1-B74C-F984773F7BD6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.repository", "3.repository", "{7E5FCA41-B1E8-4D5A-B782-F5EDD306EF27}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Repository", "3.Repository", "{7E5FCA41-B1E8-4D5A-B782-F5EDD306EF27}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.common", "4.common", "{6BFB93A8-FE3F-43E1-B4EB-0D7F2C3B80AC}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4.Common", "4.Common", "{6BFB93A8-FE3F-43E1-B4EB-0D7F2C3B80AC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.libraries", "5.libraries", "{A2649590-ED89-44AB-9FEF-6A0297884763}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.Library", "5.Library", "{A2649590-ED89-44AB-9FEF-6A0297884763}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnceMi.Framework.Util", "OnceMi.Framework.Util\OnceMi.Framework.Util.csproj", "{B07826E1-5FAB-4DBD-B638-B2C7A439AAB5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnceMi.Framework.Test", "OnceMi.Framework.Test\OnceMi.Framework.Test.csproj", "{C0664260-4C07-4768-B27D-50C5CD97C826}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.test", "6.test", "{793DFD5D-054F-45B2-BA93-6FFF4684C37E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.Test", "6.Test", "{793DFD5D-054F-45B2-BA93-6FFF4684C37E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnceMi.Framework.Config", "OnceMi.Framework.Config\OnceMi.Framework.Config.csproj", "{61A1705D-7766-46D6-9CA3-EF189872C4F1}"
 EndProject

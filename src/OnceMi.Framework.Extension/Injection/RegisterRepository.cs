@@ -1,29 +1,26 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using OnceMi.Framework.IService;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Reflection;
 using OnceMi.Framework.Model.Attributes;
-using System.Linq;
 using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
-using OnceMi.Framework.Service.Admin;
+using OnceMi.Framework.IRepository;
+using OnceMi.Framework.Repository;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
-    public static class RegisterService
+    public static class RegisterRepository
     {
-        public static IServiceCollection AddService(this IServiceCollection services)
+        public static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            //为了引入OnceMi.Framework.Service的实现，不然可能无法正确的获取业务逻辑实现
-            Type configService = typeof(ConfigService);
-            if(configService == null)
+            //为了引入OnceMi.Framework.IRepository的实现，不然可能无法正确的获取仓储实现
+            Type configRepository = typeof(ConfigRepository);
+            if (configRepository == null)
             {
-                throw new Exception("Can not load service realization");
+                throw new Exception("Can not load repository realization");
             }
-            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
-                .GetInheritInterfaceTypes(typeof(IServiceDependency));
+            Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(GlobalConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                .GetInheritInterfaceTypes(typeof(IRepositoryDependency));
             if (registerDic == null)
             {
                 return services;

@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using OnceMi.Framework.Config;
-using System;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterConfigManager
     {

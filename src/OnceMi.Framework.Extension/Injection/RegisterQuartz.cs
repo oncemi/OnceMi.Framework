@@ -4,7 +4,7 @@ using OnceMi.Framework.Extension.Job;
 using Quartz;
 using System;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterQuartz
     {

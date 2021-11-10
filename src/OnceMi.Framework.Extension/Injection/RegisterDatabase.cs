@@ -14,15 +14,11 @@ using OnceMi.Framework.Config;
 using OnceMi.Framework.Entity;
 using OnceMi.Framework.Extension.Database;
 using OnceMi.Framework.IRepository;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Reflection;
-using System.Threading;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterDatabase
     {
@@ -139,7 +135,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             {
                 return;
             }
-            AssemblyLoader assemblyLoader = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase));
+            AssemblyLoader assemblyLoader = new AssemblyLoader(p => p.Name.StartsWith(GlobalConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase));
             List<Type> tableAssembies = new List<Type>();
             var entities = assemblyLoader.GetExportedTypesByInterface(typeof(IEntity));
             foreach (Type type in entities)

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Data;
+﻿using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.IO;
 using System.Reflection;
 using FreeSql;
 using MySql.Data.MySqlClient;
 using Npgsql;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     internal static class FreeSqlCreateDatabaseExtension
     {

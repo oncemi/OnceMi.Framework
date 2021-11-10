@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Config
 {
-    public static class ConfigConstant
+    /// <summary>
+    /// 全局静态配置
+    /// </summary>
+    public static class GlobalConfigConstant
     {
         /// <summary>
         /// 默认跨域策略名称

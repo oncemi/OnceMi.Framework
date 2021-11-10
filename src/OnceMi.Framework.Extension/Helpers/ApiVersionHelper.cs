@@ -12,7 +12,7 @@ namespace OnceMi.Framework.Extension.Helpers
         public static List<ApiVersion> GetAllApiVersions()
         {
             List<ApiVersion> result = new List<ApiVersion>();
-            List<Type> types = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase)).DomainAllTypes;
+            List<Type> types = new AssemblyLoader(p => p.Name.StartsWith(GlobalConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase)).DomainAllTypes;
             if (types == null || types.Count == 0)
                 return result;
             foreach (var item in types)

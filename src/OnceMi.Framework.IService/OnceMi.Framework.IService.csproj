@@ -1,13 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OnceMi.AspNetCore.AutoInjection\OnceMi.AspNetCore.AutoInjection.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Entity\OnceMi.Framework.Entity.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OnceMi.AspNetCore.AutoInjection\OnceMi.AspNetCore.AutoInjection.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.Entity\OnceMi.Framework.Entity.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />
+	</ItemGroup>
 
 </Project>

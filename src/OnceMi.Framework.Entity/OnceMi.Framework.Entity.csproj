@@ -1,33 +1,35 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <Version>1.0.2</Version>
-    <Authors>OnceMi</Authors>
-    <Company>OnceMi</Company>
-    <Description>OnceMi Framework数据库实体对象。</Description>
-    <Copyright>OnceMi</Copyright>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>https://github.com/oncemi/OnceMi.Framework</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/oncemi/OnceMi.Framework</RepositoryUrl>
-    <RepositoryType>github</RepositoryType>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+		<Version>1.0.2</Version>
+		<Authors>OnceMi</Authors>
+		<Company>OnceMi</Company>
+		<Description>OnceMi Framework数据库实体对象。</Description>
+		<Copyright>OnceMi</Copyright>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/oncemi/OnceMi.Framework</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/oncemi/OnceMi.Framework</RepositoryUrl>
+		<RepositoryType>github</RepositoryType>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>.\OnceMi.Framework.Entity.xml</DocumentationFile>
-    <NoWarn>1701;1702;CS1591</NoWarn>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<DocumentationFile>.\OnceMi.Framework.Entity.xml</DocumentationFile>
+		<NoWarn>1701;1702;CS1591</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\..\LICENSE">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\..\LICENSE">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="FreeSql" Version="2.6.100" />
-    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.11" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FreeSql" Version="2.6.100" />
+		<PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="6.0.0" />
+	</ItemGroup>
 
 </Project>

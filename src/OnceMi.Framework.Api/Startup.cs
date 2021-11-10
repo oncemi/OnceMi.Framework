@@ -1,13 +1,7 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.AspNetCore.MQ;
@@ -15,14 +9,13 @@ using OnceMi.AspNetCore.OSS;
 using OnceMi.Framework.Api.Middlewares;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Extension.Authorizations;
-using OnceMi.Framework.Extension.DependencyInjection;
+using OnceMi.Framework.Extension.Injection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Util.Json;
-using OnceMi.Framework.Extension.Middlewares;
-using System;
 using System.Text;
 using System.Text.Encodings.Web;
+using Microsoft.AspNetCore.HttpLogging;
 
 namespace OnceMi.Framework.Api
 {
@@ -98,7 +91,7 @@ namespace OnceMi.Framework.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy(ConfigConstant.DefaultOriginsName, policy =>
+                options.AddPolicy(GlobalConfigConstant.DefaultOriginsName, policy =>
                  {
                      policy.AllowAnyHeader()
                      .AllowAnyMethod()
@@ -224,14 +217,16 @@ namespace OnceMi.Framework.Api
 
             #region 请求日志
 
-            //在.net6中将会启用此api
-            //services.AddHttpLogging(logging =>
-            //{
-            //    // Customize HTTP logging here.
-            //    logging.LoggingFields = HttpLoggingFields.All;
-            //    logging.RequestBodyLogLimit = 4096;
-            //    logging.ResponseBodyLogLimit = 4096;
-            //});
+            if (Configuration.GetValue<bool>("AppSettings:IsEnabledRequestLog"))
+            {
+                services.AddHttpLogging(logging =>
+                {
+                    // Customize HTTP logging here.
+                    logging.LoggingFields = HttpLoggingFields.All;
+                    logging.RequestBodyLogLimit = 4096;
+                    logging.ResponseBodyLogLimit = 4096;
+                });
+            }
 
             #endregion
 
@@ -267,7 +262,7 @@ namespace OnceMi.Framework.Api
                     options.JsonSerializerOptions.Converters.Add(new ExceptionConverter());
                     options.JsonSerializerOptions.Converters.Add(new TypeConverter());
                     //小驼峰
-                    options.JsonSerializerOptions.PropertyNamingPolicy = ConfigConstant.DefaultJsonNamingPolicy;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = GlobalConfigConstant.DefaultJsonNamingPolicy;
                     //循环引用
                     //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
                 });
@@ -284,9 +279,7 @@ namespace OnceMi.Framework.Api
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app
-            , IWebHostEnvironment env
-            , ILoggerFactory loggerFactory
-            , ConfigManager config)
+            , ILoggerFactory loggerFactory)
         {
             #region 全局异常处理
 
@@ -296,7 +289,7 @@ namespace OnceMi.Framework.Api
             {
                 builder.Run(async context =>
                 {
-                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, ConfigConstant.DefaultJsonNamingPolicy);
+                    await RewriteHelper.GlobalExceptionHandler(context, loggerFactory, GlobalConfigConstant.DefaultJsonNamingPolicy);
                 });
             });
 
@@ -304,10 +297,11 @@ namespace OnceMi.Framework.Api
 
             #region 请求日志
 
-            //请求日志，将在.net6中启用此api
-            //app.UseHttpLogging();
-            //请求日志
-            app.UseRequestLogging();
+            if (Configuration.GetValue<bool>("AppSettings:IsEnabledRequestLog"))
+            {
+                //请求日志
+                app.UseHttpLogging();
+            }
 
             #endregion
 
@@ -318,10 +312,11 @@ namespace OnceMi.Framework.Api
             //健康检查
             app.UseHealthChecks();
             //跨域
-            app.UseCors(ConfigConstant.DefaultOriginsName);
+            app.UseCors(GlobalConfigConstant.DefaultOriginsName);
             //消息队列
             app.UseMessageQuene();
 
+            //运行在docker中可能使用反向代理，默认注释，需要重定向可取消注释
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -330,7 +325,7 @@ namespace OnceMi.Framework.Api
 
             app.UseEndpoints(endpoints =>
             {
-                if (config.AppSettings.HealthCheck.IsEnabledHealthCheckUI)
+                if (Configuration.GetValue<bool>("AppSettings:HealthCheck:IsEnabledHealthCheckUI"))
                 {
                     //MapHealthChecksUI应该统一写到UseHealthChecks中
                     //但是有bug，具体请看UseHealthChecks中注释
@@ -340,7 +335,7 @@ namespace OnceMi.Framework.Api
                         options.UseRelativeResourcesPath = false;
                         options.UseRelativeApiPath = false;
                         options.UseRelativeWebhookPath = false;
-                        options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
+                        options.UIPath = Configuration.GetValue<string>("AppSettings:HealthCheck:HealthCheckUIPath");
                     }).AllowAnonymous();
                 }
 

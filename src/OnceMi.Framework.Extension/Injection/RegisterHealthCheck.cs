@@ -3,15 +3,11 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using HealthChecks.UI.Client;
 using OnceMi.Framework.Config;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net.Http;
 using System.Text.RegularExpressions;
 using OnceMi.AspNetCore.AutoInjection;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterHealthCheck
     {
@@ -26,7 +22,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 var checksBuilder = services.AddHealthChecks();
                 List<Type> hasRegisted = new List<Type>();
                 //自动注入实现IHealthCheck的类
-                List<Type> allHealthCheckTypes = new AssemblyLoader(p => p.Name.StartsWith(ConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
+                List<Type> allHealthCheckTypes = new AssemblyLoader(p => p.Name.StartsWith(GlobalConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                     .GetExportedTypesByInterface(typeof(IHealthCheck));
                 foreach (var item in allHealthCheckTypes)
                 {

@@ -1,21 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Hardware.Info" Version="1.1.1.1" />
-    <PackageReference Include="OnceMi.AspNetCore.IdGenerator" Version="1.0.4" />
-    <PackageReference Include="OnceMi.AspNetCore.OSS" Version="1.0.9" />
-    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.2" />
-    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.2" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Hardware.Info" Version="1.1.1.1" />
+		<PackageReference Include="OnceMi.AspNetCore.IdGenerator" Version="1.0.4" />
+		<PackageReference Include="OnceMi.AspNetCore.OSS" Version="1.0.9" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.2.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\OnceMi.Framework.Config\OnceMi.Framework.Config.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.IRepository\OnceMi.Framework.IRepository.csproj" />
-    <ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\OnceMi.Framework.Config\OnceMi.Framework.Config.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.IRepository\OnceMi.Framework.IRepository.csproj" />
+		<ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
+	</ItemGroup>
 
 </Project>

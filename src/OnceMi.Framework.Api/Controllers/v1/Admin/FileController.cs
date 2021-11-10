@@ -148,7 +148,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <param name="request">请求参数</param>
         [HttpPost]
-        [RequestSizeLimit(ConfigConstant.FileUploadSizeLimit * 1024 * 1024)]
+        [RequestSizeLimit(GlobalConfigConstant.FileUploadSizeLimit * 1024 * 1024)]
         public async Task<List<UploadFileInfo>> Post([FromForm] FileUploadRequest request)
         {
             if (request.AccessMode == 0)

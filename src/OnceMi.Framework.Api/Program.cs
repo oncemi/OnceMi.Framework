@@ -22,6 +22,7 @@ namespace OnceMi.Framework.Api
                 {
                     logging.ClearProviders();                 //移除已经注册的其他日志处理程序
                     logging.SetMinimumLevel(LogLevel.Trace);  //设置最小的日志级别
+                    //logging.AddConsole();
                 })
                 .UseNLog()
                 .ConfigureAppConfiguration((hostingContext, config) =>

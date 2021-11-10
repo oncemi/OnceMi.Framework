@@ -1,26 +1,14 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-bullseye-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["OnceMi.Framework.Api/OnceMi.Framework.Api.csproj", "OnceMi.Framework.Api/"]
-COPY ["OnceMi.Framework.Util/OnceMi.Framework.Util.csproj", "OnceMi.Framework.Util/"]
-COPY ["OnceMi.Framework.IService/OnceMi.Framework.IService.csproj", "OnceMi.Framework.IService/"]
-COPY ["OnceMi.Framework.Entity/OnceMi.Framework.Entity.csproj", "OnceMi.Framework.Entity/"]
-COPY ["OnceMi.Framework.Model/OnceMi.Framework.Model.csproj", "OnceMi.Framework.Model/"]
-COPY ["OnceMi.AspNetCore.AutoInjection/OnceMi.AspNetCore.AutoInjection.csproj", "OnceMi.AspNetCore.AutoInjection/"]
-COPY ["OnceMi.AspNetCore.MQ/OnceMi.AspNetCore.MQ.csproj", "OnceMi.AspNetCore.MQ/"]
-COPY ["OnceMi.Framework.Extension/OnceMi.Framework.Extension.csproj", "OnceMi.Framework.Extension/"]
-COPY ["OnceMi.Framework.IRepository/OnceMi.Framework.IRepository.csproj", "OnceMi.Framework.IRepository/"]
-COPY ["OnceMi.Framework.Repository/OnceMi.Framework.Repository.csproj", "OnceMi.Framework.Repository/"]
-COPY ["OnceMi.Framework.Config/OnceMi.Framework.Config.csproj", "OnceMi.Framework.Config/"]
-COPY ["OnceMi.Framework.Service/OnceMi.Framework.Service.csproj", "OnceMi.Framework.Service/"]
+COPY . /src
 RUN dotnet restore "OnceMi.Framework.Api/OnceMi.Framework.Api.csproj"
-COPY . .
 WORKDIR "/src/OnceMi.Framework.Api"
 RUN dotnet build "OnceMi.Framework.Api.csproj" -c Release -o /app/build
 
@@ -30,4 +18,12 @@ RUN dotnet publish "OnceMi.Framework.Api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+RUN sed -i 's|security.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' /etc/apt/sources.list
+RUN apt update
+RUN apt install apt-utils libgdiplus libc6-dev sqlite3 -y
+RUN mkdir -p /oncemi/data
+RUN sqlite3 /oncemi/data/app.db "VACUUM;"
+
 ENTRYPOINT ["dotnet", "OnceMi.Framework.Api.dll"]

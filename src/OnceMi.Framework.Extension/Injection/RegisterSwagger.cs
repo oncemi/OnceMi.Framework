@@ -6,12 +6,8 @@ using Microsoft.OpenApi.Models;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
-namespace OnceMi.Framework.Extension.DependencyInjection
+namespace OnceMi.Framework.Extension.Injection
 {
     public static class RegisterSwagger
     {

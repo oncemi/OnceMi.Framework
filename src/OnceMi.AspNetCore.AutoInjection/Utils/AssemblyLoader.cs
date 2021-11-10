@@ -233,7 +233,7 @@ namespace OnceMi.AspNetCore.AutoInjection
                     && p != interfaceBaseType
                     && p.GetCustomAttribute<IgnoreDependencyAttribute>() == null)
                 ?.ToList();
-            if (allBusInterfaceTypes.Count == 0)
+            if (allBusInterfaceTypes == null || allBusInterfaceTypes.Count == 0)
             {
                 return registerDic;
             }

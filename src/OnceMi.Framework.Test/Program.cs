@@ -89,34 +89,34 @@ namespace OnceMi.Framework.Test
             //stopwatch.Stop();
             //Console.WriteLine($"耗时：{stopwatch.ElapsedMilliseconds}ms");
 
-            string a = "a:b:*";
-            string b = "a:*:c";
-            string c = "*:b:c";
-            string d = "a:b:c";
+            //string a = "a:b:*";
+            //string b = "a:*:c";
+            //string c = "*:b:c";
+            //string d = "a:b:c";
 
-            string va = "a:b:1";
-            string vb = "a:1:c";
-            string vc = "1:b:c";
-            string vd = "a:b:c";
+            //string va = "a:b:1";
+            //string vb = "a:1:c";
+            //string vc = "1:b:c";
+            //string vd = "a:b:c";
 
-            string key = d.Replace("*", ".");
+            //string key = d.Replace("*", ".");
 
-            if (Regex.IsMatch(va, key))
-            {
-                Console.WriteLine($"Key:{key}, Value:{va}");
-            }
-            if (Regex.IsMatch(vb, key))
-            {
-                Console.WriteLine($"Key:{key}, Value:{vb}");
-            }
-            if (Regex.IsMatch(vc, key))
-            {
-                Console.WriteLine($"Key:{key}, Value:{vc}");
-            }
-            if (Regex.IsMatch(vd, key))
-            {
-                Console.WriteLine($"Key:{key}, Value:{vd}");
-            }
+            //if (Regex.IsMatch(va, key))
+            //{
+            //    Console.WriteLine($"Key:{key}, Value:{va}");
+            //}
+            //if (Regex.IsMatch(vb, key))
+            //{
+            //    Console.WriteLine($"Key:{key}, Value:{vb}");
+            //}
+            //if (Regex.IsMatch(vc, key))
+            //{
+            //    Console.WriteLine($"Key:{key}, Value:{vc}");
+            //}
+            //if (Regex.IsMatch(vd, key))
+            //{
+            //    Console.WriteLine($"Key:{key}, Value:{vd}");
+            //}
 
 
             Console.ReadKey(false);

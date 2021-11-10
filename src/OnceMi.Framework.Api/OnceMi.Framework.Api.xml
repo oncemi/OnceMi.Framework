@@ -15,7 +15,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController.Refesh(OnceMi.Framework.Model.Dto.RefeshTokenRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.AccountController.RefeshToken(OnceMi.Framework.Model.Dto.RefeshTokenRequest)">
             <summary>
             刷新token
             </summary>

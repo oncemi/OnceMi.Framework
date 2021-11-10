@@ -220,7 +220,7 @@ namespace OnceMi.Framework.Service.Admin
                 UserAgent = _accessor.HttpContext.Request.Headers["User-Agent"],
                 Type = type,
                 Status = true,
-                Message = type == LoginHistoryType.Login ? "登录成功" : "退出成功",
+                Message = type == LoginHistoryType.Login ? "登录" : "退出",
             };
             await _repository.Orm.Insert(history).ExecuteAffrowsAsync();
         }

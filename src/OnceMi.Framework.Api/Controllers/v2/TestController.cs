@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Hosting;
 using OnceMi.AspNetCore.MQ;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using System;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v2
 {
