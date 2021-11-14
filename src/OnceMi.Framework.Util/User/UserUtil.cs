@@ -13,7 +13,7 @@ namespace OnceMi.Framework.Util.User
                 throw new Exception("Passwd or salt can not null.");
             }
             string newPwd = string.Format(salt, "I dont know what this", pwd);
-            return Encrypt.MD5String(newPwd);
+            return MD5.MD5String(newPwd);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace OnceMi.Framework.Util.User
             string tokenKey = "oncemi.com";
             //生成规则
             string tokenStr = username + "_" + TimeUtil.Timestamp() + "_" + tokenKey;
-            return Encrypt.MD5String(tokenStr);
+            return MD5.MD5String(tokenStr);
         }
     }
 }

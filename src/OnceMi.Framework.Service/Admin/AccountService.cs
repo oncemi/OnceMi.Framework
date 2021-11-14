@@ -165,7 +165,7 @@ namespace OnceMi.Framework.Service.Admin
 
         private async Task<string> GenerateRefreshToken(Users user, string token)
         {
-            string refeshToken = Encrypt.AESEncrypt($"{Guid.NewGuid():N}_{user.Id}_{TimeUtil.Timestamp()}", _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
+            string refeshToken = AES.AESEncrypt($"{Guid.NewGuid():N}_{user.Id}_{TimeUtil.Timestamp()}", _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
             UserToken userToken = await _repository.Orm.Select<UserToken>().Where(p => p.UserId == user.Id).ToOneAsync();
             if (userToken == null)
             {

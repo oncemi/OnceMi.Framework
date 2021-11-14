@@ -15,6 +15,7 @@ using OnceMi.Framework.Util.Http;
 using OnceMi.Framework.Util.Images;
 using OnceMi.Framework.Util.Security;
 using OnceMi.Framework.Util.User;
+using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -230,16 +231,16 @@ namespace OnceMi.Framework.Service.Admin
             if (request.PasswordHashed)
                 user.Password = user.CreatePassword(request.Password);
             else
-                user.Password = user.CreatePassword(Encrypt.SHA256(request.Password));
+                user.Password = user.CreatePassword(SHA.SHA256(request.Password));
             //保存头像
             UploadFileInfo fileInfo = null;
             if (!string.IsNullOrEmpty(request.Avatar))
             {
-                using (Image headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
+                using (SKData headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
                 {
                     using (var saveStream = new MemoryStream())
                     {
-                        headerImage.Save(saveStream, ImageFormat.Png);
+                        headerImage.SaveTo(saveStream);
                         fileInfo = await _upLoadFileService.Upload(saveStream, $"{user.Id}.png", (user.CreatedUserId == null ? user.Id : user.CreatedUserId.Value), FileAccessMode.PublicRead);
                         if (fileInfo != null && !string.IsNullOrEmpty(fileInfo.Url))
                         {
@@ -307,7 +308,7 @@ namespace OnceMi.Framework.Service.Admin
                 if (request.PasswordHashed)
                     user.Password = user.CreatePassword(request.Password);
                 else
-                    user.Password = user.CreatePassword(Encrypt.SHA256(request.Password));
+                    user.Password = user.CreatePassword(SHA.SHA256(request.Password));
             }
             else
             {
@@ -321,11 +322,11 @@ namespace OnceMi.Framework.Service.Admin
             if (!string.IsNullOrEmpty(request.Avatar)
                 && !request.Avatar.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                using (Image headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
+                using (SKData headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
                 {
                     using (var saveStream = new MemoryStream())
                     {
-                        headerImage.Save(saveStream, ImageFormat.Png);
+                        headerImage.SaveTo(saveStream);
                         fileInfo = await _upLoadFileService.Upload(saveStream, $"{user.Id}.png", (user.CreatedUserId == null ? user.Id : user.CreatedUserId.Value), FileAccessMode.PublicRead);
                         if (fileInfo != null && !string.IsNullOrEmpty(fileInfo.Url))
                         {
@@ -424,21 +425,13 @@ namespace OnceMi.Framework.Service.Admin
                 .ExecuteAffrowsAsync();
         }
 
-        public byte[] GetAvatar(string name, int size = 250)
+        public byte[] GetAvatar(string name, int size)
         {
-            if (!string.IsNullOrEmpty(name) && name.Length > 2)
-            {
-                name = name.Substring(0, 2);
-            }
             if (size < 30 || size > 1500)
             {
-                size = 120;
+                size = 128;
             }
-            var bytes = RandomAvatarBuilder
-                .Build(size)
-                .SetPadding(4)
-                .FixedSeed(!string.IsNullOrEmpty(name), name)
-                .ToBytes();
+            var bytes = new RandomAvatar().Create(name, size);
             return bytes;
         }
 

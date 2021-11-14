@@ -4,29 +4,6 @@
         <name>OnceMi.Framework.Config</name>
     </assembly>
     <members>
-        <member name="F:OnceMi.Framework.Config.ConfigConstant.DefaultOriginsName">
-            <summary>
-            默认跨域策略名称
-            </summary>
-        </member>
-        <member name="F:OnceMi.Framework.Config.ConfigConstant.FileUploadSizeLimit">
-            <summary>
-            文件上传大小限制
-            单位：MB
-            限制：2048MB
-            </summary>
-        </member>
-        <member name="F:OnceMi.Framework.Config.ConfigConstant.DefaultJsonNamingPolicy">
-            <summary>
-            默认json名称序列化策略
-            首字母小写
-            </summary>
-        </member>
-        <member name="P:OnceMi.Framework.Config.ConfigConstant.FirstNamespace">
-            <summary>
-            当前项目第一个命名空间
-            </summary>
-        </member>
         <member name="M:OnceMi.Framework.Config.ConfigManager.GetKeyValue(System.String)">
             <summary>
             根据Key获取value
@@ -34,6 +11,34 @@
             </summary>
             <param name="key"></param>
             <returns></returns>
+        </member>
+        <member name="T:OnceMi.Framework.Config.GlobalConfigConstant">
+            <summary>
+            全局静态配置
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Config.GlobalConfigConstant.DefaultOriginsName">
+            <summary>
+            默认跨域策略名称
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Config.GlobalConfigConstant.FileUploadSizeLimit">
+            <summary>
+            文件上传大小限制
+            单位：MB
+            限制：2048MB
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Config.GlobalConfigConstant.DefaultJsonNamingPolicy">
+            <summary>
+            默认json名称序列化策略
+            首字母小写
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Config.GlobalConfigConstant.FirstNamespace">
+            <summary>
+            当前项目第一个命名空间
+            </summary>
         </member>
         <member name="P:OnceMi.Framework.Config.HealthCheckNode.IsEnabledHealthCheckUI">
             <summary>

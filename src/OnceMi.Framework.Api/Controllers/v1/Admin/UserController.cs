@@ -165,7 +165,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if(size == 0)
             {
-                size = 250;
+                size = 128;
             }
             byte[] avatarBytes = _service.GetAvatar(name, size);
             return File(avatarBytes, "image/png", "avatar.png");

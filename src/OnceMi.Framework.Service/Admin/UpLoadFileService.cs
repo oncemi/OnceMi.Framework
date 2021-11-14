@@ -649,7 +649,7 @@ namespace OnceMi.Framework.Service.Admin
 
         public UploadFileInfo DecodeFileKey(string key)
         {
-            string json = Encrypt.AESDecrypt(key, _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
+            string json = AES.AESDecrypt(key, _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
             if (string.IsNullOrEmpty(json))
             {
                 throw new BusException(ResultCodeConstant.FILE_KEY_DEC_FAILED, "文件密钥验证失败");
@@ -848,7 +848,7 @@ namespace OnceMi.Framework.Service.Admin
             parseInfo.Size = null;
 
             string json = JsonUtil.SerializeToString(parseInfo);
-            string key = Encrypt.AESEncrypt(json, _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
+            string key = AES.AESEncrypt(json, _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
 
             StringBuilder urlBuilder = new StringBuilder();
             urlBuilder.Append(_accessor.HttpContext.Request.Scheme);

@@ -21,8 +21,7 @@ COPY --from=publish /app/publish .
 
 RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 RUN sed -i 's|security.debian.org/debian-security|mirrors.ustc.edu.cn/debian-security|g' /etc/apt/sources.list
-RUN apt update
-RUN apt install apt-utils libgdiplus libc6-dev sqlite3 -y
+RUN apt update && apt install apt-utils libgdiplus libc6-dev sqlite3 -y && apt clean
 RUN mkdir -p /oncemi/data
 RUN sqlite3 /oncemi/data/app.db "VACUUM;"
 
