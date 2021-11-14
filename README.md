@@ -1,5 +1,5 @@
 # OnceMi.Framework
-基于.NET 6和Vue开发的企业级前后端分离权限管理开发框架（后台管理系统），具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4统一认证。  
+基于.NET 6和Vue开发的企业级前后端分离权限管理开发框架（后台管理系统），具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4认证中心。  
 
 前端源码：https://github.com/oncemi/OnceMi.Framework.AdminUI  
 
@@ -23,6 +23,7 @@
 - 使用Automapper处理对象映射
 - 支持组织管理、角色管理、用户管理、菜单管理、授权管理等基本功能
 - 得益于.NET Core的跨平台特性，支持Linux、Windows、OSX。你甚至可以将此框架运行在树莓派上面。
+- 支持Jenkins和Docker自动化部署
 
 ### 预览
 Demo：https://ofw.demo.oncemi.com/  
