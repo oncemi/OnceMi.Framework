@@ -155,6 +155,16 @@ namespace OnceMi.Framework.Util.Text
         /// </summary>
         /// <param name="text"></param>
         /// <returns></returns>
+        public static string GetPinyinSpellCode(char text)
+        {
+            return GetPinyinSpellCode(text.ToString());
+        }
+
+        /// <summary>
+        /// 获取拼音首字母
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public static string GetPinyinSpellCode(string text)
         {
             if (string.IsNullOrEmpty(text))

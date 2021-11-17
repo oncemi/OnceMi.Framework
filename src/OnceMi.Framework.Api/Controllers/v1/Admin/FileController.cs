@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
-using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Extension.Authorizations;
@@ -13,11 +11,7 @@ using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Http;
 using OnceMi.Framework.Util.User;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.IO;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
-using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using OnceMi.Framework.Model.Exception;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v1.Admin
 {
@@ -165,7 +159,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if(size == 0)
             {
-                size = 250;
+                size = 128;
             }
             byte[] avatarBytes = _service.GetAvatar(name, size);
             return File(avatarBytes, "image/png", "avatar.png");

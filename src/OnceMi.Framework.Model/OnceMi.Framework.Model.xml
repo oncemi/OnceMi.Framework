@@ -436,6 +436,26 @@
             是否启用
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IJobPageRequest.Status">
+            <summary>
+            作业状态
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IJobPageRequest.CreateTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IJobPageRequest.RequestMethod">
+            <summary>
+            请求方式
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IJobPageRequest.JobGroupId">
+            <summary>
+            作业分组
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Model.Dto.UpdateJobGroupRequest.Name">
             <summary>
             名称

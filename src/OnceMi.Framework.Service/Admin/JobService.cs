@@ -111,7 +111,7 @@ namespace OnceMi.Framework.Service.Admin
                 }
             }
             //默认排序
-            if(request.OrderByModels == null || request.OrderByModels.Count == 0)
+            if (request.OrderByModels == null || request.OrderByModels.Count == 0)
             {
                 request.OrderBy = new string[] { $"{nameof(Jobs.Id)},desc" };
             }
@@ -134,6 +134,10 @@ namespace OnceMi.Framework.Service.Admin
             if (request.CreateTime != null)
             {
                 selector = selector.Where(p => p.CreatedTime > request.CreateTime);
+            }
+            if (request.JobGroupId != null && request.JobGroupId.Value > 0)
+            {
+                selector = selector.Where(p => p.GroupId == request.JobGroupId.Value);
             }
             //get count
             int count = selector.Count();
@@ -238,7 +242,7 @@ namespace OnceMi.Framework.Service.Admin
             job.Status = status;
             job.FireCount = fireCount == null || fireCount == 0 ? job.FireCount : job.FireCount + 1;
             job.LastFireTime = fireTime == null ? job.LastFireTime : fireTime.Value;
-            if(nextFireTime == null && status == JobStatus.Stopped)
+            if (nextFireTime == null && status == JobStatus.Stopped)
                 job.NextFireTime = null;
             else
                 job.NextFireTime = nextFireTime == null ? job.NextFireTime : nextFireTime.Value;

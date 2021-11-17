@@ -72,8 +72,6 @@ namespace OnceMi.Framework.Config
             }
         }
 
-        public string FileUploadPath { get; set; }
-
         public bool IsEnabledRequestLog { get; set; }
 
         public bool IsEnabledAutoSeedDb { get; set; }

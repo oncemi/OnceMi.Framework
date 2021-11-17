@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Extension.Job;
@@ -11,9 +10,6 @@ using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Json;
 using Quartz;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

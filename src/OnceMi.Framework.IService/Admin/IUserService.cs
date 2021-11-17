@@ -82,6 +82,6 @@ namespace OnceMi.Framework.IService.Admin
         /// <param name="name"></param>
         /// <param name="size"></param>
         /// <returns></returns>
-        byte[] GetAvatar(string name, int size = 100);
+        byte[] GetAvatar(string name, int size);
     }
 }

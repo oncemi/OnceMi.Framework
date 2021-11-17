@@ -83,7 +83,7 @@ namespace OnceMi.Framework.Service.Admin
                 .ToOneAsync();
             if (userToken == null)
             {
-                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_PARAMS_ERROR, "参数错误");
+                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_FAILED, "刷新Token失败");
             }
             Users user = await _userService.Query(userToken.UserId.ToString(), true);
             if (user == null)
@@ -165,7 +165,7 @@ namespace OnceMi.Framework.Service.Admin
 
         private async Task<string> GenerateRefreshToken(Users user, string token)
         {
-            string refeshToken = Encrypt.AESEncrypt($"{Guid.NewGuid():N}_{user.Id}_{TimeUtil.Timestamp()}", _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
+            string refeshToken = AES.AESEncrypt($"{Guid.NewGuid():N}_{user.Id}_{TimeUtil.Timestamp()}", _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
             UserToken userToken = await _repository.Orm.Select<UserToken>().Where(p => p.UserId == user.Id).ToOneAsync();
             if (userToken == null)
             {

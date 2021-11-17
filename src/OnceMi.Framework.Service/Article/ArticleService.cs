@@ -7,6 +7,7 @@ using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.IService.Article;
 using OnceMi.Framework.Model.Attributes;
+using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.User;
@@ -117,7 +118,7 @@ namespace OnceMi.Framework.Service.Article
                 .NoTracking()
                 .ToOneAsync();
             if (article == null)
-                throw new BusException(-1, $"未找到Id为{id}的文章");
+                throw new BusException(ResultCodeConstant.ARTICLE_QUERY_NOT_EXIST, $"未找到Id为{id}的文章");
             return _mapper.Map<ArticleResponse>(article);
         }
 
@@ -139,11 +140,15 @@ namespace OnceMi.Framework.Service.Article
             //保存
             var result = await _repository.InsertAsync(article);
             //创建分类
+            if (request.Categories == null || request.Categories.Count == 0)
+            {
+                throw new BusException(ResultCodeConstant.ARTICLE_CATEGORY_CANNOT_NULL, "文章分类不能为空");
+            }
             //查询出全部分类
             var allCategories = await _repository.Orm.Select<ArticleCategories>().ToListAsync();
             if (allCategories == null || allCategories.Count == 0)
             {
-                throw new BusException(-1, "数据库中无可用文章分类");
+                throw new BusException(ResultCodeConstant.ARTICLE_NO_CATEGORY_IN_DB, "数据库中无可用文章分类");
             }
             request.Categories = request.Categories
                 .GroupBy(p => p)
@@ -155,11 +160,11 @@ namespace OnceMi.Framework.Service.Article
                 var categoryItem = allCategories.Where(p => p.Id == item).FirstOrDefault();
                 if (categoryItem == null || categoryItem.IsDeleted)
                 {
-                    throw new BusException(-1, $"所选文章分类不存在，文章分类Id：{item}");
+                    throw new BusException(ResultCodeConstant.ARTICLE_CATEGORY_NOT_EXIST, $"所选文章分类不存在，文章分类Id：{item}");
                 }
                 if (!categoryItem.IsEnabled)
                 {
-                    throw new BusException(-1, $"所选文章分类【{categoryItem.Name}】已经被禁用");
+                    throw new BusException(ResultCodeConstant.ARTICLE_CATEGORY_DISABLED, $"所选文章分类【{categoryItem.Name}】已经被禁用");
                 }
                 articleCategories.Add(new ArticleCategoriesMiddle()
                 {
@@ -183,11 +188,11 @@ namespace OnceMi.Framework.Service.Article
                 {
                     if (string.IsNullOrEmpty(item))
                     {
-                        throw new BusException(-1, $"标签中包含非法字符或标签为空");
+                        throw new BusException(ResultCodeConstant.ARTICLE_ILLEGAL_TAG, $"标签中包含非法字符或标签为空");
                     }
-                    if (item.Length > 10)
+                    if (item.Length > 20)
                     {
-                        throw new BusException(-1, $"标签长度不能大于10个字");
+                        throw new BusException(ResultCodeConstant.ARTICLE_TAG_TOO_LONG, $"标签长度不能大于20");
                     }
                     articleTags.Add(new ArticleTags()
                     {
@@ -233,10 +238,14 @@ namespace OnceMi.Framework.Service.Article
         [Transaction]
         public async Task Update(CreateOrUpdateArticleRequest request)
         {
+            if (request.Id == null || request.Id == 0)
+            {
+                throw new BusException(ResultCodeConstant.ARTICLE_ID_CANNOT_NULL, "更新文章时文章Id不能为空");
+            }
             Articles article = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (article == null)
             {
-                throw new BusException(-1, "更新文章不存在");
+                throw new BusException(ResultCodeConstant.ARTICLE_UPDATE_NOT_EXIST, "更新文章不存在");
             }
             article.Title = request.Title;
             article.SubTitle = request.SubTitle;
@@ -248,12 +257,16 @@ namespace OnceMi.Framework.Service.Article
             //保存
             var result = await _repository.UpdateAsync(article);
 
-            //创建分类
+            //更新分类
+            if (request.Categories == null || request.Categories.Count == 0)
+            {
+                throw new BusException(ResultCodeConstant.ARTICLE_CATEGORY_CANNOT_NULL, "文章分类不能为空");
+            }
             //查询出全部分类
             var allCategories = await _repository.Orm.Select<ArticleCategories>().ToListAsync();
             if (allCategories == null || allCategories.Count == 0)
             {
-                throw new BusException(-1, "数据库中无可用文章分类");
+                throw new BusException(ResultCodeConstant.ARTICLE_NO_CATEGORY_IN_DB, "数据库中无可用文章分类");
             }
             request.Categories = request.Categories
                 .GroupBy(p => p)
@@ -265,11 +278,11 @@ namespace OnceMi.Framework.Service.Article
                 var categoryItem = allCategories.Where(p => p.Id == item).FirstOrDefault();
                 if (categoryItem == null || categoryItem.IsDeleted)
                 {
-                    throw new BusException(-1, $"所选文章分类不存在，文章分类Id：{item}");
+                    throw new BusException(ResultCodeConstant.ARTICLE_CATEGORY_NOT_EXIST, $"所选文章分类不存在，文章分类Id：{item}");
                 }
                 if (!categoryItem.IsEnabled)
                 {
-                    throw new BusException(-1, $"所选文章分类【{categoryItem.Name}】已经被禁用");
+                    throw new BusException(ResultCodeConstant.ARTICLE_CATEGORY_DISABLED, $"所选文章分类【{categoryItem.Name}】已经被禁用");
                 }
                 articleCategories.Add(new ArticleCategoriesMiddle()
                 {
@@ -297,11 +310,11 @@ namespace OnceMi.Framework.Service.Article
                 {
                     if (string.IsNullOrEmpty(item))
                     {
-                        throw new BusException(-1, $"标签中包含非法字符或标签为空");
+                        throw new BusException(ResultCodeConstant.ARTICLE_ILLEGAL_TAG, $"标签中包含非法字符或标签为空");
                     }
-                    if (item.Length > 10)
+                    if (item.Length > 20)
                     {
-                        throw new BusException(-1, $"标签长度不能大于10个字");
+                        throw new BusException(ResultCodeConstant.ARTICLE_TAG_TOO_LONG, $"标签长度不能大于20");
                     }
                     articleTags.Add(new ArticleTags()
                     {
@@ -370,7 +383,7 @@ namespace OnceMi.Framework.Service.Article
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(-1, "没有要删除的条目");
+                throw new BusException(ResultCodeConstant.ARTICLE_DELETE_NOT_EXIST, "没有要删除的条目");
             }
             List<Articles> articles = await _repository.Where(p => ids.Contains(p.Id)).ToListAsync();
             if (articles == null || articles.Count == 0)

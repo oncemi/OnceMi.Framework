@@ -4,6 +4,8 @@ namespace OnceMi.Framework.Model.Common
 {
     public static class ResultCodeConstant
     {
+        #region 必须模块
+
         #region Account
 
         [Description("当前应用启用了IdentityServer认证中心，此功能被禁用")]
@@ -12,8 +14,8 @@ namespace OnceMi.Framework.Model.Common
         [Description("用户名或密码错误")]
         public const int ACT_USERNAME_OR_PASSWORD_ERROR = 30003;
 
-        [Description("错误的参数")]
-        public const int ACT_REFESH_TOKEN_PARAMS_ERROR = 30005;
+        [Description("刷新Token失败")]
+        public const int ACT_REFESH_TOKEN_FAILED = 30005;
 
         [Description("用户被禁用")]
         public const int ACT_USER_DISABLED = 30007;
@@ -370,23 +372,65 @@ namespace OnceMi.Framework.Model.Common
 
         #endregion
 
+        #endregion
+
+        #region 非必须模块
+
         #region AriticleCategory
 
         [Description("父亲条目不存在")]
-        public const int ARITICLECATEGORY_PARENTS_NOT_EXISTS = 31501;
+        public const int ARITICLECATEGORY_PARENTS_NOT_EXISTS = 40101;
 
         [Description("更新的条目不存在")]
-        public const int ARITICLECATEGORY_UPDATE_NOT_EXISTS = 31503;
+        public const int ARITICLECATEGORY_UPDATE_NOT_EXISTS = 40103;
 
         [Description("添加的分类名称已存在")]
-        public const int ARITICLECATEGORY_NAME_EXISTS =  31505;
+        public const int ARITICLECATEGORY_NAME_EXISTS = 40105;
 
         [Description("没有要删除的条目")]
-        public const int ARITICLECATEGORY_DELETE_NOT_EXISTS = 31509;
+        public const int ARITICLECATEGORY_DELETE_NOT_EXISTS = 40107;
 
         [Description("当前分组为锁定分组，无法被删除")]
-        public const int ARITICLECATEGORY_IS_LOCKED = 31511;
+        public const int ARITICLECATEGORY_IS_LOCKED = 40109;
 
         #endregion
+
+        #region 文章模块
+
+        [Description("文章分类不能为空")]
+        public const int ARTICLE_CATEGORY_CANNOT_NULL = 40001;
+
+        [Description("数据库中无可用文章分类")]
+        public const int ARTICLE_NO_CATEGORY_IN_DB = 40003;
+
+        [Description("所选文章分类不存在")]
+        public const int ARTICLE_CATEGORY_NOT_EXIST = 40005;
+
+        [Description("所选文章分类已经被禁用")]
+        public const int ARTICLE_CATEGORY_DISABLED = 40007;
+
+        [Description("数据库中无可用文章分类")]
+        public const int ARTICLE_ILLEGAL_TAG = 40009;
+
+        [Description("标签长度不能大于20")]
+        public const int ARTICLE_TAG_TOO_LONG = 40011;
+
+        [Description("查询的文章不存在")]
+        public const int ARTICLE_QUERY_NOT_EXIST = 40013;
+
+        [Description("更新的文章不存在")]
+        public const int ARTICLE_UPDATE_NOT_EXIST = 40015;
+
+        [Description("删除的文章不存在")]
+        public const int ARTICLE_DELETE_NOT_EXIST = 40017;
+
+        [Description("更新文章时文章Id不能为空")]
+        public const int ARTICLE_ID_CANNOT_NULL = 40019;
+
+        #endregion
+
+        #endregion
+
+
     }
 }

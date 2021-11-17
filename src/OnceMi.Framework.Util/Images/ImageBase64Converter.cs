@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+﻿using SkiaSharp;
 
 namespace OnceMi.Framework.Util.Images
 {
@@ -12,11 +9,11 @@ namespace OnceMi.Framework.Util.Images
         /// </summary>
         /// <param name="image">Image</param>
         /// <returns>Base64 String</returns>
-        public static string ImageToBase64(Image image)
+        public static string ImageToBase64(SKData image)
         {
             using (var m = new MemoryStream())
             {
-                image.Save(m, image.RawFormat);
+                image.SaveTo(m);
                 byte[] imageBytes = m.ToArray();
                 string base64String = Convert.ToBase64String(imageBytes);
                 return base64String;
@@ -28,20 +25,51 @@ namespace OnceMi.Framework.Util.Images
         /// </summary>
         /// <param name="base64String"></param>
         /// <returns></returns>
-        public static Image Base64ToImage(string base64String)
+        public static SKData Base64ToImage(string base64String)
         {
+            if (string.IsNullOrEmpty(base64String))
+            {
+                throw new ArgumentNullException(base64String);
+            }
+            SKEncodedImageFormat format = SKEncodedImageFormat.Png;
             int indexOfSplit = base64String.LastIndexOf(',');
             if (indexOfSplit != -1)
             {
+                //获取图片格式
+                int index1 = base64String.IndexOf(':') + 1;
+                int index2 = base64String.IndexOf(';');
+                if (index2 - index1 > 0)
+                {
+                    string formatStr = base64String.Substring(index1, index2 - index1);
+                    if (!string.IsNullOrEmpty(formatStr) && formatStr.StartsWith("image", StringComparison.OrdinalIgnoreCase))
+                    {
+                        formatStr = formatStr.ToLower().Replace("image/", "");
+                        switch (formatStr)
+                        {
+                            case "jpg":
+                            case "jpeg":
+                                format = SKEncodedImageFormat.Jpeg;
+                                break;
+                            case "bmp":
+                                format = SKEncodedImageFormat.Bmp;
+                                break;
+                            case "webp":
+                                format = SKEncodedImageFormat.Webp;
+                                break;
+                            case "png":
+                            default:
+                                format = SKEncodedImageFormat.Png;
+                                break;
+                        }
+                    }
+                }
+                //获取图片base
                 base64String = base64String.Substring(indexOfSplit + 1, base64String.Length - (indexOfSplit + 1));
             }
             byte[] imageBytes = Convert.FromBase64String(base64String);
-            using (var ms = new MemoryStream(imageBytes, 0, imageBytes.Length))
-            {
-                ms.Write(imageBytes, 0, imageBytes.Length);
-                Image image = Image.FromStream(ms);
-                return image;
-            }
+            SKBitmap bitmap = SKBitmap.Decode(imageBytes);
+            var skData = SKImage.FromBitmap(bitmap).Encode(format, 100);
+            return skData;
         }
     }
 }

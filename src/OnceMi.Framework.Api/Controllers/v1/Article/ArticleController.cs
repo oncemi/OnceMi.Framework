@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IService.Article;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Extension.Authorizations;
 
 namespace OnceMi.Framework.Api.Controllers.v1.ar
@@ -80,10 +74,6 @@ namespace OnceMi.Framework.Api.Controllers.v1.ar
         [HttpPost]
         public async Task<ArticleResponse> Post(CreateOrUpdateArticleRequest request)
         {
-            if (request.Categories == null || request.Categories.Count == 0)
-            {
-                throw new BusException(-1, "文章分类不能为空");
-            }
             return await _service.Insert(request);
         }
 
@@ -95,14 +85,6 @@ namespace OnceMi.Framework.Api.Controllers.v1.ar
         [HttpPut]
         public async Task Put(CreateOrUpdateArticleRequest request)
         {
-            if (request.Id == null || request.Id == 0)
-            {
-                throw new BusException(-1, "更新文章时文章Id不能为空");
-            }
-            if (request.Categories == null || request.Categories.Count == 0)
-            {
-                throw new BusException(-1, "文章分类不能为空");
-            }
             await _service.Update(request);
         }
 
