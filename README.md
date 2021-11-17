@@ -32,7 +32,7 @@ Demo：https://ofw.demo.oncemi.com/
   
 Swagger UI：https://ofw-api.demo.oncemi.com/sys/swagger-ui/index.html  
 HealthCheck UI：https://ofw-api.demo.oncemi.com/sys/health-ui  
-IdentityServer4认证中心：https://ids4.demo.oncemi.com/  
+IdentityServer4认证中心：https://ids.demo.oncemi.com/  
 
 ### 文档地址
 文档地址：https://doc.oncemi.com/web/#/5  
