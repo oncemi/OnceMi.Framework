@@ -38,8 +38,10 @@ pipeline {
  -e "ASPNETCORE_INITDB=true" \
  -v /etc/localtime:/etc/localtime \
  -v /data/oncemi/data:/oncemi/data \
- -v /data/oncemi/logs:/oncemi/logs \
- ${DOCKER_IMAGE_NAME}:latest
+ -v /data/oncemi/logs:/app/logs \
+ --link redis:redis.docker.internal \
+ --link mysql:mysql.docker.internal \
+ oncemi_framework_api:latest
 				'''
             }
         }

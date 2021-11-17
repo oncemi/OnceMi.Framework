@@ -1,28 +1,29 @@
 # OnceMi.Framework
-基于.NET 6和Vue开发的企业级前后端分离权限管理开发框架（后台管理系统），具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4统一认证。  
+基于.NET 6和Vue 2开发的企业级前后端分离权限管理开发框架（后台管理系统），具有组织管理、角色管理、用户管理、菜单管理、授权管理、计划任务、文件管理等功能。支持国内外多种流行数据库，支持IdentityServer4认证中心。  
 
 前端源码：https://github.com/oncemi/OnceMi.Framework.AdminUI  
 
 ### 特色
-- 前端界面美观大方，支持主题切换，夜间模式等，前端基于[vue-antd-admin](https://github.com/iczer/vue-antd-admin "vue-antd-admin")开发
-- 采用FreeSql，支持Sqlite/MySQL/PostgreSQL/SQLServer/Oracle等多种流行数据库(Oracle未测试)
-- 基于仓储模式开发
-- 支持本地认证和IdentityServer4统一认证（可随意切换）
-- 基于角色的权限控制
-- 后端不做过多封装，小白也能轻松上手
-- 多层开发，结构清晰，封装完善，易于扩展
-- 支持AOP面向切面开发
-- 支持AOP数据库事务，AOP缓存管理（缓存管理仅清除，可自行实现完整的缓存管理）
-- 支持分布式Redis
-- 支持Redis和RabbitMQ消息队列，且设计了简单快捷的订阅和发布机制
+- 界面美观大方，支持主题切换，夜间模式等，前端基于[vue-antd-admin](https://github.com/iczer/vue-antd-admin "vue-antd-admin")开发。
+- 采用FreeSql，支持Sqlite/MySQL/PostgreSQL/SQLServer/Oracle(未测试)等多种流行数据库。
+- 基于仓储模式开发。
+- 支持本地认证和IdentityServer4认证中心（可随意切换）。
+- 基于角色的权限控制。
+- 后端不做过多封装，小白也能轻松上手。
+- 多层开发，结构清晰，封装完善，易于扩展。
+- 支持AOP面向切面开发。
+- 支持AOP数据库事务，AOP缓存管理（缓存管理仅清除，可自行实现完整的缓存管理）。
+- 支持分布式Redis。
+- 支持Redis和RabbitMQ消息队列，且设计了简单快捷的订阅和发布机制。
 - 支持任务调度，作业管理（基于Quartz.net）。即使把本框架仅作为一个定时任务管理器，也是很不错的。
-- 支持健康检查
-- 支持Service层和Repository自动注入
-- 支持自动依赖注入
-- 统一文件管理，支持上传文件至本地和OSS（支持Minio，腾讯云，阿里云，基于[OnceMi.AspNetCore.OSS](https://github.com/oncemi/OnceMi.AspNetCore.OSS "OnceMi.AspNetCore.OSS")）
-- 使用Automapper处理对象映射
-- 支持组织管理、角色管理、用户管理、菜单管理、授权管理等基本功能
+- 支持健康检查。
+- 支持Service层和Repository自动注入。
+- 支持自动依赖注入。
+- 统一文件管理，支持上传文件至本地和OSS（支持Minio，腾讯云，阿里云，基于[OnceMi.AspNetCore.OSS](https://github.com/oncemi/OnceMi.AspNetCore.OSS "OnceMi.AspNetCore.OSS")）。
+- 使用Automapper处理对象映射。
+- 支持组织管理、角色管理、用户管理、菜单管理、授权管理等基本功能。
 - 得益于.NET Core的跨平台特性，支持Linux、Windows、OSX。你甚至可以将此框架运行在树莓派上面。
+- 支持Jenkins和Docker自动化部署。
 
 ### 预览
 Demo：https://ofw.demo.oncemi.com/  
@@ -31,7 +32,7 @@ Demo：https://ofw.demo.oncemi.com/
   
 Swagger UI：https://ofw-api.demo.oncemi.com/sys/swagger-ui/index.html  
 HealthCheck UI：https://ofw-api.demo.oncemi.com/sys/health-ui  
-IdentityServer4认证中心：https://ids4.demo.oncemi.com/  
+IdentityServer4认证中心：https://ids.demo.oncemi.com/  
 
 ### 文档地址
 文档地址：https://doc.oncemi.com/web/#/5  
