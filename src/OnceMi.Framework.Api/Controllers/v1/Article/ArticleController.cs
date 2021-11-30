@@ -34,7 +34,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.ar
         [HttpGet]
         [Route("[action]")]
         [SkipAuthorization]
-        public async Task<List<ISelectResponse<string>>> AllTags()
+        public async Task<List<ISelectResponse<string>>> Tags()
         {
             List<ArticleTagResponse> responses = await _articleTagService.QueryAllTags();
             return responses.Select(p => new ISelectResponse<string>()
@@ -50,7 +50,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.ar
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<ArticleResponse>> Get([FromQuery] QueryArticlePageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<ArticleResponse>> PageList([FromQuery] QueryArticlePageRequest request)
         {
             return await _service.Query(request);
         }

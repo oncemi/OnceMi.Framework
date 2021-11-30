@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace OnceMi.Framework.Entity.Admin
 {
     [Table(Name = nameof(Configs))]
+    [Index("index_{TableName}_" + nameof(Key), nameof(Key), false)]
     public class Configs : IBaseEntity
     {
         /// <summary>
@@ -18,5 +19,11 @@ namespace OnceMi.Framework.Entity.Admin
         /// </summary>
         [Column(DbType = "text")]
         public string Content { get; set; } = "{}";
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [Column(StringLength = 600, IsNullable = true)]
+        public string Description { get; set; }
     }
 }

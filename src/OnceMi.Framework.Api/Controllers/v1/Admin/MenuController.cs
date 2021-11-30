@@ -106,8 +106,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("QueryByPage")]
-        public async Task<IPageResponse<MenuItemResponse>> Get([FromQuery] IPageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<MenuItemResponse>> PageList([FromQuery] IPageRequest request)
         {
             return await _service.Query(request);
         }
@@ -118,7 +118,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("QueryById/{id}")]
+        [Route("{id}")]
         public async Task<MenuItemResponse> Get(long id)
         {
             return await _service.Query(id);

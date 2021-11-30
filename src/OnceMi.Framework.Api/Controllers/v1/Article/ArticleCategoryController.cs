@@ -55,7 +55,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.ar
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<ArticleCategoryResponse>> Get([FromQuery] IPageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<ArticleCategoryResponse>> PageList([FromQuery] IPageRequest request)
         {
             return await _service.Query(request);
         }

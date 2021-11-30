@@ -78,12 +78,16 @@ namespace OnceMi.Framework.Service.Admin
         public async Task<LoginResponse> RefreshToken(RefeshTokenRequest request)
         {
             UserToken userToken = await _repository.Orm.Select<UserToken>()
-                .Where(p => p.RefeshToken == request.Token && p.RefeshTokenExpiration >= DateTime.Now && !p.IsDeleted)
+                .Where(p => p.RefeshToken == request.Token && !p.IsDeleted)
                 .NoTracking()
                 .ToOneAsync();
             if (userToken == null)
             {
-                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_FAILED, "刷新Token失败");
+                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_FAILED, "刷新Token失败，无效的Token");
+            }
+            if (userToken.RefeshTokenExpiration < DateTime.Now)
+            {
+                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_TIMEOUT, "Token已过期，请重新登录");
             }
             Users user = await _userService.Query(userToken.UserId.ToString(), true);
             if (user == null)

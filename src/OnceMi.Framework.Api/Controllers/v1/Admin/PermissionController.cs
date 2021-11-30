@@ -57,7 +57,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpGet]
         [Route("[action]")]
         [SkipAuthorization]
-        public async Task<List<UserRolePermissionResponse>> UserRolePermission()
+        public async Task<List<UserRolePermissionResponse>> RolePermission()
         {
             List<long> ids = HttpContext.User.GetRoles()?.Distinct().ToList();
             if (ids == null || ids.Count == 0)

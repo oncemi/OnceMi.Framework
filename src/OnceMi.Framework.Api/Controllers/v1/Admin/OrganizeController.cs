@@ -40,7 +40,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpGet]
         [Route("[action]")]
         [SkipAuthorization]
-        public List<ISelectResponse<int>> OrganizeTypeSelectList()
+        public List<ISelectResponse<int>> TypeSelectList()
         {
             return _service.QueryOrganizeTypes();
         }
@@ -84,7 +84,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IEnumerable<OrganizeItemResponse>> OrganizeTreeList()
+        public async Task<IEnumerable<OrganizeItemResponse>> TreeList()
         {
             var data = await _service.Query(new OrganizePageRequest()
             {
@@ -105,7 +105,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<OrganizeItemResponse>> Get([FromQuery] OrganizePageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<OrganizeItemResponse>> PageList([FromQuery] OrganizePageRequest request)
         {
             return await _service.Query(request);
         }

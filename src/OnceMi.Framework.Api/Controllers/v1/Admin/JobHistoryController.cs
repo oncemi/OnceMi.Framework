@@ -35,7 +35,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<JobHistoryItemResponse>> Get([FromQuery] JobHistoryPageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<JobHistoryItemResponse>> PageList([FromQuery] JobHistoryPageRequest request)
         {
             return await _service.Query(request);
         }

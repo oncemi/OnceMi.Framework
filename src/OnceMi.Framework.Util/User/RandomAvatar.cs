@@ -13,6 +13,10 @@ namespace OnceMi.Framework.Util.User
                 picSize = 128;
             }
             string name = GetEncodeChars(username);
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = "WTF";
+            }
             SKBitmap bmp = new SKBitmap(picSize, picSize);
             using (SKCanvas canvas = new SKCanvas(bmp))
             {

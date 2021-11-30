@@ -31,7 +31,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="queryString">模糊匹配</param>
         /// <returns></returns>
         [HttpGet]
-        public List<CacheKeyItemResponse> Get([FromQuery] string queryString)
+        [Route("[action]")]
+        public List<CacheKeyItemResponse> PageList([FromQuery] string queryString)
         {
             return _cacheService.GetCacheKeys(queryString);
         }
@@ -41,7 +42,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        [HttpDelete()]
+        [HttpDelete]
         public DeleteCachesResponse Delete(DeleteCachesRequest request)
         {
             return _cacheService.DeleteCaches(request);

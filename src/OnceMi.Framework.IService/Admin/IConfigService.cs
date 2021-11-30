@@ -14,6 +14,6 @@ namespace OnceMi.Framework.IService.Admin
         /// 获取应用程序信息
         /// </summary>
         /// <returns></returns>
-        Task<SystemHardwareInfo> SystemHardwareInfo();
+        Task<SystemHardwareInfo> HardwareInfo();
     }
 }

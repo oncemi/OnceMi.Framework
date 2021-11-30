@@ -28,12 +28,20 @@ namespace OnceMi.Framework.Model.Common
         /// <summary>
         /// 作业管理请求Key
         /// </summary>
+        [Description("作业管理请求Key")]
         public const string SystemJobApiKey = "admin:sys:jobapis:{0}";
 
         /// <summary>
-        /// 作业Key
+        /// 作业条目信息缓存
         /// </summary>
+        [Description("作业条目信息缓存（慎重清理，会导致作业状态不正确）")]
         public const string SystemJobKey = "admin:sys:jobs:{0}";
+
+        /// <summary>
+        /// 配置项缓存
+        /// </summary>
+        [Description("配置项缓存")]
+        public const string ConfigItemKey = "admin:sys:configs:{0}";
 
         /// <summary>
         /// 获取角色主键
@@ -58,6 +66,16 @@ namespace OnceMi.Framework.Model.Common
         public static string GetJobKey(long id)
         {
             return string.Format(SystemJobKey, id);
+        }
+
+        /// <summary>
+        /// 获取配置项的缓存keu
+        /// </summary>
+        /// <param name="key">配置项key</param>
+        /// <returns></returns>
+        public static string GetConfigKey(string key)
+        {
+            return string.Format(ConfigItemKey, key);
         }
     }
 }

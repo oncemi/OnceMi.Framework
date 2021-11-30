@@ -14,11 +14,14 @@ namespace OnceMi.Framework.Model.Common
         [Description("用户名或密码错误")]
         public const int ACT_USERNAME_OR_PASSWORD_ERROR = 30003;
 
-        [Description("刷新Token失败")]
+        [Description("刷新Token失败，无效的Token")]
         public const int ACT_REFESH_TOKEN_FAILED = 30005;
 
         [Description("用户被禁用")]
         public const int ACT_USER_DISABLED = 30007;
+
+        [Description("Token已过期，请重新登录")]
+        public const int ACT_REFESH_TOKEN_TIMEOUT = 30009;
 
         #endregion
 

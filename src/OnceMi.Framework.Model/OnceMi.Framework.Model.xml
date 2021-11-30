@@ -74,7 +74,12 @@
         </member>
         <member name="F:OnceMi.Framework.Model.Common.CacheConstant.SystemJobKey">
             <summary>
-            作业Key
+            作业条目信息缓存
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.ConfigItemKey">
+            <summary>
+            配置项缓存
             </summary>
         </member>
         <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetRoleKey(System.String)">
@@ -89,6 +94,13 @@
             获取作业请求key
             </summary>
             <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetConfigKey(System.String)">
+            <summary>
+            获取配置项的缓存keu
+            </summary>
+            <param name="key">配置项key</param>
             <returns></returns>
         </member>
         <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.IsSuccessful">
@@ -254,6 +266,21 @@
         <member name="P:OnceMi.Framework.Model.Dto.DeleteCachesRequest.Value">
             <summary>
             Key名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Request.Admin.Config.WebSiteInfoModel.ICP">
+            <summary>
+            ICP备案
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Request.Admin.Config.WebSiteInfoModel.ICPUrl">
+            <summary>
+            ICP管局网站地址
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Request.Admin.Config.WebSiteInfoModel.MPS">
+            <summary>
+            公安部备案
             </summary>
         </member>
         <member name="F:OnceMi.Framework.Model.Dto.CreateDictionaryRequest._parentId">
@@ -1340,6 +1367,41 @@
         <member name="P:OnceMi.Framework.Model.Dto.CacheKeyItemResponse.Description">
             <summary>
             描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.Key">
+            <summary>
+            键名
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.Data">
+            <summary>
+            配置内容
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.CreatedUserId">
+            <summary>
+            创建者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.CreatedTime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.UpdatedUserId">
+            <summary>
+            修改者Id
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.Response.Admin.Config.ConfigModel`1.UpdatedTime">
+            <summary>
+            修改时间
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Model.Dto.SystemHardwareInfo.OSDescription">

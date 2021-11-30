@@ -57,7 +57,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<IPageResponse<FileItemResponse>> QueryByPage([FromQuery] IPageRequest request)
+        public async Task<IPageResponse<FileItemResponse>> PageList([FromQuery] IPageRequest request)
         {
             return await _service.Query(request);
         }

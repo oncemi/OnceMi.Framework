@@ -93,7 +93,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<DictionaryItemResponse>> Get([FromQuery] IPageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<DictionaryItemResponse>> PageList([FromQuery] IPageRequest request)
         {
             return await _service.Query(request);
         }
@@ -104,10 +105,9 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("[action]")]
-        public async Task<DictionaryItemResponse> Detail([FromQuery] DictionaryDetailRequest request)
+        public async Task<DictionaryItemResponse> Get([FromQuery] DictionaryDetailRequest request)
         {
-            if(string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
+            if (string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
             {
                 throw new BusException(ResultCodeConstant.DIC_ID_AND_CODE_CANNOT_ALL_EMPTY, "查询条件Id和编码不能同时为空");
             }

@@ -16,7 +16,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
     /// 接口管理
     /// </summary>
     [ApiController]
-    [ApiVersion(ApiVersions.V1)]
+    [ApiVersion(Model.Enums.ApiVersions.V1)]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class ApiController : ControllerBase
     {
@@ -40,7 +40,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [HttpGet]
         [Route("[action]")]
         [SkipAuthorization]
-        public List<ISelectResponse<string>> GetApiVersions()
+        public List<ISelectResponse<string>> ApiVersions()
         {
             return _service.QueryApiVersions();
         }
@@ -72,7 +72,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<ApiItemResponse>> Get([FromQuery] QueryApiPageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<ApiItemResponse>> PageList([FromQuery] QueryApiPageRequest request)
         {
             return await _service.Query(request);
         }

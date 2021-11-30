@@ -59,7 +59,8 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IPageResponse<ViewItemResponse>> Get([FromQuery] IPageRequest request)
+        [Route("[action]")]
+        public async Task<IPageResponse<ViewItemResponse>> PageList([FromQuery] IPageRequest request)
         {
             return await _service.Query(request);
         }

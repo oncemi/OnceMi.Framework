@@ -34,7 +34,7 @@
             接口管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.GetApiVersions">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.ApiVersions">
             <summary>
             获取Api版本
             </summary>
@@ -46,7 +46,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Get(OnceMi.Framework.Model.Dto.QueryApiPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.PageList(OnceMi.Framework.Model.Dto.QueryApiPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -89,7 +89,7 @@
             缓存管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.CacheController.Get(System.String)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.CacheController.PageList(System.String)">
             <summary>
             查询缓存Key
             </summary>
@@ -108,9 +108,9 @@
             配置管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ConfigController.SystemHardwareInfo">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ConfigController.HardwareInfo">
             <summary>
-            获取应用程序信息
+            获取硬件信息
             </summary>
             <returns></returns>
         </member>
@@ -138,14 +138,14 @@
             <param name="parentId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Detail(OnceMi.Framework.Model.Dto.DictionaryDetailRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.DictionaryController.Get(OnceMi.Framework.Model.Dto.DictionaryDetailRequest)">
             <summary>
             查询字典详情
             </summary>
@@ -182,7 +182,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.QueryByPage(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.FileController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -221,7 +221,7 @@
             作业管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobController.Get(OnceMi.Framework.Model.Dto.IJobPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobController.PageList(OnceMi.Framework.Model.Dto.IJobPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -286,7 +286,7 @@
             作业分组管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobGroupController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -331,7 +331,7 @@
             作业记录查询
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobHistoryController.Get(OnceMi.Framework.Model.Dto.JobHistoryPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.JobHistoryController.PageList(OnceMi.Framework.Model.Dto.JobHistoryPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -368,7 +368,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.MenuController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -406,7 +406,7 @@
             组织机构管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.OrganizeTypeSelectList">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.TypeSelectList">
             <summary>
             获取组织类型
             </summary>
@@ -424,13 +424,13 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.OrganizeTreeList">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.TreeList">
             <summary>
             查询用户管理页面树
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.Get(OnceMi.Framework.Model.Dto.OrganizePageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.OrganizeController.PageList(OnceMi.Framework.Model.Dto.OrganizePageRequest)">
             <summary>
             分页查询
             </summary>
@@ -481,7 +481,7 @@
             <param name="roleId">角色Id</param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.UserRolePermission">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.PermissionController.RolePermission">
             <summary>
             获取用户角色操作权限
             </summary>
@@ -505,7 +505,7 @@
             <param name="parentId"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.RoleController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -561,7 +561,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.Get(OnceMi.Framework.Model.Dto.QueryUserPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.UserController.PageList(OnceMi.Framework.Model.Dto.QueryUserPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -627,7 +627,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ViewController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -671,7 +671,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Get(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
@@ -709,13 +709,13 @@
             文章管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.AllTags">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Tags">
             <summary>
             查询所有标签
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Get(OnceMi.Framework.Model.Dto.QueryArticlePageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.PageList(OnceMi.Framework.Model.Dto.QueryArticlePageRequest)">
             <summary>
             分页查询
             </summary>

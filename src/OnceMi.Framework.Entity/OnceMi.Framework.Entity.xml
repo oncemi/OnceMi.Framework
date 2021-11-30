@@ -74,6 +74,11 @@
             配置内容
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Configs.Description">
+            <summary>
+            描述
+            </summary>
+        </member>
         <member name="T:OnceMi.Framework.Entity.Admin.Dictionaries">
             <summary>
             字典表

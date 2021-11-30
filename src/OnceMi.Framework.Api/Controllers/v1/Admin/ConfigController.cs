@@ -25,14 +25,14 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 获取应用程序信息
+        /// 获取硬件信息
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<SystemHardwareInfo> SystemHardwareInfo()
+        public async Task<SystemHardwareInfo> HardwareInfo()
         {
-            return await _configsService.SystemHardwareInfo();
+            return await _configsService.HardwareInfo();
         }
     }
 }
