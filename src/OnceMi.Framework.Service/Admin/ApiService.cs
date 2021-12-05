@@ -12,14 +12,11 @@ using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Util.Json;
 using OnceMi.Framework.Util.User;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
@@ -264,7 +261,7 @@ namespace OnceMi.Framework.Service.Admin
                     Code = $"{p.Path.Trim('/').Replace('/', ':')}:{p.Method}".ToLower(),
                     Description = p.Description,
                     Method = p.Method,
-                    Parameters = p.Parameters == null ? null : string.Join(',', p.Parameters),
+                    Parameters = p.Parameters == null || p.Parameters.Count == 0 ? null : JsonUtil.SerializeToString(p.Parameters),
                     CreatedTime = DateTime.Now,
                     CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id,
                     IsEnabled = true,
@@ -342,13 +339,24 @@ namespace OnceMi.Framework.Service.Admin
             }
             List<long> menuIds = await GetMenuIncludeApis(delIds);
             List<long> permissionIds = await GetPermissionIncludeMenus(menuIds);
-
             if (delIds != null && delIds.Count > 0)
-                await _repository.Where(p => delIds.Contains(p.Id)).ToDelete().ExecuteAffrowsAsync();
+            {
+                await _repository.Where(p => delIds.Contains(p.Id))
+                    .ToDelete()
+                    .ExecuteAffrowsAsync();
+            }
             if (menuIds != null && menuIds.Count > 0)
-                await _repository.Orm.Delete<Views>().Where(p => menuIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            {
+                await _repository.Orm.Delete<Menus>()
+                    .Where(p => menuIds.Contains(p.Id))
+                    .ExecuteAffrowsAsync();
+            }
             if (permissionIds != null && permissionIds.Count > 0)
-                await _repository.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            {
+                await _repository.Orm.Delete<RolePermissions>()
+                    .Where(p => permissionIds.Contains(p.Id))
+                    .ExecuteAffrowsAsync();
+            }
         }
 
         private void GetQueryApiChild(List<Apis> source, Apis api, List<Apis> removeApis = null)
@@ -451,6 +459,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
+            //查找ParentId为id的子节点
             List<Menus> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
@@ -577,7 +586,7 @@ namespace OnceMi.Framework.Service.Admin
                             Version = docs?.Info.Version,
                             Description = operationItem.Value?.Description,
                             Method = operationItem.Key.ToString(),
-                            Parameters = operationItem.Value?.Parameters?.Select(p => p?.Name).ToList()
+                            Parameters = GenerateApiParameters(operationItem.Value?.Parameters)
                         };
                         if (!string.IsNullOrEmpty(itemInfo.Controller)
                             && docs.Tags != null
@@ -706,6 +715,28 @@ namespace OnceMi.Framework.Service.Admin
                     InsertApis(oldSource, newSource, item);
                 }
             }
+        }
+
+        private Dictionary<string, string> GenerateApiParameters(IList<OpenApiParameter> parameters)
+        {
+            if (parameters == null || parameters.Count == 0)
+            {
+                return null;
+            }
+            Dictionary<string, string> result = new Dictionary<string, string>();
+            foreach (var item in parameters)
+            {
+                if(item.Schema == null || string.IsNullOrEmpty(item.Schema.Type))
+                {
+                    continue;
+                }
+                if (result.ContainsKey(item.Name))
+                {
+                    continue;
+                }
+                result.Add(item.Name, item.Schema.Type);
+            }
+            return result;
         }
 
         #endregion

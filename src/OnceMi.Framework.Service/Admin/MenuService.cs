@@ -13,12 +13,9 @@ using OnceMi.Framework.Model.Enums;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Cache;
 using OnceMi.Framework.Util.Enum;
+using OnceMi.Framework.Util.Json;
 using OnceMi.Framework.Util.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
@@ -373,6 +370,21 @@ namespace OnceMi.Framework.Service.Admin
                      .OrderBy(p => p.Id)
                      .NoTracking()
                      .ToListAsync();
+                 //格式化api 参数
+                 if (menus != null && menus.Count > 0)
+                 {
+                     foreach (var menu in menus)
+                     {
+                         if (menu.Type != MenuType.Api
+                         || menu.Api == null
+                         || string.IsNullOrEmpty(menu.Api.Parameters)
+                         || !JsonUtil.TryParse(menu.Api.Parameters, out Dictionary<string, string> paramDic))
+                         {
+                             continue;
+                         }
+                         menu.Api.ParameterDictionaries = paramDic;
+                     }
+                 }
                  return menus;
              });
             return allMenus;

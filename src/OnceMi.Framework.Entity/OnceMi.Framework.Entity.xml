@@ -59,6 +59,11 @@
             子条目
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Entity.Admin.Apis.ParameterDictionaries">
+            <summary>
+            参数字典
+            </summary>
+        </member>
         <member name="T:OnceMi.Framework.Entity.Admin.ApiCreateMethod">
             <summary>
             创建方式

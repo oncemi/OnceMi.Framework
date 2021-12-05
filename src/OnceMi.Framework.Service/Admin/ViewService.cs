@@ -220,36 +220,23 @@ namespace OnceMi.Framework.Service.Admin
             }
             List<long> menuIds = await GetMenuIncludeViews(delIds);
             List<long> permissionIds = await GetPermissionIncludeMenus(menuIds);
-
             if (delIds != null && delIds.Count > 0)
-                await _repository.Orm.Delete<Views>().Where(p => delIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            {
+                await _repository.Where(p => delIds.Contains(p.Id))
+                    .ToDelete()
+                    .ExecuteAffrowsAsync();
+            }
             if (menuIds != null && menuIds.Count > 0)
-                await _repository.Orm.Delete<Menus>().Where(p => menuIds.Contains(p.Id)).ExecuteAffrowsAsync();
+            {
+                await _repository.Orm.Delete<Menus>()
+                    .Where(p => menuIds.Contains(p.Id))
+                    .ExecuteAffrowsAsync();
+            }
             if (permissionIds != null && permissionIds.Count > 0)
-                await _repository.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
-        }
-
-        /// <summary>
-        /// 搜素要删除的父节点和子节点
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="id"></param>
-        /// <param name="dest"></param>
-        private void SearchDelViews(List<Views> source, long id, List<long> dest)
-        {
-            var item = source.Where(p => p.Id == id).FirstOrDefault();
-            if (item == null)
             {
-                return;
-            }
-            if (!dest.Contains(item.Id))
-            {
-                dest.Add(item.Id);
-            }
-            List<Views> child = source.Where(p => p.ParentId == id).ToList();
-            foreach (var citem in child)
-            {
-                SearchDelViews(source, citem.Id, dest);
+                await _repository.Orm.Delete<RolePermissions>()
+                    .Where(p => permissionIds.Contains(p.Id))
+                    .ExecuteAffrowsAsync();
             }
         }
 
@@ -318,6 +305,30 @@ namespace OnceMi.Framework.Service.Admin
             return allPermissions.Select(p => p.Id).ToList();
         }
 
+        /// <summary>
+        /// 搜素要删除的父节点和子节点
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="id"></param>
+        /// <param name="dest"></param>
+        private void SearchDelViews(List<Views> source, long id, List<long> dest)
+        {
+            var item = source.Where(p => p.Id == id).FirstOrDefault();
+            if (item == null)
+            {
+                return;
+            }
+            if (!dest.Contains(item.Id))
+            {
+                dest.Add(item.Id);
+            }
+            List<Views> child = source.Where(p => p.ParentId == id).ToList();
+            foreach (var citem in child)
+            {
+                SearchDelViews(source, citem.Id, dest);
+            }
+        }
+
         private void SearchDelMenus(List<Menus> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
@@ -329,6 +340,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
+            //查找ParentId为id的子节点
             List<Menus> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {

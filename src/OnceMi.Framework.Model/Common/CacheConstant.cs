@@ -38,6 +38,12 @@ namespace OnceMi.Framework.Model.Common
         public const string SystemJobKey = "admin:sys:jobs:{0}";
 
         /// <summary>
+        /// 作业执行失败通知时间
+        /// </summary>
+        [Description("作业执行失败通知时间（用于避免频繁发送作业失败通知）")]
+        public const string SystemJobNoticeTimeKey = "admin:sys:jobnotice:{0}";
+
+        /// <summary>
         /// 配置项缓存
         /// </summary>
         [Description("配置项缓存")]
@@ -66,6 +72,16 @@ namespace OnceMi.Framework.Model.Common
         public static string GetJobKey(long id)
         {
             return string.Format(SystemJobKey, id);
+        }
+
+        /// <summary>
+        /// 获取作业执行失败通知key
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static string GetJobNoticeTimeKey(long id)
+        {
+            return string.Format(SystemJobNoticeTimeKey, id);
         }
 
         /// <summary>

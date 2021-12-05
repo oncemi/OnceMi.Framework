@@ -79,7 +79,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 return;
             }
             //判断是否包含自定义授权
-            if(requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is SkipAuthorizationAttribute) == true)
+            if (requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is SkipAuthorizationAttribute) == true)
             {
                 context.Succeed(requirement);
                 return;
@@ -116,30 +116,77 @@ namespace OnceMi.Framework.Extension.Authorizations
         /// <param name="requestPath"></param>
         /// <param name="requestMethod"></param>
         /// <returns></returns>
-        bool CompareMenu(Menus menu, string requestPath, string requestMethod)
+        private bool CompareMenu(Menus menu, string requestPath, string requestMethod)
         {
             if (string.IsNullOrEmpty(requestPath))
                 return false;
-            string[] paths = GetPaths(requestPath);
+            //请求方式
             if (!menu.Api.Method.Equals(requestMethod, StringComparison.OrdinalIgnoreCase))
                 return false;
+            //路径
+            string[] paths = GetPaths(requestPath);
             string[] menuPaths = GetPaths(menu.Api.Path);
-            if (paths.Length != menuPaths.Length)
+            if (paths.Length == 0 || paths.Length != menuPaths.Length)
                 return false;
             for (int i = 0; i < menuPaths.Length; i++)
             {
-                if (IsParameter(menuPaths[i]))
+                if (menu.Type == MenuType.Api 
+                    && IsParameter(menuPaths[i]) 
+                    && CompareParameter(menuPaths[i], paths[i], menu.Api.ParameterDictionaries))
                     continue;
                 if (!paths[i].Equals(menuPaths[i], StringComparison.OrdinalIgnoreCase))
                     return false;
             }
             return true;
 
-            bool IsParameter(string input)
-                => !string.IsNullOrEmpty(input) && input.Length > 2 && (input[0] == '{' && input[^1] == '}');
+            #region Method
 
-            string[] GetPaths(string path)
-                => path.Trim().Split('/').Where(p => !string.IsNullOrEmpty(p)).ToArray();
+            bool IsParameter(string input) =>
+                !string.IsNullOrEmpty(input) && input.Length > 2 && (input[0] == '{' && input[^1] == '}');
+
+            string[] GetPaths(string path) =>
+                string.IsNullOrWhiteSpace(path)
+                ? new string[0]
+                : path.Trim().Split('/', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            bool CompareParameter(string menuPathParam, string value, Dictionary<string, string> apiParams)
+            {
+                string paramName = menuPathParam[1..^1];
+                if (!apiParams.ContainsKey(paramName))
+                {
+                    return false;
+                }
+                string type = apiParams[paramName];
+                if (string.IsNullOrEmpty(type))
+                {
+                    return false;
+                }
+                switch (type.ToLower())
+                {
+                    case "integer":
+                        return long.TryParse(value, out long _);
+                    case "boolean":
+                        return bool.TryParse(value, out bool _);
+                    case "number":
+                        return double.TryParse(value, out double _);
+                    case "string":
+                        {
+                            //比如权限菜单路径为/a/b/{id}，且参数id为字符串，请求路径为 /a/b/c和/a/b/00000000-0000-0000-0000-000000000000
+                            //此时无法方便c与00000000-0000-0000-0000-000000000000的区别，也就无法做权限控制了
+                            //只有尽量不要使用string作为动态路径，本框架中均使用int64作为id。
+                            return true;
+                        }
+                    case "object":
+                    case "null":
+                    case "empty":
+                    case "array":
+                    default:
+                        return false;
+                }
+            }
+            #endregion
+
         }
+
     }
 }

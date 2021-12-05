@@ -42,7 +42,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 描述
         /// </summary>
-        [Column(StringLength = 600, IsNullable = true)]
+        [Column(StringLength = 1000, IsNullable = true)]
         public string Description { get; set; }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// <summary>
         /// 参数
         /// </summary>
-        [Column(StringLength = 600, IsNullable = true)]
+        [Column(StringLength = 1000, IsNullable = true)]
         public string Parameters { get; set; }
 
         /// <summary>
@@ -73,6 +73,12 @@ namespace OnceMi.Framework.Entity.Admin
         /// </summary>
         [Column(IsIgnore = true)]
         public List<Apis> Children { get; set; }
+
+        /// <summary>
+        /// 参数字典
+        /// </summary>
+        [Column(IsIgnore = true)]
+        public Dictionary<string,string> ParameterDictionaries { get; set; }
     }
 
     /// <summary>

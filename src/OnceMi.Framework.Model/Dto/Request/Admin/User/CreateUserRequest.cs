@@ -13,12 +13,14 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 用户名
         /// </summary>
+        [MaxLength(30, ErrorMessage = "用户名不能超过30个字符")]
         [Required(ErrorMessage = "用户名称不能为空")]
         public string UserName { get; set; }
 
         /// <summary>
         /// 昵称
         /// </summary>
+        [MaxLength(30, ErrorMessage = "昵称不能超过30个字符")]
         public string NickName { get; set; }
 
         /// <summary>

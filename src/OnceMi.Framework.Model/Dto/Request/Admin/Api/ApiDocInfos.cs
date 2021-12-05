@@ -20,6 +20,6 @@ namespace OnceMi.Framework.Model.Dto
 
         public string Method { get; set; }
 
-        public List<string> Parameters { get; set; }
+        public Dictionary<string, string> Parameters { get; set; }
     }
 }

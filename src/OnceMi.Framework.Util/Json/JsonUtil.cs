@@ -117,6 +117,35 @@ namespace OnceMi.Framework.Util.Json
         }
 
         /// <summary>
+        /// 验证字符串是否为json
+        /// 并返回反序列化之后的object
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool TryParse<T>(string source, out T obj)
+        {
+            obj = default;
+            if (string.IsNullOrEmpty(source))
+            {
+                return false;
+            }
+            try
+            {
+                if (source.Length < 2) return false;
+                if (source[0] != '[' && source[0] != '{') return false;
+                if (source[^1] != ']' && source[^1] != '}') return false;
+                obj = DeserializeStringToObject<T>(source);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
         /// 将对象序列化为JSON格式
         /// </summary>
         /// <param name="o">对象</param>
