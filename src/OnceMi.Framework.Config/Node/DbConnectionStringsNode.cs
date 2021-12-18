@@ -11,11 +11,40 @@ namespace OnceMi.Framework.Config
     public class DbConnectionStringsNode
     {
         private string _connectionString = null;
+        private string _name = null;
 
-        public string Name { get; set; }
+        /// <summary>
+        /// 标识名称
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentNullException(nameof(this.Name), "The connect string name can not null.");
+                }
+                _name = value;
+            }
+        }
 
+        /// <summary>
+        /// 数据库类型
+        /// </summary>
         public DataType DbType { get; set; }
 
+        /// <summary>
+        /// 是否自动同步结构
+        /// </summary>
+        public bool AutoSyncStructure { get; set; } = false;
+
+        /// <summary>
+        /// 连接字符串
+        /// </summary>
         public string ConnectionString
         {
             get
@@ -26,9 +55,9 @@ namespace OnceMi.Framework.Config
             {
                 if (string.IsNullOrEmpty(value))
                 {
-                    throw new ArgumentNullException("Connection string can not null");
+                    throw new ArgumentNullException(nameof(ConnectionString), "Connection string can not null");
                 }
-                
+
                 if (DbType == DataType.Sqlite)
                 {
                     string connStr = value;
@@ -47,5 +76,10 @@ namespace OnceMi.Framework.Config
                 }
             }
         }
+
+        /// <summary>
+        /// 从库
+        /// </summary>
+        public string[] Slaves { get; set; }
     }
 }

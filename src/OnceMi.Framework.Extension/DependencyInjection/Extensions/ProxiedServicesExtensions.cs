@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     /// <summary>
     /// 注入AOP代理扩展

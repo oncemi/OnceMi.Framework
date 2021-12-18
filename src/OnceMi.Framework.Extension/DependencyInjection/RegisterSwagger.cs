@@ -7,7 +7,7 @@ using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterSwagger
     {

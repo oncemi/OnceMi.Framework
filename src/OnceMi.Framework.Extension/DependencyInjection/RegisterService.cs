@@ -7,7 +7,7 @@ using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Service.Admin;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterService
     {

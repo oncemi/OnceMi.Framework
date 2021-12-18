@@ -12,18 +12,18 @@
 
 	<ItemGroup>
 		<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.0.0" />
-		<PackageReference Include="FreeSql.Provider.MySql" Version="2.6.100" />
-		<PackageReference Include="FreeSql.Provider.Sqlite" Version="2.6.100" />
-		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="2.6.100" />
-		<PackageReference Include="FreeSql.Provider.SqlServer" Version="2.6.100" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.0" />
+		<PackageReference Include="FreeSql.Provider.MySql" Version="3.0.100" />
+		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.0.100" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.0.100" />
+		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.0.100" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="MySql.Data" Version="8.0.27" />
 		<PackageReference Include="System.Data.Odbc" Version="6.0.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="5.0.1" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="5.0.1" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.1-rc2.4" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.1-rc2.4" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.1-rc2.4" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
 		<PackageReference Include="Quartz" Version="3.3.3" />

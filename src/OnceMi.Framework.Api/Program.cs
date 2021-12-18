@@ -1,11 +1,4 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
 using NLog.Web;
-using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace OnceMi.Framework.Api
 {
@@ -25,34 +18,39 @@ namespace OnceMi.Framework.Api
                     //logging.AddConsole();
                 })
                 .UseNLog()
-                .ConfigureAppConfiguration((hostingContext, config) =>
+                .ConfigureAppConfiguration((hostingContext, configuration) =>
                 {
-                    string baseConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Base.json");
-                    if (!File.Exists(baseConfigPath))
-                    {
-                        throw new Exception($"Base app config not exist. Please check file '{baseConfigPath}'");
-                    }
-                    config.AddJsonFile(baseConfigPath, optional: false, reloadOnChange: true);
-
-                    string normalConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-                    if (File.Exists(normalConfigPath))
-                    {
-                        config.AddJsonFile(normalConfigPath, optional: false, reloadOnChange: true);
-                    }
-
-                    string eventName = hostingContext.HostingEnvironment.EnvironmentName;
-                    if (!string.IsNullOrEmpty(eventName))
-                    {
-                        string eventAppConfigPath = Path.Combine(AppContext.BaseDirectory, $"appsettings.{eventName}.json");
-                        if (File.Exists(eventAppConfigPath))
-                        {
-                            config.AddJsonFile(eventAppConfigPath, optional: false, reloadOnChange: true);
-                        }
-                    }
+                    LoadAppsettings(hostingContext, configuration);
                 })
-                .ConfigureWebHostDefaults(webBuilder =>
+                .ConfigureWebHostDefaults(host =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    host.UseStartup<Startup>();
                 });
+
+        private static void LoadAppsettings(HostBuilderContext hostingContext, IConfigurationBuilder configuration)
+        {
+            string baseConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Base.json");
+            if (!File.Exists(baseConfigPath))
+            {
+                throw new Exception($"Base app config not exist. Please check file '{baseConfigPath}'");
+            }
+            configuration.AddJsonFile(baseConfigPath, optional: false, reloadOnChange: true);
+
+            string normalConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+            if (File.Exists(normalConfigPath))
+            {
+                configuration.AddJsonFile(normalConfigPath, optional: false, reloadOnChange: true);
+            }
+
+            string eventName = hostingContext.HostingEnvironment.EnvironmentName;
+            if (!string.IsNullOrEmpty(eventName))
+            {
+                string eventAppConfigPath = Path.Combine(AppContext.BaseDirectory, $"appsettings.{eventName}.json");
+                if (File.Exists(eventAppConfigPath))
+                {
+                    configuration.AddJsonFile(eventAppConfigPath, optional: false, reloadOnChange: true);
+                }
+            }
+        }
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using OnceMi.Framework.Extension.Aop;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterAop
     {

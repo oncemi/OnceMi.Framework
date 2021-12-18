@@ -7,7 +7,7 @@ using FreeSql;
 using MySql.Data.MySqlClient;
 using Npgsql;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     internal static class FreeSqlCreateDatabaseExtension
     {

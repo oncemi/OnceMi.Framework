@@ -74,8 +74,6 @@ namespace OnceMi.Framework.Config
 
         public bool IsEnabledRequestLog { get; set; }
 
-        public bool IsEnabledAutoSeedDb { get; set; }
-
         public HealthCheckNode HealthCheck { get; set; }
     }
 }

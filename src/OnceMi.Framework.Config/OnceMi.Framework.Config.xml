@@ -40,6 +40,31 @@
             当前项目第一个命名空间
             </summary>
         </member>
+        <member name="P:OnceMi.Framework.Config.DbConnectionStringsNode.Name">
+            <summary>
+            标识名称
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Config.DbConnectionStringsNode.DbType">
+            <summary>
+            数据库类型
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Config.DbConnectionStringsNode.AutoSyncStructure">
+            <summary>
+            是否自动同步结构
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Config.DbConnectionStringsNode.ConnectionString">
+            <summary>
+            连接字符串
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Config.DbConnectionStringsNode.Slaves">
+            <summary>
+            从库
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Config.HealthCheckNode.IsEnabledHealthCheckUI">
             <summary>
             是否开启HealthCheckUI

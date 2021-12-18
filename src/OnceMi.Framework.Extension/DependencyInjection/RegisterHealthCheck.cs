@@ -7,7 +7,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text.RegularExpressions;
 using OnceMi.AspNetCore.AutoInjection;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterHealthCheck
     {

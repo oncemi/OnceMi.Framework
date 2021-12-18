@@ -9,7 +9,7 @@ using OnceMi.Framework.Config;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Util.Extensions;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterAutoMapper
     {

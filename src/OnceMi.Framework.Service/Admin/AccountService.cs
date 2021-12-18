@@ -83,11 +83,11 @@ namespace OnceMi.Framework.Service.Admin
                 .ToOneAsync();
             if (userToken == null)
             {
-                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_FAILED, "刷新Token失败，无效的Token");
+                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_FAILED, "获取秘钥失败，无效的请求秘钥");
             }
             if (userToken.RefeshTokenExpiration < DateTime.Now)
             {
-                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_TIMEOUT, "Token已过期，请重新登录");
+                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_TIMEOUT, "登录已过期，请重新登录");
             }
             Users user = await _userService.Query(userToken.UserId.ToString(), true);
             if (user == null)
@@ -181,7 +181,8 @@ namespace OnceMi.Framework.Service.Admin
                     RefeshToken = refeshToken,
                     RefeshTokenExpiration = DateTime.Now.AddSeconds(_config.TokenManagement.RefreshExpiration),
                     CreatedTime = DateTime.Now,
-                    UpdatedTime = DateTime.Now,
+                    UpdatedUserId = null,
+                    UpdatedTime = null,
                     IsDeleted = false,
                 };
                 int result = await _repository.Orm.Insert(userToken).ExecuteAffrowsAsync();
@@ -189,7 +190,6 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     throw new Exception("Save user refesh token failed.");
                 }
-
             }
             else
             {

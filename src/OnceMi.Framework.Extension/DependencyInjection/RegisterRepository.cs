@@ -7,7 +7,7 @@ using OnceMi.Framework.Config;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.Repository;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterRepository
     {

@@ -18,49 +18,37 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
-namespace OnceMi.Framework.Extension.Injection
+namespace OnceMi.Framework.Extension.DependencyInjection
 {
     public static class RegisterDatabase
     {
-        static readonly IdleBus<IFreeSql> ib = new IdleBus<IFreeSql>(TimeSpan.FromMinutes(10));
+        static readonly IdleBus<IFreeSql> ib = new IdleBus<IFreeSql>(TimeSpan.FromMinutes(60));
 
         public static IServiceCollection AddDatabase(this IServiceCollection services)
         {
             using (var provider = services.BuildServiceProvider())
             {
-                ILogger<IFreeSql> logger = provider.GetRequiredService<ILoggerFactory>()?.CreateLogger<IFreeSql>();
+                ILogger<IFreeSql> logger = provider.GetRequiredService<ILoggerFactory>().CreateLogger<IFreeSql>();
                 IConfiguration configuration = provider.GetRequiredService<IConfiguration>();
                 IIdGeneratorService idGenerator = provider.GetRequiredService<IIdGeneratorService>();
                 IWebHostEnvironment env = provider.GetRequiredService<IWebHostEnvironment>();
                 //获取所有的连接字符串
-                IConfigurationSection section = configuration.GetSection("DbConnectionStrings");
-                if (section == null || !section.Exists())
-                {
-                    throw new Exception("Can not get connect strings from app setting.");
-                }
-                List<DbConnectionStringsNode> connectionStrings = section.Get<List<DbConnectionStringsNode>>();
-                if (connectionStrings == null || connectionStrings.Count == 0)
-                {
-                    throw new Exception("Can not get connect strings from app setting.");
-                }
-                var dbNameDic = connectionStrings.GroupBy(p => p.Name).ToDictionary(g => g.Key, g => g.Count());
-                foreach (var item in dbNameDic)
-                {
-                    if (item.Value > 1)
-                    {
-                        throw new Exception($"Database name cannot be duplicate, there have {item.Value} db for name {item.Key}");
-                    }
-                }
-                //获取是否为调试模式
+                List<DbConnectionStringsNode> connectionStrings = GetConnectionStrings(configuration);
+                //创建IFreeSql对象
                 foreach (var item in connectionStrings)
                 {
                     var registerResult = ib.TryRegister(item.Name, () =>
                     {
-                        var fsql = new FreeSqlBuilder()
+                        FreeSqlBuilder fsqlBuilder = new FreeSqlBuilder()
                             .UseConnectionString(item.DbType, item.ConnectionString)
-                            .UseAutoSyncStructure(IsEnabledAutoSeedDatabase(configuration, env))    //自动迁移
-                            .CreateDatabaseIfNotExists()   //如果数据库不存在，那么自动创建数据库
-                            .Build();
+                            .UseAutoSyncStructure(IsAutoSyncStructure(item, env))    //自动迁移
+                            .CreateDatabaseIfNotExists();   //如果数据库不存在，那么自动创建数据库
+                        //判断是否开启读写分离
+                        if (item.Slaves != null && item.Slaves.Length > 0)
+                        {
+                            fsqlBuilder.UseSlave(item.Slaves);
+                        }
+                        IFreeSql fsql = fsqlBuilder.Build();
                         //sql执行日志
                         fsql.Aop.CurdAfter += (s, e) =>
                         {
@@ -73,8 +61,7 @@ namespace OnceMi.Framework.Extension.Injection
                             if ((e.AuditValueType == AuditValueType.Insert || e.AuditValueType == AuditValueType.InsertOrUpdate)
                              && e.Column.CsType == typeof(long)
                              && e.Value?.ToString().Equals("0") == true
-                             && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null || (e.Property.GetCustomAttribute<ColumnAttribute>(false) != null
-                             && e.Property.GetCustomAttribute<ColumnAttribute>(false).IsPrimary)))
+                             && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null || (e.Property.GetCustomAttribute<ColumnAttribute>(false)?.IsPrimary == true)))
                             {
                                 //生成雪花Id
                                 e.Value = idGenerator.NewId();
@@ -87,16 +74,10 @@ namespace OnceMi.Framework.Extension.Injection
                         throw new Exception($"Register db '{item.Name}' failed.");
                     }
                 }
-                //同步数据库
-                List<IFreeSql> freeSqls = ib.GetAll();
-                foreach (var item in freeSqls)
-                {
-                    SyncStructure(item);
-                }
                 //注入
                 services.AddScoped<BaseUnitOfWorkManager>();
                 //注入IdleBus<IFreeSql>
-                services.TryAddSingleton<IdleBus<IFreeSql>>(ib);
+                services.TryAddSingleton(ib);
                 return services;
             }
         }
@@ -109,26 +90,44 @@ namespace OnceMi.Framework.Extension.Injection
         public static IApplicationBuilder UseDbSeed(this IApplicationBuilder app)
         {
             IdleBus<IFreeSql> ib = app.ApplicationServices.GetRequiredService<IdleBus<IFreeSql>>();
-            ILoggerFactory logger = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
             if (ib == null)
             {
                 throw new Exception("Get idlebus service failed.");
             }
             IConfiguration configuration = app.ApplicationServices.GetRequiredService<IConfiguration>();
             IWebHostEnvironment env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+            ILoggerFactory loggerFactory = app.ApplicationServices.GetRequiredService<ILoggerFactory>();
+            ILogger logger = loggerFactory.CreateLogger(nameof(RegisterDatabase));
+            //获取所有的连接字符串
+            List<DbConnectionStringsNode> connectionStrings = GetConnectionStrings(configuration);
             //配置文件中开启了初始化数据库，并开启了开发者模式
-            if (IsEnabledAutoSeedDatabase(configuration, env))
+            foreach (var item in connectionStrings)
             {
-                logger.CreateLogger(nameof(UseDbSeed)).LogInformation($"Automatic database seed is turned on, start seeding database...");
-                foreach (var item in ib.GetAll())
+                if (!IsAutoSyncStructure(item, env))
                 {
-                    InitializeDatabase seed = new InitializeDatabase(item, logger);
-                    seed.Begin().GetAwaiter().GetResult();
+                    continue;
                 }
+                IFreeSql db = ib.Get(item.Name);
+                if (db == null)
+                {
+                    throw new Exception($"Can not get db '{item.Name}' from IdleBus.");
+                }
+                logger.LogInformation($"For db '{item.Name}', automatic sync database structure is turned on, start seeding database...");
+                //同步表结构
+                SyncStructure(db);
+                //写入种子数据
+                new InitializeDatabase(db, loggerFactory).Begin()
+                    .ConfigureAwait(false)
+                    .GetAwaiter()
+                    .GetResult();
             }
             return app;
         }
 
+        /// <summary>
+        /// 同步表结构
+        /// </summary>
+        /// <param name="fsql"></param>
         private static void SyncStructure(IFreeSql fsql)
         {
             if (!fsql.CodeFirst.IsAutoSyncStructure)
@@ -145,7 +144,7 @@ namespace OnceMi.Framework.Extension.Injection
                     && (type.BaseType == typeof(IBaseEntity)
                     || type.BaseType == typeof(IBaseEntity<long>)
                     || type.BaseType == typeof(IBaseEntity<int>)
-                    || type.BaseType == typeof(IBaseEntity<short>) 
+                    || type.BaseType == typeof(IBaseEntity<short>)
                     || type.BaseType == typeof(IBaseEntity<byte>)))
                 {
                     tableAssembies.Add(type);
@@ -158,16 +157,51 @@ namespace OnceMi.Framework.Extension.Injection
             fsql.CodeFirst.SyncStructure(tableAssembies.ToArray());
         }
 
-        private static bool IsEnabledAutoSeedDatabase(IConfiguration config, IWebHostEnvironment env)
+        /// <summary>
+        /// 是否开启表结构同步
+        /// </summary>
+        /// <param name="dbConfig"></param>
+        /// <param name="env"></param>
+        /// <returns></returns>
+        private static bool IsAutoSyncStructure(DbConnectionStringsNode dbConfig, IWebHostEnvironment env)
         {
             string seedDbEnvVal = Environment.GetEnvironmentVariable("ASPNETCORE_INITDB");
-            bool isEnabledAutoSeedDb = config.GetValue<bool>("AppSettings:IsEnabledAutoSeedDb");
-            if (isEnabledAutoSeedDb
-                && (env.IsDevelopment() || !string.IsNullOrEmpty(seedDbEnvVal) && seedDbEnvVal.Equals("true", StringComparison.OrdinalIgnoreCase)))
+            return dbConfig.AutoSyncStructure
+                && (env.IsDevelopment() || bool.TryParse(seedDbEnvVal, out bool isSeedDbInEnv) && isSeedDbInEnv);
+        }
+
+        /// <summary>
+        /// 从IConfiguration中获取连接字符串
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        private static List<DbConnectionStringsNode> GetConnectionStrings(IConfiguration configuration)
+        {
+            if (configuration == null)
             {
-                return true;
+                return null;
             }
-            return false;
+            IConfigurationSection section = configuration.GetSection("DbConnectionStrings");
+            if (section == null || !section.Exists())
+            {
+                throw new Exception("Can not get connect strings from app setting.");
+            }
+            List<DbConnectionStringsNode> connectionStrings = section.Get<List<DbConnectionStringsNode>>();
+            if (connectionStrings == null || connectionStrings.Count == 0)
+            {
+                throw new Exception("Can not get connect strings from app setting.");
+            }
+            //判断name是否重复
+            var dbNameDic = connectionStrings.GroupBy(p => p.Name).ToDictionary(g => g.Key, g => g.Count());
+            foreach (var item in dbNameDic)
+            {
+                if (item.Value > 1)
+                {
+                    throw new Exception($"Database name cannot be duplicate, there have {item.Value} db for name {item.Key}");
+                }
+            }
+            return connectionStrings;
         }
     }
 }

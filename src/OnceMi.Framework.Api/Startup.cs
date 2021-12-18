@@ -9,7 +9,7 @@ using OnceMi.AspNetCore.OSS;
 using OnceMi.Framework.Api.Middlewares;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Extension.Authorizations;
-using OnceMi.Framework.Extension.Injection;
+using OnceMi.Framework.Extension.DependencyInjection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Util.Json;

@@ -748,6 +748,21 @@
             根据Id删除
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Api.Controllers.v2.DbDemoController">
+            <summary>
+            测试接口
+            </summary>
+            <remarks>
+            用于测试一些功能，不需要可以直接删除
+            </remarks>
+        </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v2.DbDemoController.GetAllConfigs">
+            <summary>
+            测试分库查询
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
         <member name="T:OnceMi.Framework.Api.Controllers.v2.JobDemoController">
             <summary>
             定时任务Demo
