@@ -1060,6 +1060,12 @@
             标签
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.DisableSyncStructureAttribute">
+            <summary>
+            禁用表结构同步
+            使用该Attribute的Entity不会被同步至数据库
+            </summary>
+        </member>
         <member name="T:OnceMi.Framework.Entity.IBaseEntity`1">
             <summary>
             

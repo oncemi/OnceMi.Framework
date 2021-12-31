@@ -130,7 +130,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             {
                 return endpoint;
             }
-            var uri = Regex.Replace(host, @"^(?<scheme>https?):\/\/((\+)|(\*)|(0.0.0.0))(?=[\:\/]|$)", "${scheme}://localhost");
+            var uri = Regex.Replace(host.TrimEnd('/'), @"^(?<scheme>https?):\/\/((\+)|(\*)|(0.0.0.0))(?=[\:\/]|$)", "${scheme}://localhost");
             Uri httpEndpoint = new Uri(uri, UriKind.Absolute);
             return new UriBuilder(httpEndpoint.Scheme, httpEndpoint.Host, httpEndpoint.Port, endpoint).ToString();
         }

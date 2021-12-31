@@ -39,10 +39,21 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 {
                     var registerResult = ib.TryRegister(item.Name, () =>
                     {
+                        //是否开启自动迁移
+                        bool syncStructure = IsAutoSyncStructure(item, env);
+                        //create builder
                         FreeSqlBuilder fsqlBuilder = new FreeSqlBuilder()
                             .UseConnectionString(item.DbType, item.ConnectionString)
-                            .UseAutoSyncStructure(IsAutoSyncStructure(item, env))    //自动迁移
-                            .CreateDatabaseIfNotExists();   //如果数据库不存在，那么自动创建数据库
+                            .UseAutoSyncStructure(syncStructure);
+                        //如果数据库不存在，那么自动创建数据库
+                        if (syncStructure && (item.DbType == FreeSql.DataType.MySql
+                            || item.DbType == FreeSql.DataType.SqlServer
+                            || item.DbType == FreeSql.DataType.PostgreSQL
+                            || item.DbType == FreeSql.DataType.Sqlite
+                            || item.DbType == FreeSql.DataType.OdbcSqlServer))
+                        {
+                            fsqlBuilder.CreateDatabaseIfNotExists();
+                        }
                         //判断是否开启读写分离
                         if (item.Slaves != null && item.Slaves.Length > 0)
                         {
@@ -140,12 +151,11 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             foreach (Type type in entities)
             {
                 if (type.GetCustomAttribute<TableAttribute>() != null
+                    && type.GetCustomAttribute<DisableSyncStructureAttribute>() == null
                     && type.BaseType != null
                     && (type.BaseType == typeof(IBaseEntity)
                     || type.BaseType == typeof(IBaseEntity<long>)
-                    || type.BaseType == typeof(IBaseEntity<int>)
-                    || type.BaseType == typeof(IBaseEntity<short>)
-                    || type.BaseType == typeof(IBaseEntity<byte>)))
+                    || type.BaseType == typeof(IBaseEntity<int>)))
                 {
                     tableAssembies.Add(type);
                 }
