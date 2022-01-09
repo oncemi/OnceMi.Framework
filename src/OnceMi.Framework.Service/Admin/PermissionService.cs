@@ -173,7 +173,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (!await _roleRepository.Select.AnyAsync(p => p.Id == request.RoleId && !p.IsDeleted && p.IsEnabled))
             {
-                throw new BusException(ResultCodeConstant.PERM_UPDATE_ROLE_NOT_EXISTS, "更新的角色不存在或已被禁用。");
+                throw new BusException(ResultCode.PERM_UPDATE_ROLE_NOT_EXISTS, "更新的角色不存在或已被禁用。");
             }
             //获取全部的菜单
             List<Menus> allMenus = await _menuService.Where(p => !p.IsDeleted && p.IsEnabled).ToListAsync();

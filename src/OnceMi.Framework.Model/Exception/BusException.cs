@@ -1,28 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OnceMi.Framework.Model.Common;
+using OnceMi.Framework.Util.Extensions;
 
 namespace OnceMi.Framework.Model.Exception
 {
     public class BusException : System.Exception
     {
-        public int Code { get; set; }
+        public ResultCode Code { get; set; }
 
-        public BusException(int code)
+        public override string Message { get; }
+
+        public BusException(ResultCode code) : base()
         {
             this.Code = code;
+            this.Message = code.GetDescription();
         }
 
-        public BusException(int code, string message) : base(message)
+        public BusException(ResultCode code, string message) : base(message)
         {
             this.Code = code;
+            this.Message = string.IsNullOrWhiteSpace(message) ? code.GetDescription() : message;
         }
 
-        public BusException(int code, string message, System.Exception ex) : base(message, ex)
+        public BusException(ResultCode code, string message, System.Exception ex) : base(message, ex)
         {
             this.Code = code;
+            this.Message = string.IsNullOrWhiteSpace(message) ? code.GetDescription() : message;
         }
     }
 }

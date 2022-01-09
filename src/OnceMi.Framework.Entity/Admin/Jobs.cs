@@ -6,6 +6,9 @@ using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 定时任务表
+    /// </summary>
     [Table(Name = nameof(Jobs))]
     public class Jobs : IBaseEntity
     {

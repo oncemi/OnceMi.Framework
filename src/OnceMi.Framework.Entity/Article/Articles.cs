@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace OnceMi.Framework.Entity.Article
 {
+    /// <summary>
+    /// 文章
+    /// </summary>
     [Table(Name = nameof(Articles))]
     public class Articles : IBaseEntity
     {

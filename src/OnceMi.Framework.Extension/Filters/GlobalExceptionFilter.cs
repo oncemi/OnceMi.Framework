@@ -28,7 +28,7 @@ namespace OnceMi.Framework.Extension.Filters
             {
                 case BusException ex:
                     {
-                        context.Result = new ObjectResult(new ResultObject<object>(ex.Code, ex.Message));
+                        context.Result = new ObjectResult(new ResultObject<object>((int)ex.Code, ex.Message));
                         logger.LogWarning(ex, ex.Message);
                     }
                     break;

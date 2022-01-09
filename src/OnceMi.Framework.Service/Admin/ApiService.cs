@@ -169,16 +169,16 @@ namespace OnceMi.Framework.Service.Admin
             if ((api.ParentId != null && api.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == api.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.API_PARENT_ENTRY_DOES_NOT_EXIST, "父条目不存在");
+                throw new BusException(ResultCode.API_PARENT_ENTRY_DOES_NOT_EXIST, "父条目不存在");
             }
             if ((api.ParentId != null && api.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == api.ParentId && p.Version == request.Version))
             {
-                throw new BusException(ResultCodeConstant.API_MUST_THE_SAME_AS_PARENT, "添加的API版本必须和父节点版本相同");
+                throw new BusException(ResultCode.API_MUST_THE_SAME_AS_PARENT, "添加的API版本必须和父节点版本相同");
             }
             if (await _repository.Select.AnyAsync(p => p.Path == api.Path && p.Method == request.Method && p.Version == p.Version && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.API_EXISTS, $"当前添加的路径‘{api.Path}’的Api已存在");
+                throw new BusException(ResultCode.API_EXISTS, $"当前添加的路径‘{api.Path}’的Api已存在");
             }
             api.Code = $"{api.Path.Trim('/').Replace('/', ':')}:{api.Method}".ToLower();
             api.ParentId = api.ParentId == 0 ? null : api.ParentId;
@@ -200,21 +200,21 @@ namespace OnceMi.Framework.Service.Admin
             Apis api = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (api == null)
             {
-                throw new BusException(ResultCodeConstant.API_FOR_CURRENT_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.API_FOR_CURRENT_NOT_EXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.API_FOR_PARENT_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.API_FOR_PARENT_NOT_EXISTS, "父条目不存在");
             }
             if ((api.ParentId != null && api.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == api.ParentId && p.Version == request.Version))
             {
-                throw new BusException(ResultCodeConstant.API_MUST_THE_SAME_AS_PARENT, "添加的API版本必须和父节点版本相同");
+                throw new BusException(ResultCode.API_MUST_THE_SAME_AS_PARENT, "添加的API版本必须和父节点版本相同");
             }
             if (await _repository.Select.AnyAsync(p => p.Path == request.Path && p.Method == request.Method && p.Version == request.Version && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.API_EXISTS, $"当前修改路径‘{request.Path}’的Api已存在");
+                throw new BusException(ResultCode.API_EXISTS, $"当前修改路径‘{request.Path}’的Api已存在");
             }
 
             api = request.MapTo(api);
@@ -318,7 +318,7 @@ namespace OnceMi.Framework.Service.Admin
 
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.API_FOR_DELETE_NOT_EISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.API_FOR_DELETE_NOT_EISTS, "没有要删除的条目");
             }
             List<Apis> allApis = await _repository
                 .Where(p => !p.IsDeleted)
@@ -558,7 +558,7 @@ namespace OnceMi.Framework.Service.Admin
             IDictionary<string, OpenApiInfo> docsInfos = _options.SwaggerDocs;
             if (docsInfos == null || docsInfos.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.API_CANNOT_FIND_OPEN_API_OPTION, "Can not find open api option from SwaggerGeneratorOptions.");
+                throw new BusException(ResultCode.API_CANNOT_FIND_OPEN_API_OPTION, "Can not find open api option from SwaggerGeneratorOptions.");
             }
             List<ApiDocInfo> result = new List<ApiDocInfo>();
             foreach (var item in docsInfos)
@@ -695,7 +695,7 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     var newParentApi = newSource.Where(p => p.Id == api.ParentId).SingleOrDefault();
                     if (newParentApi == null)
-                        throw new BusException(ResultCodeConstant.API_CANNOT_FIND_CURRENTAPI_PARENTS, $"未找到当前Api(Id:{api.Id},Pid:{api.ParentId})的父节点。");
+                        throw new BusException(ResultCode.API_CANNOT_FIND_CURRENTAPI_PARENTS, $"未找到当前Api(Id:{api.Id},Pid:{api.ParentId})的父节点。");
                     var oldParentApi = oldSource
                         .Where(p => p.Path == newParentApi.Path && p.Version == newParentApi.Version && p.OperationId == newParentApi.OperationId)
                         .SingleOrDefault();

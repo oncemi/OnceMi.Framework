@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 配置项
+    /// </summary>
     [Table(Name = nameof(Configs))]
     [Index("index_{TableName}_" + nameof(Key), nameof(Key), false)]
     public class Configs : IBaseEntity

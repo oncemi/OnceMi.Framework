@@ -1,4 +1,6 @@
 ﻿using IdentityModel;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -84,6 +86,29 @@ namespace OnceMi.Framework.Util.User
             if (nameClaim == null)
                 return null;
             return nameClaim.Value;
+        }
+
+        /// <summary>
+        /// 获取登录用户的Token
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public static string GetToken(this HttpContext context)
+        {
+            if (context == null)
+            {
+                return null;
+            }
+            string jwtSource = context.Request.Headers[HeaderNames.Authorization];
+            if (string.IsNullOrWhiteSpace(jwtSource))
+            {
+                return null;
+            }
+            if (jwtSource.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+            {
+                jwtSource = jwtSource.Substring(7);
+            }
+            return jwtSource.Trim();
         }
     }
 }

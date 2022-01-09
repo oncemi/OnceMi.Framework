@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Util.Security
 {
@@ -15,7 +11,7 @@ namespace OnceMi.Framework.Util.Security
         /// </summary>
         /// <param name="str">原始字符串</param>
         /// <returns>SHA256结果(返回长度为44字节的字符串)</returns>
-        public static string SHA256(string str)
+        public static string SHA256(string str, bool toLower = true)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(str);
             using (SHA256 sha256 = System.Security.Cryptography.SHA256.Create())
@@ -26,7 +22,7 @@ namespace OnceMi.Framework.Util.Security
                 {
                     builder.Append(hash[i].ToString("X2"));
                 }
-                return builder.ToString().ToLower();
+                return toLower ? builder.ToString().ToLower() : builder.ToString().ToUpper();
             }
         }
 
@@ -36,7 +32,7 @@ namespace OnceMi.Framework.Util.Security
         /// <param name="content">需要加密字符串</param>  
         /// <param name="encode">指定加密编码</param>  
         /// <returns>返回40位小写写字符串</returns>  
-        public static string SHA1(string content)
+        public static string SHA1(string content, bool toLower = true)
         {
             using (SHA1 sha1 = System.Security.Cryptography.SHA1.Create())
             {
@@ -44,7 +40,7 @@ namespace OnceMi.Framework.Util.Security
                 byte[] bytes_out = sha1.ComputeHash(bytes_in);
                 string result = BitConverter.ToString(bytes_out);
                 result = result.Replace("-", "");
-                return result.ToLower();
+                return toLower ? result.ToLower() : result.ToUpper();
             }
         }
 

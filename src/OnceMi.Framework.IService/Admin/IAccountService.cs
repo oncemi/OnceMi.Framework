@@ -14,7 +14,13 @@ namespace OnceMi.Framework.IService.Admin
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<LoginResponse> Authenticate(LoginRequest request);
+        Task<LoginResponse> Login(LoginRequest request);
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        Task Logout();
 
         /// <summary>
         /// 刷新token
@@ -22,12 +28,5 @@ namespace OnceMi.Framework.IService.Admin
         /// <param name="request"></param>
         /// <returns></returns>
         Task<LoginResponse> RefreshToken(RefeshTokenRequest request);
-
-        /// <summary>
-        /// 撤销RefreshToken
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        Task RevokeToken(RevokeTokenRequest request);
     }
 }

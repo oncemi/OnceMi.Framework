@@ -74,7 +74,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             List<long> ids = HttpContext.User.GetRoles()?.Distinct().ToList();
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.MENU_GET_ROLE_FAILED, "获取用户角色失败");
+                throw new BusException(ResultCode.MENU_GET_ROLE_FAILED, "获取用户角色失败");
             }
             return await _permissionService.QueryUserMenus(ids);
         }
@@ -138,7 +138,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     {
                         if (request.ApiId == null)
                         {
-                            throw new BusException(ResultCodeConstant.MENU_API_CANNOT_NULL, "当才菜单类型为接口时，接口不能为空");
+                            throw new BusException(ResultCode.MENU_API_CANNOT_NULL, "当才菜单类型为接口时，接口不能为空");
                         }
                         request.ViewId = null;
                     }
@@ -148,13 +148,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     {
                         if (request.ViewId == null || request.ViewId == 0)
                         {
-                            throw new BusException(ResultCodeConstant.MENU_VIEW_CANNOT_NULL, "当才菜单类型为视图或分组时，视图不能为空");
+                            throw new BusException(ResultCode.MENU_VIEW_CANNOT_NULL, "当才菜单类型为视图或分组时，视图不能为空");
                         }
                         request.ApiId = null;
                     }
                     break;
                 default:
-                    throw new BusException(ResultCodeConstant.MENU_UNKNOW_TYPE, "未知的菜单类型");
+                    throw new BusException(ResultCode.MENU_UNKNOW_TYPE, "未知的菜单类型");
             }
             return await _service.Insert(request);
         }
@@ -173,7 +173,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     {
                         if (request.ApiId == null)
                         {
-                            throw new BusException(ResultCodeConstant.MENU_API_CANNOT_NULL, "当才菜单类型为接口时，接口不能为空");
+                            throw new BusException(ResultCode.MENU_API_CANNOT_NULL, "当才菜单类型为接口时，接口不能为空");
                         }
                         request.ViewId = null;
                     }
@@ -183,13 +183,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     {
                         if (request.ViewId == null || request.ViewId == 0)
                         {
-                            throw new BusException(ResultCodeConstant.MENU_VIEW_CANNOT_NULL, "当才菜单类型为视图或分组时，视图不能为空");
+                            throw new BusException(ResultCode.MENU_VIEW_CANNOT_NULL, "当才菜单类型为视图或分组时，视图不能为空");
                         }
                         request.ApiId = null;
                     }
                     break;
                 default:
-                    throw new BusException(ResultCodeConstant.MENU_UNKNOW_TYPE, "未知的菜单类型");
+                    throw new BusException(ResultCode.MENU_UNKNOW_TYPE, "未知的菜单类型");
             }
             await _service.Update(request);
         }

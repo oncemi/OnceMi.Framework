@@ -88,7 +88,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             {
                 if (!JsonUtil.TryParse(request.Query, out string json))
                 {
-                    throw new BusException(ResultCodeConstant.VIEW_PARAMS_MUST_JSON, "参数必须是合法的Json字符串");
+                    throw new BusException(ResultCode.VIEW_PARAMS_MUST_JSON, "参数必须是合法的Json字符串");
                 }
                 request.Query = json;
             }
@@ -108,7 +108,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             {
                 if (!JsonUtil.TryParse(request.Query, out string json))
                 {
-                    throw new BusException(ResultCodeConstant.VIEW_PARAMS_MUST_JSON, "参数必须是合法的Json字符串");
+                    throw new BusException(ResultCode.VIEW_PARAMS_MUST_JSON, "参数必须是合法的Json字符串");
                 }
                 request.Query = json;
             }

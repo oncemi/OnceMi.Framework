@@ -97,16 +97,16 @@ namespace OnceMi.Framework.Service.Admin
             //判断分组是否存在
             if (await _repository.Select.AnyAsync(p => p.Name == request.Name && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.JOBG_NAME_EXISTS, $"分组名称“{request.Name}”已存在");
+                throw new BusException(ResultCode.JOBG_NAME_EXISTS, $"分组名称“{request.Name}”已存在");
             }
             //判断code是否存在
             if (await _repository.Select.AnyAsync(p => p.Code == request.Code && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.JOBG_CODE_EXISTS, $"分组编码“{request.Code}”已存在！");
+                throw new BusException(ResultCode.JOBG_CODE_EXISTS, $"分组编码“{request.Code}”已存在！");
             }
             if (!IsRightGroupCode(request.Code))
             {
-                throw new BusException(ResultCodeConstant.JOBG_CODE_FORMAT_ERROR, $"分组编码格式不正确，编码只能由字母、数组和下划线组成");
+                throw new BusException(ResultCode.JOBG_CODE_FORMAT_ERROR, $"分组编码格式不正确，编码只能由字母、数组和下划线组成");
             }
             //创建信息
             jobGroup.Id = _idGenerator.NewId();
@@ -123,12 +123,12 @@ namespace OnceMi.Framework.Service.Admin
             JobGroups jobGroup = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
             if (jobGroup == null)
             {
-                throw new BusException(ResultCodeConstant.JOBG_NOT_EXISTS, $"修改的分组不存在");
+                throw new BusException(ResultCode.JOBG_NOT_EXISTS, $"修改的分组不存在");
             }
             //判断分组是否存在
             if (await _repository.Select.AnyAsync(p => p.Name == request.Name && !p.IsDeleted && p.Id != request.Id))
             {
-                throw new BusException(ResultCodeConstant.JOBG_NAME_EXISTS, $"分组名称“{request.Name}”已存在！");
+                throw new BusException(ResultCode.JOBG_NAME_EXISTS, $"分组名称“{request.Name}”已存在！");
             }
             jobGroup.Name = request.Name;
             jobGroup.UpdatedTime = DateTime.Now;
@@ -146,7 +146,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.JOBG_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.JOBG_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
             List<JobGroups> allDelGroups = await _repository.Where(p => ids.Contains(p.Id))
                 .NoTracking()
@@ -155,7 +155,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 if (await _repository.Orm.Select<Jobs>().AnyAsync(p => p.GroupId == item.Id && !p.IsDeleted))
                 {
-                    throw new BusException(ResultCodeConstant.JOBG_IN_USED, $"分组“{item.Name}”正在使用，无法删除");
+                    throw new BusException(ResultCode.JOBG_IN_USED, $"分组“{item.Name}”正在使用，无法删除");
                 }
             }
             await _repository.Where(p => ids.Contains(p.Id))

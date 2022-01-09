@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 用户所属组织
+    /// </summary>
     [Table(Name = nameof(UserOrganize))]
     public class UserOrganize : IBaseEntity
     {

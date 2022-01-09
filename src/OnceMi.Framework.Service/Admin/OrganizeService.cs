@@ -190,7 +190,7 @@ namespace OnceMi.Framework.Service.Admin
             if ((organize.ParentId != null && organize.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == organize.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ORG_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.ORG_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             organize.ParentId = organize.ParentId == 0 ? null : organize.ParentId;
             organize.Id = _idGenerator.NewId();
@@ -215,16 +215,16 @@ namespace OnceMi.Framework.Service.Admin
             Organizes organize = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (organize == null)
             {
-                throw new BusException(ResultCodeConstant.ORG_UPDATE_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.ORG_UPDATE_NOT_EXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ORG_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.ORG_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             if (request.ParentId != null && request.ParentId != 0 && request.Id == request.ParentId)
             {
-                throw new BusException(ResultCodeConstant.ORG_PARENT_CANNOT_SELF, "父条目不能为本身");
+                throw new BusException(ResultCode.ORG_PARENT_CANNOT_SELF, "父条目不能为本身");
             }
             List<OrganizeManagers> managers = await GenerateOrganizeManagers(request);
             //将请求Map到要修改的对象
@@ -260,7 +260,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.ORG_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.ORG_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
             List<Organizes> allOrganizes = await _repository
                 .Where(p => !p.IsDeleted)
@@ -284,12 +284,12 @@ namespace OnceMi.Framework.Service.Admin
             canNotDelete = await _repository.Orm.Select<Roles>().AnyAsync(p => delIds.Contains(p.OrganizeId) && !p.IsDeleted);
             if (canNotDelete)
             {
-                throw new BusException(ResultCodeConstant.ORG_HAS_ROLES, "删除失败，当前组织机构下包含未删除的角色组");
+                throw new BusException(ResultCode.ORG_HAS_ROLES, "删除失败，当前组织机构下包含未删除的角色组");
             }
             canNotDelete = await _repository.Orm.Select<Users>().AnyAsync(p => p.Organizes.AsSelect().Any(q => delIds.Contains(q.Id)) && !p.IsDeleted);
             if (canNotDelete)
             {
-                throw new BusException(ResultCodeConstant.ORG_HAS_USERS, "删除失败，当前组织机构下包含未删除的用户");
+                throw new BusException(ResultCode.ORG_HAS_USERS, "删除失败，当前组织机构下包含未删除的用户");
             }
             if (delIds != null)
             {
@@ -406,7 +406,7 @@ namespace OnceMi.Framework.Service.Admin
                 List<Users> departLeaderUsers = await _userRepository.Where(p => request.DepartLeaders.Contains(p.Id) && !p.IsDeleted).ToListAsync();
                 if (request.DepartLeaders.Count != departLeaderUsers.Count)
                 {
-                    throw new BusException(ResultCodeConstant.ORG_SELECT_DL_ERROR, "所选部门负责人不正确");
+                    throw new BusException(ResultCode.ORG_SELECT_DL_ERROR, "所选部门负责人不正确");
                 }
                 if (departLeaderUsers != null && departLeaderUsers.Count > 0)
                 {
@@ -427,7 +427,7 @@ namespace OnceMi.Framework.Service.Admin
                 List<Users> hesderLeaderUsers = await _userRepository.Where(p => request.HeadLeaders.Contains(p.Id) && !p.IsDeleted).ToListAsync();
                 if (request.HeadLeaders.Count != hesderLeaderUsers.Count)
                 {
-                    throw new BusException(ResultCodeConstant.ORG_SELECT_HL_ERROR, "所选分管领导不正确");
+                    throw new BusException(ResultCode.ORG_SELECT_HL_ERROR, "所选分管领导不正确");
                 }
                 if (hesderLeaderUsers != null && hesderLeaderUsers.Count > 0)
                 {

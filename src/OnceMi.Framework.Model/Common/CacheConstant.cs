@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using OnceMi.Framework.Util.Security;
+using System.ComponentModel;
 
 namespace OnceMi.Framework.Model.Common
 {
@@ -50,6 +51,14 @@ namespace OnceMi.Framework.Model.Common
         public const string ConfigItemKey = "admin:sys:configs:{0}";
 
         /// <summary>
+        /// 禁用或者删除用户,JWT禁用黑名单
+        /// </summary>
+        [Description("JWT禁用黑名单")]
+        public const string JwtBlackListKey = "admin:sys:jwtblacklist:{0}";
+
+        #region Methods
+
+        /// <summary>
         /// 获取角色主键
         /// </summary>
         /// <param name="roleCode"></param>
@@ -69,6 +78,11 @@ namespace OnceMi.Framework.Model.Common
             return string.Format(SystemJobApiKey, key);
         }
 
+        /// <summary>
+        /// 获取作业key
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static string GetJobKey(long id)
         {
             return string.Format(SystemJobKey, id);
@@ -93,5 +107,21 @@ namespace OnceMi.Framework.Model.Common
         {
             return string.Format(ConfigItemKey, key);
         }
+
+        /// <summary>
+        /// JWT禁用黑名单
+        /// </summary>
+        /// <param name="jwt">传入的用户jwt</param>
+        /// <returns></returns>
+        public static string GetJwtBlackListKey(string jwt)
+        {
+            if (string.IsNullOrEmpty(jwt))
+            {
+                throw new ArgumentNullException(nameof(jwt));
+            }
+            return string.Format(JwtBlackListKey, SHA.SHA256(jwt));
+        }
+
+        #endregion
     }
 }

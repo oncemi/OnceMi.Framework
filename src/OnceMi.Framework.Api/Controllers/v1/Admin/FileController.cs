@@ -81,7 +81,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (string.IsNullOrEmpty(key))
             {
-                throw new BusException(ResultCodeConstant.FILE_REQUEST_KEY_CANNOT_NULL, "请求文件key不能为空");
+                throw new BusException(ResultCode.FILE_REQUEST_KEY_CANNOT_NULL, "请求文件key不能为空");
             }
             //解码
             UploadFileInfo fileInfo = _service.DecodeFileKey(key);
@@ -100,20 +100,20 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                         //仅自己可以查询或下载
                         if (!TryParseToken(token, out JwtSecurityToken securityToken))
                         {
-                            throw new BusException(ResultCodeConstant.FILE_TOKEN_INVALID, "请求token验证失败");
+                            throw new BusException(ResultCode.FILE_TOKEN_INVALID, "请求token验证失败");
                         }
                         if (securityToken.ValidTo < DateTime.UtcNow)
                         {
-                            throw new BusException(ResultCodeConstant.FILE_TOKEN_EXPIRED, "请求token已过期");
+                            throw new BusException(ResultCode.FILE_TOKEN_EXPIRED, "请求token已过期");
                         }
                         long? userId = securityToken.Claims?.GetSubject().id;
                         if (userId == null)
                         {
-                            throw new BusException(ResultCodeConstant.FILE_NO_DOWNLOAD_PERMISSION, "对不起，您没有该文件的访问权限");
+                            throw new BusException(ResultCode.FILE_NO_DOWNLOAD_PERMISSION, "对不起，您没有该文件的访问权限");
                         }
                         if (fileInfo.Owner != userId)
                         {
-                            throw new BusException(ResultCodeConstant.FILE_NO_DOWNLOAD_PERMISSION, "对不起，您没有该文件的访问权限");
+                            throw new BusException(ResultCode.FILE_NO_DOWNLOAD_PERMISSION, "对不起，您没有该文件的访问权限");
                         }
                     }
                     break;
@@ -123,16 +123,16 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                         //目前是登录用户即可查看或下载
                         if (!TryParseToken(token, out JwtSecurityToken securityToken))
                         {
-                            throw new BusException(ResultCodeConstant.FILE_TOKEN_INVALID, "请求token验证失败");
+                            throw new BusException(ResultCode.FILE_TOKEN_INVALID, "请求token验证失败");
                         }
                         if (securityToken.ValidTo < DateTime.UtcNow)
                         {
-                            throw new BusException(ResultCodeConstant.FILE_TOKEN_EXPIRED, "请求token已过期");
+                            throw new BusException(ResultCode.FILE_TOKEN_EXPIRED, "请求token已过期");
                         }
                     }
                     break;
                 default:
-                    throw new BusException(ResultCodeConstant.FILE_PERMISSION_UNSUPPORT, "不支持的文件访问权限");
+                    throw new BusException(ResultCode.FILE_PERMISSION_UNSUPPORT, "不支持的文件访问权限");
             }
             return await FileDownload(fileInfo);
         }
@@ -152,12 +152,12 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             IFormFileCollection files = HttpContext.Request.Form.Files;
             if (files == null || files.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_IS_NULL, "上传的文件不能为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_IS_NULL, "上传的文件不能为空");
             }
             long? userId = HttpContext.User?.GetSubject().id;
             if (userId == null)
             {
-                throw new BusException(ResultCodeConstant.FILE_GET_USERINFO_FAILED, "获取登录用户信息失败");
+                throw new BusException(ResultCode.FILE_GET_USERINFO_FAILED, "获取登录用户信息失败");
             }
             return await _service.Upload(files, userId.Value, request.AccessMode, request.ExpiredTime);
         }
@@ -178,11 +178,11 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (string.IsNullOrEmpty(file.Path))
             {
-                throw new BusException(ResultCodeConstant.FILE_CANNOT_FIND_FILE_PATH, "获取文件参数失败，找不到指定的文件路径！");
+                throw new BusException(ResultCode.FILE_CANNOT_FIND_FILE_PATH, "获取文件参数失败，找不到指定的文件路径！");
             }
             if (file.ExpiredTime != null && (file.ExpiredTime.Value - DateTime.Now).TotalSeconds <= 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_EXPIRED, "该文件已过期！");
+                throw new BusException(ResultCode.FILE_EXPIRED, "该文件已过期！");
             }
             switch (file.StorageType)
             {
@@ -190,7 +190,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                     {
                         if (!System.IO.File.Exists(file.Path))
                         {
-                            throw new BusException(ResultCodeConstant.FILE_CANNOT_FIND_LOCALTION, "获取文件参数失败，找不到指定的文件存储位置！");
+                            throw new BusException(ResultCode.FILE_CANNOT_FIND_LOCALTION, "获取文件参数失败，找不到指定的文件存储位置！");
                         }
                         if (!new FileExtensionContentTypeProvider().TryGetContentType(file.Path, out string contentType))
                         {
@@ -211,13 +211,13 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                         }
                         if (string.IsNullOrEmpty(file.BucketName))
                         {
-                            throw new BusException(ResultCodeConstant.FILE_CANNOT_FIND_LOCALTION, "获取文件参数失败，找不到指定的文件存储位置！");
+                            throw new BusException(ResultCode.FILE_CANNOT_FIND_LOCALTION, "获取文件参数失败，找不到指定的文件存储位置！");
                         }
                         string url = await _service.GetPresignedObjectUrl(file.Path, file.BucketName, expiredSeconds);
                         return Redirect(url);
                     }
                 default:
-                    throw new BusException(ResultCodeConstant.FILE_UNKNOW_STORAGE_TYPE, "未知的文件存储类型！");
+                    throw new BusException(ResultCode.FILE_UNKNOW_STORAGE_TYPE, "未知的文件存储类型！");
             }
         }
 

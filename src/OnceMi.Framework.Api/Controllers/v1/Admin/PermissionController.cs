@@ -62,7 +62,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             List<long> ids = HttpContext.User.GetRoles()?.Distinct().ToList();
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.PERM_GET_ROLE_FAILED, "获取用户角色失败");
+                throw new BusException(ResultCode.PERM_GET_ROLE_FAILED, "获取用户角色失败");
             }
             return await _service.QueryUserRolePermission(ids);
         }

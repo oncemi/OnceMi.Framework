@@ -109,7 +109,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         {
             if (string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
             {
-                throw new BusException(ResultCodeConstant.DIC_ID_AND_CODE_CANNOT_ALL_EMPTY, "查询条件Id和编码不能同时为空");
+                throw new BusException(ResultCode.DIC_ID_AND_CODE_CANNOT_ALL_EMPTY, "查询条件Id和编码不能同时为空");
             }
             return await _service.Query(request);
         }

@@ -135,14 +135,14 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (string.IsNullOrWhiteSpace(key))
             {
-                throw new BusException(-1, "获取配置项失败，KEY参数不能为空");
+                throw new BusException(ResultCode.CONFIG_KEY_CANNOT_NULL, "获取配置项失败，参数KEY不能为空");
             }
             return await _redisClient.GetOrCreateAsync<ConfigModel<T>>(CacheConstant.GetConfigKey(key), async () =>
             {
                 Configs config = await _repository.Where(p => p.Key == key).FirstAsync();
                 if (config == null)
                 {
-                    throw new BusException(-1, $"获取配置项失败，未找到配置项：{key}");
+                    throw new BusException(ResultCode.CONFIG_CANNOT_FING_KEY, $"获取配置项失败，未找到配置项：{key}");
                 }
                 ConfigModel<T> result = _mapper.Map<ConfigModel<T>>(config);
                 if (result == null)
@@ -169,11 +169,11 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (data == null)
             {
-                throw new BusException(-1, "设置配置项失败，参数不能为空");
+                throw new BusException(ResultCode.CONFIG_KEY_CANNOT_NULL, "设置配置项失败，参数不能为空");
             }
             if (string.IsNullOrWhiteSpace(data.Key))
             {
-                throw new BusException(-1, "设置配置项失败，KEY参数不能为空");
+                throw new BusException(ResultCode.CONFIG_KEY_CANNOT_NULL, "设置配置项失败，参数KEY不能为空");
             }
             string content = "";
             if (data.Data != null)

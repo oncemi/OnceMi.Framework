@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 视图表
+    /// </summary>
     [Table(Name = nameof(Views))]
     public class Views : IBaseEntity
     {

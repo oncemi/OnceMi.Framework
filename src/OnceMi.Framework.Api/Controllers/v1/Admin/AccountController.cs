@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
@@ -35,7 +36,19 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         [AllowAnonymous]
         public async Task<LoginResponse> Login(LoginRequest request)
         {
-            return await _service.Authenticate(request);
+            return await _service.Login(request);
+        }
+
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("[action]")]
+        [SkipAuthorization]
+        public async Task Logout()
+        {
+            await _service.Logout();
         }
 
         /// <summary>
@@ -49,19 +62,6 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         public async Task<LoginResponse> RefeshToken(RefeshTokenRequest request)
         {
             return await _service.RefreshToken(request);
-        }
-
-        /// <summary>
-        /// 撤销token
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("[action]")]
-        [AllowAnonymous]
-        public async Task RevokeToken(RevokeTokenRequest request)
-        {
-            await _service.RevokeToken(request);
         }
     }
 }

@@ -200,12 +200,12 @@ namespace OnceMi.Framework.Service.Admin
             if ((menu.ParentId != null && menu.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == menu.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.MENU_PARENTS_NOT_EXISTS, "父目录不存在");
+                throw new BusException(ResultCode.MENU_PARENTS_NOT_EXISTS, "父目录不存在");
             }
             if (menu.ParentId != null && menu.ParentId != 0
                 && await _repository.Select.AnyAsync(p => p.Id == menu.ParentId && p.Type == MenuType.Api))
             {
-                throw new BusException(ResultCodeConstant.MENU_API_CANNOT_AS_PARENT, "接口不能作为父目录");
+                throw new BusException(ResultCode.MENU_API_CANNOT_AS_PARENT, "接口不能作为父目录");
             }
             //更新sort
             if (request.Sort == 0)
@@ -230,7 +230,7 @@ namespace OnceMi.Framework.Service.Admin
                 Views view = await _repository.Orm.Select<Views>().Where(p => p.Id == menu.ViewId && !p.IsDeleted).FirstAsync();
                 if (view == null)
                 {
-                    throw new BusException(ResultCodeConstant.MENU_VIEW_NOT_EXISTS, "指定的视图不存在");
+                    throw new BusException(ResultCode.MENU_VIEW_NOT_EXISTS, "指定的视图不存在");
                 }
             }
             //验证Api
@@ -239,7 +239,7 @@ namespace OnceMi.Framework.Service.Admin
                 Apis api = await _repository.Orm.Select<Apis>().Where(p => p.Id == menu.ApiId).FirstAsync();
                 if (api == null)
                 {
-                    throw new BusException(ResultCodeConstant.MENU_API_NOT_EXISTS, "指定的Api不存在");
+                    throw new BusException(ResultCode.MENU_API_NOT_EXISTS, "指定的Api不存在");
                 }
             }
             //set value
@@ -274,17 +274,17 @@ namespace OnceMi.Framework.Service.Admin
             Menus menu = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (menu == null)
             {
-                throw new BusException(ResultCodeConstant.MENU_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.MENU_NOT_EXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.MENU_PARENTS_NOT_EXISTS, "父目录不存在");
+                throw new BusException(ResultCode.MENU_PARENTS_NOT_EXISTS, "父目录不存在");
             }
             if (menu.ParentId != null && menu.ParentId != 0
                 && await _repository.Select.AnyAsync(p => p.Id == menu.ParentId && p.Type == MenuType.Api))
             {
-                throw new BusException(ResultCodeConstant.MENU_API_CANNOT_AS_PARENT, "接口不能作为父目录");
+                throw new BusException(ResultCode.MENU_API_CANNOT_AS_PARENT, "接口不能作为父目录");
             }
 
             //set value
@@ -298,7 +298,7 @@ namespace OnceMi.Framework.Service.Admin
                 Views view = await _repository.Orm.Select<Views>().Where(p => p.Id == menu.ViewId && !p.IsDeleted).FirstAsync();
                 if (view == null)
                 {
-                    throw new BusException(ResultCodeConstant.MENU_VIEW_NOT_EXISTS, "指定的视图不存在。");
+                    throw new BusException(ResultCode.MENU_VIEW_NOT_EXISTS, "指定的视图不存在。");
                 }
             }
             //验证api是否正确
@@ -307,7 +307,7 @@ namespace OnceMi.Framework.Service.Admin
                 Apis api = await _repository.Orm.Select<Apis>().Where(p => p.Id == menu.ApiId).FirstAsync();
                 if (api == null)
                 {
-                    throw new BusException(ResultCodeConstant.MENU_API_NOT_EXISTS, "指定的Api不存在。");
+                    throw new BusException(ResultCode.MENU_API_NOT_EXISTS, "指定的Api不存在。");
                 }
             }
             await _repository.UpdateAsync(menu);
@@ -330,7 +330,7 @@ namespace OnceMi.Framework.Service.Admin
 
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.MENU_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.MENU_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
             List<Menus> allMenus = await _repository
                 .Where(p => !p.IsDeleted)

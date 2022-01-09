@@ -6,10 +6,8 @@ using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.Model;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
-using System;
-using System.Linq;
+using OnceMi.Framework.Util.User;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Filters
 {
@@ -19,30 +17,17 @@ namespace OnceMi.Framework.Extension.Filters
     public class GlobalPermissionFilter : IAsyncAuthorizationFilter
     {
         private readonly IAuthorizationService _authorization;
-        private readonly RedisClient _redisClient;
+        private readonly RedisClient _redis;
 
         public GlobalPermissionFilter(IAuthorizationService authorization
             , RedisClient redisClient)
         {
             this._authorization = authorization ?? throw new ArgumentNullException(nameof(authorization));
-            this._redisClient = redisClient ?? throw new ArgumentNullException(nameof(redisClient));
+            this._redis = redisClient ?? throw new ArgumentNullException(nameof(redisClient));
         }
 
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
-            //if (context.HttpContext.Request.Path.Value.Contains("login", StringComparison.OrdinalIgnoreCase)
-            //    || context.HttpContext.Request.Path.Value.Contains("QueryUserRolePermission", StringComparison.OrdinalIgnoreCase)
-            //    || context.HttpContext.Request.Path.Value.Contains("QueryViewMenu", StringComparison.OrdinalIgnoreCase))
-            //{
-
-            //}
-            //else
-            //{
-            //    context.Result = new UnauthorizedResult();
-            //    return;
-            //}
-
-
             //检查是否为作业请求
             var isJobRequest = context.ActionDescriptor.EndpointMetadata?.Any(p => p is JobAttribute);
             if (isJobRequest == true)
@@ -51,13 +36,13 @@ namespace OnceMi.Framework.Extension.Filters
                 string jobKey = context.HttpContext.Request.Headers["JobKey"];
                 if (string.IsNullOrEmpty(jobKey))
                 {
-                    context.Result = BadJobResult("请求被拒绝，此接口仅允许作业管理器请求。");
+                    context.Result = BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
                     return;
                 }
-                string jobValue = _redisClient.Get(CacheConstant.GetJobApiKey(jobKey));
+                string jobValue = _redis.Get(CacheConstant.GetJobApiKey(jobKey));
                 if (string.IsNullOrEmpty(jobValue) || !DateTime.TryParse(jobValue, out DateTime _))
                 {
-                    context.Result = BadJobResult("请求被拒绝，此接口仅允许作业管理器请求。");
+                    context.Result = BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
                     return;
                 }
             }
@@ -79,6 +64,18 @@ namespace OnceMi.Framework.Extension.Filters
                     return;
                 }
             }
+            //JWT黑名单，用户登出或删除之后，有效期内的JWT会被存入redis中
+            string jwt = context.HttpContext.GetToken();
+            if (string.IsNullOrWhiteSpace(jwt))
+            {
+                context.Result = BuildResult(HttpStatusCode.Unauthorized);
+                return;
+            }
+            if (_redis.Exists(CacheConstant.GetJwtBlackListKey(jwt)))
+            {
+                context.Result = BuildResult(HttpStatusCode.Unauthorized);
+                return;
+            }
             //自定义授权验证
             var result = await this._authorization.AuthorizeAsync(context.HttpContext.User, null, new GlobalPermissionRequirement()
             {
@@ -90,16 +87,16 @@ namespace OnceMi.Framework.Extension.Filters
             }
         }
 
-        private IActionResult BadJobResult(string message)
+        private IActionResult BuildResult(HttpStatusCode code, string message = "")
         {
             return new JsonResult(new ResultObject<object>()
             {
-                Code = (int)HttpStatusCode.BadRequest,
-                Message = message,
+                Code = (int)code,
+                Message = string.IsNullOrEmpty(message) ? code.ToString() : message,
                 Data = null
             })
             {
-                StatusCode = (int)HttpStatusCode.BadRequest,
+                StatusCode = (int)code,
             };
         }
     }

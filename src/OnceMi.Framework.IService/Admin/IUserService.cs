@@ -77,6 +77,13 @@ namespace OnceMi.Framework.IService.Admin
         Task Delete(List<long> ids);
 
         /// <summary>
+        /// 禁用用户Token
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        Task DisableUserToken(long userId);
+
+        /// <summary>
         /// 获取用户头像
         /// </summary>
         /// <param name="name"></param>

@@ -145,7 +145,7 @@ namespace OnceMi.Framework.Service.Admin
             if ((view.ParentId != null && view.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == view.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.VIEW_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.VIEW_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             view.ParentId = view.ParentId == 0 ? null : view.ParentId;
             view.Id = _idGenerator.NewId();
@@ -163,16 +163,16 @@ namespace OnceMi.Framework.Service.Admin
             Views view = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (view == null)
             {
-                throw new BusException(ResultCodeConstant.VIEW_UPDATE_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.VIEW_UPDATE_NOT_EXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.VIEW_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.VIEW_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             if (request.ParentId != null && request.ParentId != 0 && request.Id == request.ParentId)
             {
-                throw new BusException(ResultCodeConstant.VIEW_PARENTS_CANNOT_SELF, "父条目不能为本身");
+                throw new BusException(ResultCode.VIEW_PARENTS_CANNOT_SELF, "父条目不能为本身");
             }
             view = request.MapTo(view);
             view.ParentId = request.ParentId == 0 ? null : request.ParentId;
@@ -199,7 +199,7 @@ namespace OnceMi.Framework.Service.Admin
 
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.VIEW_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.VIEW_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
             List<Views> allViews = await _repository
                 .Where(p => !p.IsDeleted)

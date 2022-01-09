@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 用户表
+    /// </summary>
     [Table(Name = nameof(Users))]
     [Index("index_{TableName}_" + nameof(UserName), nameof(UserName), true)]
     public class Users : IBaseEntity

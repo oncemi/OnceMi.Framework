@@ -4,10 +4,6 @@ using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Util.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Authorizations
 {
@@ -18,21 +14,18 @@ namespace OnceMi.Framework.Extension.Authorizations
         private readonly IRoleService _rolesService;
         private readonly IPermissionService _permissionService;
         private readonly IMenuService _menusService;
-        private readonly IUserService _usersService;
 
         public PermissionAuthorizationHandler(ILogger<PermissionAuthorizationHandler> logger
             , IHttpContextAccessor accessor
             , IRoleService rolesService
             , IPermissionService permissionService
-            , IMenuService menusService
-            , IUserService usersService)
+            , IMenuService menusService)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
             _rolesService = rolesService ?? throw new ArgumentNullException(nameof(rolesService));
             _permissionService = permissionService ?? throw new ArgumentNullException(nameof(permissionService));
             _menusService = menusService ?? throw new ArgumentNullException(nameof(menusService));
-            _usersService = usersService ?? throw new ArgumentNullException(nameof(usersService));
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, GlobalPermissionRequirement requirement)
@@ -47,8 +40,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 context.Fail();
                 return;
             }
-
-            //判断用户是否存在或被删除
+            //获取用户Id
             (string idStr, long? id) = context.User.GetSubject();
             if (id == null)
             {
@@ -56,14 +48,6 @@ namespace OnceMi.Framework.Extension.Authorizations
                 context.Fail();
                 return;
             }
-            //可选从数据库判断用户状态，因为accessToken过期时间为1小时，用户被禁用后，最多一个小时候无法访问
-            //UserItemResponse user = await _usersService.Query(id.Value);
-            //if(user == null || user.Status != UserStatus.Enable)
-            //{
-            //    _logger.LogWarning($"{method} {path}|Can not get user info from db.");
-            //    context.Fail();
-            //    return;
-            //}
             //判断角色是否存在
             List<long> roleIds = context.User.GetRoles();
             if (roleIds == null || roleIds.Count == 0)
@@ -72,14 +56,14 @@ namespace OnceMi.Framework.Extension.Authorizations
                 context.Fail();
                 return;
             }
-            //判断是否为开发人员
-            if (await _rolesService.IsDeveloper(roleIds) != null)
+            //判断是否包含自定义授权
+            if (requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is SkipAuthorizationAttribute) == true)
             {
                 context.Succeed(requirement);
                 return;
             }
-            //判断是否包含自定义授权
-            if (requirement.ActionDescriptor.EndpointMetadata?.Any(p => p is SkipAuthorizationAttribute) == true)
+            //判断是否为开发人员
+            if (await _rolesService.IsDeveloper(roleIds) != null)
             {
                 context.Succeed(requirement);
                 return;
@@ -130,8 +114,8 @@ namespace OnceMi.Framework.Extension.Authorizations
                 return false;
             for (int i = 0; i < menuPaths.Length; i++)
             {
-                if (menu.Type == MenuType.Api 
-                    && IsParameter(menuPaths[i]) 
+                if (menu.Type == MenuType.Api
+                    && IsParameter(menuPaths[i])
                     && CompareParameter(menuPaths[i], paths[i], menu.Api.ParameterDictionaries))
                     continue;
                 if (!paths[i].Equals(menuPaths[i], StringComparison.OrdinalIgnoreCase))

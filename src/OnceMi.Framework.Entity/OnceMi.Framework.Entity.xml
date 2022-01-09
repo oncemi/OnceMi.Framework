@@ -4,6 +4,11 @@
         <name>OnceMi.Framework.Entity</name>
     </assembly>
     <members>
+        <member name="T:OnceMi.Framework.Entity.Admin.Apis">
+            <summary>
+            接口
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Apis.OperationId">
             <summary>
             操作Id
@@ -67,6 +72,11 @@
         <member name="T:OnceMi.Framework.Entity.Admin.ApiCreateMethod">
             <summary>
             创建方式
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Configs">
+            <summary>
+            配置项
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Configs.Key">
@@ -234,6 +244,11 @@
             初始化
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Jobs">
+            <summary>
+            定时任务表
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Jobs.Name">
             <summary>
             名称
@@ -374,6 +389,11 @@
             等待中
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.LoginHistory">
+            <summary>
+            登录历史记录
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.IP">
             <summary>
             IP
@@ -417,6 +437,11 @@
         <member name="P:OnceMi.Framework.Entity.Admin.LoginHistory.Message">
             <summary>
             操作消息
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Menus">
+            <summary>
+            菜单表
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Menus.Name">
@@ -609,6 +634,11 @@
             工作组
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.RolePermissions">
+            <summary>
+            角色权限表
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.RolePermissions.RoleId">
             <summary>
             角色Id
@@ -674,6 +704,11 @@
             Users导航属性
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.UpLoadFiles">
+            <summary>
+            上传文件表
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.UpLoadFiles.Content">
             <summary>
             Base64 存放
@@ -712,6 +747,21 @@
         <member name="F:OnceMi.Framework.Entity.Admin.FileAccessMode.Inside">
             <summary>
             内部
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.UserOrganize">
+            <summary>
+            用户所属组织
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.UserRole">
+            <summary>
+            用户角色
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Users">
+            <summary>
+            用户表
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Users.UserName">
@@ -830,6 +880,11 @@
             用户性别
             </summary>
         </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.UserToken">
+            <summary>
+            用户Token表
+            </summary>
+        </member>
         <member name="P:OnceMi.Framework.Entity.Admin.UserToken.Token">
             <summary>
             Token
@@ -843,6 +898,11 @@
         <member name="P:OnceMi.Framework.Entity.Admin.UserToken.RefeshTokenExpiration">
             <summary>
             RefeshToken到期时间
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Admin.Views">
+            <summary>
+            视图表
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Admin.Views.Path">
@@ -973,6 +1033,11 @@
         <member name="P:OnceMi.Framework.Entity.Article.ArticleCovers.Url">
             <summary>
             链接
+            </summary>
+        </member>
+        <member name="T:OnceMi.Framework.Entity.Article.Articles">
+            <summary>
+            文章
             </summary>
         </member>
         <member name="P:OnceMi.Framework.Entity.Article.Articles.Title">

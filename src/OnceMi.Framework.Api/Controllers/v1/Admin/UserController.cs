@@ -148,7 +148,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         }
 
         /// <summary>
-        /// 获取随机头像
+        /// 根据name获取头像
         /// </summary>
         /// <param name="name"></param>
         /// <param name="size"></param>

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using FreeRedis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OnceMi.AspNetCore.IdGenerator;
+using OnceMi.Framework.Config;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
@@ -16,15 +18,8 @@ using OnceMi.Framework.Util.Images;
 using OnceMi.Framework.Util.Security;
 using OnceMi.Framework.Util.User;
 using SkiaSharp;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
@@ -36,19 +31,25 @@ namespace OnceMi.Framework.Service.Admin
         private readonly IUpLoadFileService _upLoadFileService;
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
+        private readonly RedisClient _redis;
+        private readonly ConfigManager _config;
 
         public UserService(IUserRepository repository
             , ILogger<UserService> logger
             , IIdGeneratorService idGenerator
             , IUpLoadFileService upLoadFileService
             , IHttpContextAccessor accessor
-            , IMapper mapper)
+            , IMapper mapper
+            , RedisClient redis
+            , ConfigManager config)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _upLoadFileService = upLoadFileService ?? throw new ArgumentNullException(nameof(upLoadFileService));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _redis = redis ?? throw new ArgumentNullException(nameof(redis));
+            _config = config ?? throw new ArgumentNullException(nameof(config));
             _accessor = accessor;
         }
 
@@ -199,7 +200,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (!IsUserName(request.UserName))
             {
-                throw new BusException(ResultCodeConstant.USER_NAME_INVALID, "用户名只能由数字和字母组成");
+                throw new BusException(ResultCode.USER_NAME_INVALID, "用户名只能由数字和字母组成");
             }
             Users user = _mapper.Map<Users>(request);
             if (user == null)
@@ -209,19 +210,19 @@ namespace OnceMi.Framework.Service.Admin
             //判断用户是否存在
             if (await _repository.Select.AnyAsync(p => p.UserName == request.UserName && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.USER_NAME_EXISTS, $"用户名“{request.UserName}”已存在");
+                throw new BusException(ResultCode.USER_NAME_EXISTS, $"用户名“{request.UserName}”已存在");
             }
             //判断电话是否重复
             if (!string.IsNullOrEmpty(request.PhoneNumber)
                 && await _repository.Select.AnyAsync(p => p.PhoneNumber == request.PhoneNumber && p.PhoneNumberConfirmed && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.USER_PHONE_EXISTS, $"当前电话号码已被注册");
+                throw new BusException(ResultCode.USER_PHONE_EXISTS, $"当前电话号码已被注册");
             }
             //判断邮箱是否被注册
             if (!string.IsNullOrEmpty(request.Email)
                 && await _repository.Select.AnyAsync(p => p.Email == request.Email && p.EmailConfirmed && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.USER_EMAIL_EXISTS, $"当前邮箱已被注册");
+                throw new BusException(ResultCode.USER_EMAIL_EXISTS, $"当前邮箱已被注册");
             }
             //创建信息
             user.Id = _idGenerator.NewId();
@@ -273,30 +274,30 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (!IsUserName(request.UserName))
             {
-                throw new BusException(ResultCodeConstant.USER_NAME_INVALID, "用户名只能由数字和字母组成");
+                throw new BusException(ResultCode.USER_NAME_INVALID, "用户名只能由数字和字母组成");
             }
             //判断用户是否存在
             Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
             if (user == null)
             {
-                throw new BusException(ResultCodeConstant.USER_UPDATE_NOT_EXISTS, $"修改的用户不存在");
+                throw new BusException(ResultCode.USER_UPDATE_NOT_EXISTS, $"修改的用户不存在");
             }
             //判断用户是否存在
             if (await _repository.Select.AnyAsync(p => p.UserName == request.UserName && !p.IsDeleted && p.Id != request.Id))
             {
-                throw new BusException(ResultCodeConstant.USER_NAME_EXISTS, $"用户名“{request.UserName}”已存在");
+                throw new BusException(ResultCode.USER_NAME_EXISTS, $"用户名“{request.UserName}”已存在");
             }
             //判断电话是否重复
             if (!string.IsNullOrEmpty(request.PhoneNumber)
                 && await _repository.Select.AnyAsync(p => p.PhoneNumber == request.PhoneNumber && p.PhoneNumberConfirmed && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.USER_PHONE_EXISTS, $"当前电话号码已被注册");
+                throw new BusException(ResultCode.USER_PHONE_EXISTS, $"当前电话号码已被注册");
             }
             //判断邮箱是否被注册
             if (!string.IsNullOrEmpty(request.Email)
                 && await _repository.Select.AnyAsync(p => p.Email == request.Email && p.EmailConfirmed && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.USER_EMAIL_EXISTS, $"当前邮箱已被注册");
+                throw new BusException(ResultCode.USER_EMAIL_EXISTS, $"当前邮箱已被注册");
             }
             //map会清理掉password
             string oldPwd = user.Password;
@@ -340,6 +341,11 @@ namespace OnceMi.Framework.Service.Admin
                 await _repository.UpdateAsync(user);
                 await UpdateUserRoles(user.Id, request.UserRoles);
                 await UpdateUserOrganizes(user.Id, request.UserOrganizes);
+                //禁用用户
+                if (request.Status != 0 && request.Status != UserStatus.Enable)
+                {
+                    await DisableUserToken(user.Id);
+                }
             }
             catch
             {
@@ -368,13 +374,18 @@ namespace OnceMi.Framework.Service.Admin
             }
         }
 
+        [Transaction]
         public async Task UpdateStatus(UpdateUserStatusRequest request)
         {
+            if (request.Status == 0)
+            {
+                throw new BusException(ResultCode.USER_UNKNOW_STATUS, $"未知的用户状态");
+            }
             //判断用户是否存在
             Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
             if (user == null)
             {
-                throw new BusException(ResultCodeConstant.USER_UPDATE_NOT_EXISTS, $"用户不存在！");
+                throw new BusException(ResultCode.USER_UPDATE_NOT_EXISTS, $"用户不存在");
             }
             if (user.Status != request.Status)
             {
@@ -383,6 +394,10 @@ namespace OnceMi.Framework.Service.Admin
                 user.Status = request.Status;
                 await _repository.UpdateAsync(user);
             }
+            if (request.Status != UserStatus.Enable)
+            {
+                await DisableUserToken(user.Id);
+            }
         }
 
         public async Task UpdatePassword(UpdateUserPasswordRequest request)
@@ -390,12 +405,12 @@ namespace OnceMi.Framework.Service.Admin
             Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).ToOneAsync();
             if (user == null)
             {
-                throw new BusException(ResultCodeConstant.USER_UPDATE_NOT_EXISTS, $"用户不存在");
+                throw new BusException(ResultCode.USER_UPDATE_NOT_EXISTS, $"用户不存在");
             }
             if (false)
             //if (!user.AuthenticatePassword(request.OldPassword))
             {
-                throw new BusException(ResultCodeConstant.USER_OLD_PWD_INVALID, $"旧密码错误");
+                throw new BusException(ResultCode.USER_OLD_PWD_INVALID, $"旧密码错误");
             }
             string pwd = user.CreatePassword(request.Password);
             await _repository.Where(p => p.Id == request.Id)
@@ -415,16 +430,74 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.USER_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.USER_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
+            //设置删除状态
             await _repository.Where(p => ids.Contains(p.Id))
                 .ToUpdate()
                 .Set(p => p.IsDeleted, true)
                 .Set(p => p.Status, UserStatus.Disable)
                 .Set(p => p.UpdatedUserId, _accessor?.HttpContext?.User?.GetSubject().id)
                 .ExecuteAffrowsAsync();
+            //设置refesh token过期
+            await _repository.Orm.Select<UserToken>()
+                .Where(p => ids.Contains(p.UserId))
+                .ToUpdate()
+                .Set(p => p.RefeshTokenExpiration, DateTime.MinValue)
+                .Set(p => p.IsDeleted, true)
+                .ExecuteAffrowsAsync();
+            //设置jwt黑名单
+            List<UserToken> tokens = await _repository.Orm.Select<UserToken>()
+                .Where(p => ids.Contains(p.UserId))
+                .ToListAsync();
+            if (tokens != null && tokens.Any())
+            {
+                foreach (var item in tokens)
+                {
+                    //已经过期就不管了
+                    if (item.RefeshTokenExpiration < DateTime.Now)
+                    {
+                        continue;
+                    }
+                    //在Redis中保存token黑名单
+                    _redis.Set(CacheConstant.GetJwtBlackListKey(item.Token), item, TimeSpan.FromSeconds(_config.TokenManagement.AccessExpiration));
+                }
+            }
         }
 
+        /// <summary>
+        /// 根据Id禁用用户Token
+        /// </summary>
+        /// <param name="userId"></param>
+        public async Task DisableUserToken(long userId)
+        {
+            UserToken token = await _repository.Orm.Select<UserToken>()
+                .Where(p => p.UserId == userId && !p.IsDeleted)
+                .ToOneAsync();
+            if (token == null || token.RefeshTokenExpiration < DateTime.Now)
+            {
+                return;
+            }
+            //设置refesh token为过期状态
+            int count = await _repository.Orm.Select<UserToken>()
+                .Where(p => p.Id == token.Id)
+                .ToUpdate()
+                .Set(p => p.RefeshTokenExpiration, DateTime.MinValue)
+                .ExecuteAffrowsAsync();
+            if (count <= 0)
+            {
+                _logger.LogWarning($"Set user refesh token expired failed. User id is {userId}");
+            }
+            //在Redis中保存token黑名单
+            _redis.Set(CacheConstant.GetJwtBlackListKey(token.Token), token, TimeSpan.FromSeconds(_config.TokenManagement.AccessExpiration));
+        }
+
+        /// <summary>
+        /// 获取用户头像
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         public byte[] GetAvatar(string name, int size)
         {
             if (size < 30 || size > 1500)

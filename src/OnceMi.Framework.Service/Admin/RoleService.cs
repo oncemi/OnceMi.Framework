@@ -197,15 +197,15 @@ namespace OnceMi.Framework.Service.Admin
             if ((role.ParentId != null && role.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == role.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ROLE_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.ROLE_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Code == role.Code && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ROLE_CODE_EXISTS, $"当前添加的角色编码‘{role.Code}’已存在");
+                throw new BusException(ResultCode.ROLE_CODE_EXISTS, $"当前添加的角色编码‘{role.Code}’已存在");
             }
             if (!await _repository.Orm.Select<Organizes>().AnyAsync(p => p.Id == request.OrganizeId && p.IsEnabled && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ROLE_ORGANIZES_NOT_EXISTS, $"所选组织不存在或已被停用");
+                throw new BusException(ResultCode.ROLE_ORGANIZES_NOT_EXISTS, $"所选组织不存在或已被停用");
             }
 
             role.ParentId = role.ParentId == 0 ? null : role.ParentId;
@@ -229,20 +229,20 @@ namespace OnceMi.Framework.Service.Admin
             Roles role = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (role == null)
             {
-                throw new BusException(ResultCodeConstant.ROLE_UPDATE_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.ROLE_UPDATE_NOT_EXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ROLE_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.ROLE_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Code == request.Code && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ROLE_CODE_EXISTS, $"当前修改的角色编码‘{request.Code}’已存在");
+                throw new BusException(ResultCode.ROLE_CODE_EXISTS, $"当前修改的角色编码‘{request.Code}’已存在");
             }
             if (!await _repository.Orm.Select<Organizes>().AnyAsync(p => p.Id == request.OrganizeId && p.IsEnabled && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ROLE_ORGANIZES_NOT_EXISTS, $"所选组织不存在或已被停用");
+                throw new BusException(ResultCode.ROLE_ORGANIZES_NOT_EXISTS, $"所选组织不存在或已被停用");
             }
 
             role = request.MapTo(role);
@@ -289,7 +289,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.ROLE_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.ROLE_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
             List<Roles> allRoles = await _repository
                 .Where(p => !p.IsDeleted)
@@ -306,7 +306,7 @@ namespace OnceMi.Framework.Service.Admin
                 List<string> inUseRoleNames = allRoles.Where(p => userRoles.Any(q => q.RoleId == p.Id))
                     .Select(p => p.Name)
                     .ToList();
-                throw new BusException(ResultCodeConstant.ROLE_USERD, $"删除失败，角色{string.Join(',', inUseRoleNames)}已经被分配至用户");
+                throw new BusException(ResultCode.ROLE_USERD, $"删除失败，角色{string.Join(',', inUseRoleNames)}已经被分配至用户");
             }
             List<long> delIds = new List<long>();
             foreach (var item in ids)

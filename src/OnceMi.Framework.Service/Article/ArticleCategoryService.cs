@@ -139,11 +139,11 @@ namespace OnceMi.Framework.Service.Article
             if ((category.ParentId != null && category.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == category.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.ARITICLECATEGORY_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Name == category.Name && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_NAME_EXISTS, $"当前添加的分类名称‘{category.Name}’已存在");
+                throw new BusException(ResultCode.ARITICLECATEGORY_NAME_EXISTS, $"当前添加的分类名称‘{category.Name}’已存在");
             }
             category.ParentId = category.ParentId == 0 ? null : category.ParentId;
             category.Id = _idGenerator.NewId();
@@ -160,16 +160,16 @@ namespace OnceMi.Framework.Service.Article
             ArticleCategories category = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (category == null)
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_UPDATE_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.ARITICLECATEGORY_UPDATE_NOT_EXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_PARENTS_NOT_EXISTS, "父条目不存在");
+                throw new BusException(ResultCode.ARITICLECATEGORY_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Name == request.Name && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_NAME_EXISTS, $"当前添加的分类名称‘{category.Name}’已存在");
+                throw new BusException(ResultCode.ARITICLECATEGORY_NAME_EXISTS, $"当前添加的分类名称‘{category.Name}’已存在");
             }
             category = request.MapTo(category);
             category.ParentId = request.ParentId == 0 ? null : request.ParentId;
@@ -182,7 +182,7 @@ namespace OnceMi.Framework.Service.Article
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_DELETE_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.ARITICLECATEGORY_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
             List<ArticleCategories> allCategories = await _repository
                 .Where(p => !p.IsDeleted)
@@ -246,7 +246,7 @@ namespace OnceMi.Framework.Service.Article
             }
             if (item.IsLocked)
             {
-                throw new BusException(ResultCodeConstant.ARITICLECATEGORY_IS_LOCKED, "当前分组为锁定分组，无法被删除");
+                throw new BusException(ResultCode.ARITICLECATEGORY_IS_LOCKED, "当前分组为锁定分组，无法被删除");
             }
             if (!dest.Contains(item.Id))
             {

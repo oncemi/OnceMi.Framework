@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FreeRedis;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -15,12 +16,10 @@ using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.Date;
 using OnceMi.Framework.Util.Http;
 using OnceMi.Framework.Util.Security;
-using System;
-using System.Collections.Generic;
+using OnceMi.Framework.Util.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
@@ -30,6 +29,7 @@ namespace OnceMi.Framework.Service.Admin
         private readonly IUserService _userService;
         private readonly IUserRepository _repository;
         private readonly IIdGeneratorService _idGenerator;
+        private readonly RedisClient _redis;
         private readonly ConfigManager _config;
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _accessor;
@@ -38,6 +38,7 @@ namespace OnceMi.Framework.Service.Admin
             , IUserService userService
             , IUserRepository repository
             , IIdGeneratorService idGenerator
+            , RedisClient redis
             , ConfigManager config
             , IMapper mapper
             , IHttpContextAccessor accessor)
@@ -46,26 +47,27 @@ namespace OnceMi.Framework.Service.Admin
             _userService = userService ?? throw new ArgumentNullException(nameof(userService));
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
+            _redis = redis ?? throw new ArgumentNullException(nameof(redis));
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
         }
 
         [Transaction]
-        public async Task<LoginResponse> Authenticate(LoginRequest request)
+        public async Task<LoginResponse> Login(LoginRequest request)
         {
             if (_config.IdentityServer.IsEnabledIdentityServer)
             {
-                throw new BusException(ResultCodeConstant.ACT_FUNCTION_DISABLED_NOT_SUPPORT, "当前应用启用了IdentityServer认证中心，此功能被禁用");
+                throw new BusException(ResultCode.ACT_FUNCTION_DISABLED_NOT_SUPPORT, "当前应用启用了IdentityServer认证中心，此功能被禁用");
             }
             Users user = await _userService.Query(request.Username, true);
             if (user == null)
             {
-                throw new BusException(ResultCodeConstant.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
+                throw new BusException(ResultCode.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
             }
             if (!user.AuthenticatePassword(request.Password))
             {
-                throw new BusException(ResultCodeConstant.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
+                throw new BusException(ResultCode.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
             }
             //build response
             var response = await BuildJwtToken(user);
@@ -74,47 +76,56 @@ namespace OnceMi.Framework.Service.Admin
             return response;
         }
 
+        /// <summary>
+        /// 登出
+        /// </summary>
+        /// <returns></returns>
+        public async Task Logout()
+        {
+            if (_config.IdentityServer.IsEnabledIdentityServer)
+            {
+                throw new BusException(ResultCode.ACT_FUNCTION_DISABLED_NOT_SUPPORT, "当前应用启用了IdentityServer认证中心，此功能被禁用");
+            }
+            long? userId = _accessor?.HttpContext?.User?.GetSubject().id;
+            if (userId == null || userId == 0)
+            {
+                throw new BusException(ResultCode.ACT_GET_USERID_FAILED, "获取登录用户信息失败，用户可能未登录");
+            }
+            //禁用用户Token
+            await _userService.DisableUserToken(userId.Value);
+            //写退出日志
+            await WriteSignHistory(userId.Value, LoginHistoryType.Logout);
+        }
+
         [Transaction]
         public async Task<LoginResponse> RefreshToken(RefeshTokenRequest request)
         {
+            if (_config.IdentityServer.IsEnabledIdentityServer)
+            {
+                throw new BusException(ResultCode.ACT_FUNCTION_DISABLED_NOT_SUPPORT, "当前应用启用了IdentityServer认证中心，此功能被禁用");
+            }
             UserToken userToken = await _repository.Orm.Select<UserToken>()
                 .Where(p => p.RefeshToken == request.Token && !p.IsDeleted)
                 .NoTracking()
                 .ToOneAsync();
             if (userToken == null)
             {
-                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_FAILED, "获取秘钥失败，无效的请求秘钥");
+                throw new BusException(ResultCode.ACT_REFESH_TOKEN_FAILED, "获取秘钥失败，无效的请求秘钥");
             }
             if (userToken.RefeshTokenExpiration < DateTime.Now)
             {
-                throw new BusException(ResultCodeConstant.ACT_REFESH_TOKEN_TIMEOUT, "登录已过期，请重新登录");
+                throw new BusException(ResultCode.ACT_REFESH_TOKEN_TIMEOUT, "登录已过期，请重新登录");
             }
             Users user = await _userService.Query(userToken.UserId.ToString(), true);
             if (user == null)
             {
-                throw new BusException(ResultCodeConstant.ACT_USER_DISABLED, "用户被删除或停用");
+                throw new BusException(ResultCode.ACT_USER_DISABLED, "用户被删除或停用");
             }
             LoginResponse response = await BuildJwtToken(user);
             return response;
         }
 
-        public async Task RevokeToken(RevokeTokenRequest request)
-        {
-            UserToken token = await _repository.Orm.Select<UserToken>()
-                .Where(p => p.RefeshToken == request.Token && !p.IsDeleted)
-                .ToOneAsync();
-            if (token == null)
-            {
-                return;
-            }
-            await _repository.Orm.Select<UserToken>()
-                .Where(p => p.Id == token.Id)
-                .ToUpdate()
-                .Set(p => p.IsDeleted, true)
-                .ExecuteAffrowsAsync();
-            //写退出日志
-            await WriteSignHistory(token.UserId, LoginHistoryType.Logout);
-        }
+        #region Private methods
 
         private async Task<LoginResponse> BuildJwtToken(Users user)
         {
@@ -228,5 +239,8 @@ namespace OnceMi.Framework.Service.Admin
             };
             await _repository.Orm.Insert(history).ExecuteAffrowsAsync();
         }
+
+        #endregion
+
     }
 }

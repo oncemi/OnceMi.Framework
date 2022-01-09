@@ -2,6 +2,9 @@
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 登录历史记录
+    /// </summary>
     [Table(Name = nameof(LoginHistory))]
     public class LoginHistory : IBaseEntity
     {

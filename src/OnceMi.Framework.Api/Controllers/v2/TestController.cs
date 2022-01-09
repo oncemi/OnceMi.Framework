@@ -4,6 +4,7 @@ using OnceMi.AspNetCore.MQ;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
+using OnceMi.Framework.Model.Exception;
 
 namespace OnceMi.Framework.Api.Controllers.v2
 {

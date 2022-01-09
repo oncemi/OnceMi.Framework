@@ -47,10 +47,10 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                             .UseAutoSyncStructure(syncStructure);
                         //如果数据库不存在，那么自动创建数据库
                         if (syncStructure && (item.DbType == FreeSql.DataType.MySql
-                            || item.DbType == FreeSql.DataType.SqlServer
-                            || item.DbType == FreeSql.DataType.PostgreSQL
-                            || item.DbType == FreeSql.DataType.Sqlite
-                            || item.DbType == FreeSql.DataType.OdbcSqlServer))
+                        || item.DbType == FreeSql.DataType.SqlServer
+                        || item.DbType == FreeSql.DataType.PostgreSQL
+                        || item.DbType == FreeSql.DataType.Sqlite
+                        || item.DbType == FreeSql.DataType.OdbcSqlServer))
                         {
                             fsqlBuilder.CreateDatabaseIfNotExists();
                         }

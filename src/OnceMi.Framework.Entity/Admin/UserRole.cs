@@ -2,6 +2,9 @@
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 用户角色
+    /// </summary>
     [Table(Name = nameof(UserRole))]
     public class UserRole : IBaseEntity
     {

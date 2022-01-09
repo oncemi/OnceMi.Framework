@@ -1,14 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
-using OnceMi.Framework.Entity.Admin;
+﻿using NLog;
 using OnceMi.Framework.Extension.Job;
-using OnceMi.Framework.IService.Admin;
-using OnceMi.Framework.Util.Reflection;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Middlewares
 {

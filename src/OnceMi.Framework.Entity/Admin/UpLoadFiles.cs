@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 上传文件表
+    /// </summary>
     [Table(Name = nameof(UpLoadFiles))]
     public class UpLoadFiles : IBaseEntity<long>
     {

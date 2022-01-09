@@ -87,6 +87,11 @@
             配置项缓存
             </summary>
         </member>
+        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.JwtBlackListKey">
+            <summary>
+            禁用或者删除用户,JWT禁用黑名单
+            </summary>
+        </member>
         <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetRoleKey(System.String)">
             <summary>
             获取角色主键
@@ -101,6 +106,13 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJobKey(System.Int64)">
+            <summary>
+            获取作业key
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
         <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJobNoticeTimeKey(System.Int64)">
             <summary>
             获取作业执行失败通知key
@@ -113,6 +125,13 @@
             获取配置项的缓存keu
             </summary>
             <param name="key">配置项key</param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJwtBlackListKey(System.String)">
+            <summary>
+            JWT禁用黑名单
+            </summary>
+            <param name="jwt">传入的用户jwt</param>
             <returns></returns>
         </member>
         <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.IsSuccessful">

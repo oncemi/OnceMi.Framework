@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 菜单表
+    /// </summary>
     [Table(Name = nameof(Menus))]
     public class Menus : IBaseEntity
     {

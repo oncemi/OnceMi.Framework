@@ -184,7 +184,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (!await _repository.Orm.Select<JobGroups>().AnyAsync(p => p.Id == request.GroupId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
+                throw new BusException(ResultCode.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
             }
             job.Id = _idGenerator.NewId();
             job.FireCount = 0;
@@ -196,7 +196,7 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.InsertAsync(job);
             var result = await QueryJobById(job.Id);
             if (result == null)
-                throw new BusException(ResultCodeConstant.JOB_DATA_SAVE_ERROR, "保存任务信息到数据库失败");
+                throw new BusException(ResultCode.JOB_DATA_SAVE_ERROR, "保存任务信息到数据库失败");
             return result;
         }
 
@@ -209,11 +209,11 @@ namespace OnceMi.Framework.Service.Admin
             Jobs job = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (job == null)
             {
-                throw new BusException(ResultCodeConstant.JOB_UPDATE_ITEM_NOT_EXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.JOB_UPDATE_ITEM_NOT_EXISTS, "修改的条目不存在");
             }
             if (!await _repository.Orm.Select<JobGroups>().AnyAsync(p => p.Id == request.GroupId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
+                throw new BusException(ResultCode.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
             }
             //set value
             job = request.MapTo(job);
@@ -318,14 +318,14 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.JOB_DELETE_ITEM_NOT_EXISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.JOB_DELETE_ITEM_NOT_EXISTS, "没有要删除的条目");
             }
             foreach (var item in ids)
             {
                 var job = await QueryJobById(item);
                 if (job != null && job.Status != JobStatus.Stopped)
                 {
-                    throw new BusException(ResultCodeConstant.JOB_IS_RUNNING, $"任务[{job.Name}]未停止，请先停止任务");
+                    throw new BusException(ResultCode.JOB_IS_RUNNING, $"任务[{job.Name}]未停止，请先停止任务");
                 }
             }
             await _repository.Where(p => ids.Contains(p.Id))

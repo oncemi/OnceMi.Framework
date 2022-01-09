@@ -2,6 +2,9 @@
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 角色权限表
+    /// </summary>
     [Table(Name = nameof(RolePermissions))]
     public class RolePermissions : IBaseEntity
     {

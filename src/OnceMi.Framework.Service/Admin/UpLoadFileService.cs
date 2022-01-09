@@ -188,7 +188,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (file == null)
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_IS_NULL, "上传文件为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_IS_NULL, "上传文件为空");
             }
             List<IFormFile> upFiles = new List<IFormFile>()
             {
@@ -199,7 +199,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 return result[0];
             }
-            throw new BusException(ResultCodeConstant.FILE_UPLOAD_FAILED, "文件上传失败");
+            throw new BusException(ResultCode.FILE_UPLOAD_FAILED, "文件上传失败");
         }
 
         public async Task<List<UploadFileInfo>> UploadToLocal(IFormFileCollection files
@@ -228,7 +228,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (files == null || files.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_IS_NULL, "上传文件为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_IS_NULL, "上传文件为空");
             }
             List<UploadFileInfo> result = new List<UploadFileInfo>();
             try
@@ -263,23 +263,23 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (stream == null || stream.Length == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_STREAM_IS_NULL, "文件流为空");
+                throw new BusException(ResultCode.FILE_STREAM_IS_NULL, "文件流为空");
             }
             if (stream.Length == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_STREAM_IS_NULL, "文件流为空");
+                throw new BusException(ResultCode.FILE_STREAM_IS_NULL, "文件流为空");
             }
             if (!stream.CanRead)
             {
-                throw new BusException(ResultCodeConstant.FILE_STREAM_CANNOT_READ, "无法读取文件流");
+                throw new BusException(ResultCode.FILE_STREAM_CANNOT_READ, "无法读取文件流");
             }
             if (string.IsNullOrEmpty(oldName))
             {
-                throw new BusException(ResultCodeConstant.FILE_OLDNAME_CANNOT_READ, "无法获取历史文件名称");
+                throw new BusException(ResultCode.FILE_OLDNAME_CANNOT_READ, "无法获取历史文件名称");
             }
             if (string.IsNullOrEmpty(path))
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_PATH_IS_NULL, "上传路径不能为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_PATH_IS_NULL, "上传路径不能为空");
             }
             if (!Directory.Exists(path))
             {
@@ -292,7 +292,7 @@ namespace OnceMi.Framework.Service.Admin
             string ext = Path.GetExtension(oldName);
             if (string.IsNullOrEmpty(ext))
             {
-                throw new BusException(ResultCodeConstant.FILE_CONTENTTYPE_CANNOT_GET, $"获取文件类型失败，文件名称为：{oldName}");
+                throw new BusException(ResultCode.FILE_CONTENTTYPE_CANNOT_GET, $"获取文件类型失败，文件名称为：{oldName}");
             }
             string newName = $"{Guid.NewGuid()}{ext.ToLower()}";
             //获取绝对路径
@@ -348,7 +348,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 return result[0];
             }
-            throw new BusException(ResultCodeConstant.FILE_UPLOAD_FAILED, "文件上传失败");
+            throw new BusException(ResultCode.FILE_UPLOAD_FAILED, "文件上传失败");
         }
 
         public async Task<List<UploadFileInfo>> UploadToOSS(IFormFileCollection files
@@ -379,7 +379,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (files == null || files.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_IS_NULL, "上传文件为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_IS_NULL, "上传文件为空");
             }
             List<UploadFileInfo> result = new List<UploadFileInfo>();
             try
@@ -414,11 +414,11 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (string.IsNullOrEmpty(uploadFilePath))
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_PATH_IS_NULL, "上传文件路径不能为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_PATH_IS_NULL, "上传文件路径不能为空");
             }
             if (!File.Exists(uploadFilePath))
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_NOT_EXISTS, "上传文件不存在");
+                throw new BusException(ResultCode.FILE_UPLOAD_NOT_EXISTS, "上传文件不存在");
             }
             string oldName = Path.GetFileName(uploadFilePath);
             using (var stream = File.OpenRead(uploadFilePath))
@@ -438,29 +438,29 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (stream == null || stream.Length == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_STREAM_IS_NULL, "文件流为空");
+                throw new BusException(ResultCode.FILE_STREAM_IS_NULL, "文件流为空");
             }
             if (stream.Length == 0)
             {
-                throw new BusException(ResultCodeConstant.FILE_STREAM_IS_NULL, "文件流为空");
+                throw new BusException(ResultCode.FILE_STREAM_IS_NULL, "文件流为空");
             }
             if (!stream.CanRead)
             {
-                throw new BusException(ResultCodeConstant.FILE_STREAM_CANNOT_READ, "无法读取文件流");
+                throw new BusException(ResultCode.FILE_STREAM_CANNOT_READ, "无法读取文件流");
             }
             if (string.IsNullOrEmpty(oldName))
             {
-                throw new BusException(ResultCodeConstant.FILE_OLDNAME_CANNOT_READ, "无法获取历史文件名称");
+                throw new BusException(ResultCode.FILE_OLDNAME_CANNOT_READ, "无法获取历史文件名称");
             }
             string ext = Path.GetExtension(oldName);
             if (string.IsNullOrEmpty(ext))
             {
-                throw new BusException(ResultCodeConstant.FILE_CONTENTTYPE_CANNOT_GET, $"获取文件类型失败，文件名称为：{oldName}");
+                throw new BusException(ResultCode.FILE_CONTENTTYPE_CANNOT_GET, $"获取文件类型失败，文件名称为：{oldName}");
             }
             string newName = $"{Path.GetFileNameWithoutExtension(oldName)}_{owner}_{_idGenerator.NewId()}{ext}";
             if (string.IsNullOrEmpty(path))
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_PATH_IS_NULL, "上传路径不能为空");
+                throw new BusException(ResultCode.FILE_UPLOAD_PATH_IS_NULL, "上传路径不能为空");
             }
             if (path.StartsWith("/"))
             {
@@ -476,7 +476,7 @@ namespace OnceMi.Framework.Service.Admin
             bool putResult = await _ossService.PutObjectAsync(bucketName, newPath, stream);
             if (!putResult)
             {
-                throw new BusException(ResultCodeConstant.FILE_UPLOAD_TO_OSS_FAILED, $"上传文件【{newPath}】到对象储存失败");
+                throw new BusException(ResultCode.FILE_UPLOAD_TO_OSS_FAILED, $"上传文件【{newPath}】到对象储存失败");
             }
             stream.Position = 0;
             if (accessMode == FileAccessMode.PublicRead
@@ -652,12 +652,12 @@ namespace OnceMi.Framework.Service.Admin
             string json = AES.AESDecrypt(key, _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
             if (string.IsNullOrEmpty(json))
             {
-                throw new BusException(ResultCodeConstant.FILE_KEY_DEC_FAILED, "文件密钥验证失败");
+                throw new BusException(ResultCode.FILE_KEY_DEC_FAILED, "文件密钥验证失败");
             }
             UploadFileInfo fileInfo = JsonUtil.DeserializeStringToObject<UploadFileInfo>(json);
             if (fileInfo == null)
             {
-                throw new BusException(ResultCodeConstant.FILE_KEY_FORMAT_FAILED, "文件密钥验证失败");
+                throw new BusException(ResultCode.FILE_KEY_FORMAT_FAILED, "文件密钥验证失败");
             }
             return fileInfo;
         }

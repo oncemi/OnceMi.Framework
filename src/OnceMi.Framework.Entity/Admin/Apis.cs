@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 接口
+    /// </summary>
     [Table(Name = nameof(Apis))]
     public class Apis : IBaseEntity
     {

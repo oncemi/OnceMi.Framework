@@ -130,7 +130,7 @@ namespace OnceMi.Framework.Service.Admin
                     .FirstAsync();
                 if (queryDic == null)
                 {
-                    throw new BusException(ResultCodeConstant.DIC_QUERY_BY_CODE_FAILED, $"根据编码【{request.Code}】查询字典信息失败");
+                    throw new BusException(ResultCode.DIC_QUERY_BY_CODE_FAILED, $"根据编码【{request.Code}】查询字典信息失败");
                 }
                 request.Id = queryDic.Id;
             }
@@ -142,7 +142,7 @@ namespace OnceMi.Framework.Service.Admin
                     .ToListAsync();
                 if (allDics == null || allDics.Count == 0)
                 {
-                    throw new BusException(ResultCodeConstant.DIC_QUERY_FAILED, $"查询字典信息失败");
+                    throw new BusException(ResultCode.DIC_QUERY_FAILED, $"查询字典信息失败");
                 }
                 Dictionaries queryDic = allDics.Where(p => p.Id == request.Id).FirstOrDefault();
                 if (queryDic == null)
@@ -173,15 +173,15 @@ namespace OnceMi.Framework.Service.Admin
             if ((dictionary.ParentId != null && dictionary.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == dictionary.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.DIC_PARENT_NOT_EXIST, "父条目不存在");
+                throw new BusException(ResultCode.DIC_PARENT_NOT_EXIST, "父条目不存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Code == dictionary.Code && p.ParentId == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下Code'{request.Code}'已存在");
+                throw new BusException(ResultCode.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下Code'{request.Code}'已存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Name == dictionary.Name && p.ParentId == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下Name'{request.Name}'已存在");
+                throw new BusException(ResultCode.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下Name'{request.Name}'已存在");
             }
             dictionary.ParentId = dictionary.ParentId == 0 ? null : dictionary.ParentId;
             //view.Id = _idGenerator.NewId();
@@ -197,20 +197,20 @@ namespace OnceMi.Framework.Service.Admin
             Dictionaries dictionary = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (dictionary == null)
             {
-                throw new BusException(ResultCodeConstant.DIC_UPDATE_ITEM_NOTEXISTS, "修改的条目不存在");
+                throw new BusException(ResultCode.DIC_UPDATE_ITEM_NOTEXISTS, "修改的条目不存在");
             }
             if ((request.ParentId != null && request.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.DIC_PARENT_NOT_EXIST, "父条目不存在");
+                throw new BusException(ResultCode.DIC_PARENT_NOT_EXIST, "父条目不存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Code == dictionary.Code && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下Code'{request.Code}'已存在");
+                throw new BusException(ResultCode.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下Code'{request.Code}'已存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Name == dictionary.Name && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCodeConstant.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下Name'{request.Name}'已存在");
+                throw new BusException(ResultCode.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下Name'{request.Name}'已存在");
             }
             dictionary = request.MapTo(dictionary);
             dictionary.UpdatedTime = DateTime.Now;
@@ -223,7 +223,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (ids == null || ids.Count == 0)
             {
-                throw new BusException(ResultCodeConstant.DIC_DELETE_NOT_EISTS, "没有要删除的条目");
+                throw new BusException(ResultCode.DIC_DELETE_NOT_EISTS, "没有要删除的条目");
             }
             List<Dictionaries> allDics = await _repository
                 .Where(p => !p.IsDeleted)

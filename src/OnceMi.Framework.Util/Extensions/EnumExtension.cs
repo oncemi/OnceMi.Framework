@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace OnceMi.Framework.Util.Extensions
 {
@@ -13,15 +10,29 @@ namespace OnceMi.Framework.Util.Extensions
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public static string GetDescription(this System.Enum obj)
+        public static string GetDescription(this System.Enum value)
         {
             try
             {
-                string objName = obj.ToString();
-                FieldInfo fi = obj.GetType().GetField(objName);
-                if (fi == null) return null;
-                DescriptionAttribute[] arrDesc = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                return arrDesc[0].Description;
+                Type enumType = value.GetType();
+                // 获取枚举常数名称。
+                string name = System.Enum.GetName(enumType, value);
+                if (name != null)
+                {
+                    // 获取枚举字段。
+                    FieldInfo fieldInfo = enumType.GetField(name);
+                    if (fieldInfo != null)
+                    {
+                        // 获取描述的属性。
+                        DescriptionAttribute attr = Attribute.GetCustomAttribute(fieldInfo,
+                            typeof(DescriptionAttribute), false) as DescriptionAttribute;
+                        if (attr != null)
+                        {
+                            return attr.Description;
+                        }
+                    }
+                }
+                return null;
             }
             catch
             {

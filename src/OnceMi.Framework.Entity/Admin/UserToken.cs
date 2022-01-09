@@ -3,6 +3,9 @@ using System;
 
 namespace OnceMi.Framework.Entity.Admin
 {
+    /// <summary>
+    /// 用户Token表
+    /// </summary>
     [Table(Name = nameof(UserToken))]
     [Index("index_{TableName}_" + nameof(UserId), nameof(UserId), true)]
     public class UserToken : IBaseEntity
