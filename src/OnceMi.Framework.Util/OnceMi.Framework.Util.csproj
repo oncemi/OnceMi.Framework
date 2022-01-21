@@ -7,9 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="10.1.1" />
+		<PackageReference Include="AutoMapper" Version="11.0.0" />
 		<PackageReference Include="Chinese" Version="0.4.6" />
-		<PackageReference Include="IdentityModel" Version="5.2.0" />
+		<PackageReference Include="IdentityModel" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />

@@ -1,9 +1,5 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper.Internal;
 
 namespace OnceMi.Framework.Util.Extensions
 {
@@ -62,13 +58,18 @@ namespace OnceMi.Framework.Util.Extensions
             return expression;
         }
 
+        public static void IgnoreUnmapped(this IProfileExpression profile)
+        {
+            InternalApi.Internal(profile).ForAllMaps(IgnoreUnmappedProperties);
+        }
+
         /// <summary>
         /// 忽略未映射的属性
         /// </summary>
         /// <param name="profile"></param>
-        public static void IgnoreUnmapped(this IProfileExpression profile)
+        public static void IgnoreUnmapped(this IGlobalConfigurationExpression cfg)
         {
-            profile.ForAllMaps(IgnoreUnmappedProperties);
+            cfg.ForAllMaps(IgnoreUnmappedProperties);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace OnceMi.Framework.Util.Extensions
         /// <param name="filter"></param>
         public static void IgnoreUnmapped(this IProfileExpression profile, Func<TypeMap, bool> filter)
         {
-            profile.ForAllMaps((map, expr) =>
+            InternalApi.Internal(profile).ForAllMaps((map, expr) =>
             {
                 if (filter(map))
                 {

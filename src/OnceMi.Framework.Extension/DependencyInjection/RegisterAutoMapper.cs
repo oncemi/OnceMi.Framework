@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Configuration;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -8,6 +7,7 @@ using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Util.Extensions;
+using AutoMapper.Internal;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -50,9 +50,9 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                         }
                     }
                     //禁止有相同类型的map
-                    cfg.Advanced.AllowAdditiveTypeMapCreation = false;
+                    InternalApi.Internal(cfg).AllowAdditiveTypeMapCreation = false;
                     //忽略未映射的属性
-                    cfg.IgnoreUnmapped();
+                    InternalApi.Internal(cfg).IgnoreUnmapped();
                 });
 
                 if (env.IsDevelopment())
