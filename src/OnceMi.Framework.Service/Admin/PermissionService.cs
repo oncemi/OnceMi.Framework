@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class PermissionService : BaseService<RolePermissions, long>, IPermissionService
+    public class PermissionService : BaseService<RolePermission, long>, IPermissionService
     {
         private readonly IPermissionRepository _repository;
         private readonly ILogger<PermissionService> _logger;
@@ -81,8 +81,8 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<List<long>> QueryRolePermissionList(long roleId)
         {
-            List<RolePermissions> allPermissions = await QueryRolePermissionsFromCache();
-            List<RolePermissions> permissions = allPermissions.Where(p => p.RoleId == roleId).ToList();
+            List<RolePermission> allPermissions = await QueryRolePermissionsFromCache();
+            List<RolePermission> permissions = allPermissions.Where(p => p.RoleId == roleId).ToList();
             if (permissions == null || permissions.Count == 0)
             {
                 return new List<long>();
@@ -97,8 +97,8 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<List<long>> QueryRolePermissionList(List<long> roleIds)
         {
-            List<RolePermissions> allPermissions = await QueryRolePermissionsFromCache();
-            List<RolePermissions> permissions = allPermissions.Where(p => roleIds.Contains(p.RoleId)).ToList();
+            List<RolePermission> allPermissions = await QueryRolePermissionsFromCache();
+            List<RolePermission> permissions = allPermissions.Where(p => roleIds.Contains(p.RoleId)).ToList();
             if (permissions == null || permissions.Count == 0)
             {
                 return new List<long>();
@@ -121,8 +121,8 @@ namespace OnceMi.Framework.Service.Admin
             {
                 Id = p
             }).ToList();
-            List<RolePermissions> allPermissions = await QueryRolePermissionsFromCache();
-            List<RolePermissions> permissions = allPermissions.Where(p => roleIds.Contains(p.RoleId) && p.Menu != null && p.Menu.Type == MenuType.Api)
+            List<RolePermission> allPermissions = await QueryRolePermissionsFromCache();
+            List<RolePermission> permissions = allPermissions.Where(p => roleIds.Contains(p.RoleId) && p.Menu != null && p.Menu.Type == MenuType.Api)
                 .ToList();
             if (permissions == null || permissions.Count == 0)
             {
@@ -142,7 +142,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 return new List<UserMenuResponse>();
             }
-            List<Menus> allMenus = await _menuService.Query(menuIds);
+            List<Menu> allMenus = await _menuService.Query(menuIds);
             if (allMenus == null || allMenus.Count == 0)
             {
                 return new List<UserMenuResponse>();
@@ -151,7 +151,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 Router = "root"
             };
-            List<Menus> allParentsMenus = allMenus
+            List<Menu> allParentsMenus = allMenus
                 .Where(p => (p.ParentId == null || p.ParentId == 0) && p.Type != MenuType.Api)
                 .OrderBy(p => p.Sort)
                 .ThenBy(p => p.Id)
@@ -176,12 +176,12 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.PERM_UPDATE_ROLE_NOT_EXISTS, "更新的角色不存在或已被禁用。");
             }
             //获取全部的菜单
-            List<Menus> allMenus = await _menuService.Where(p => !p.IsDeleted && p.IsEnabled).ToListAsync();
+            List<Menu> allMenus = await _menuService.Where(p => !p.IsDeleted && p.IsEnabled).ToListAsync();
             if (allMenus == null)
             {
-                allMenus = new List<Menus>();
+                allMenus = new List<Menu>();
             }
-            List<Menus> permissionMenus = allMenus.Where(p => request.Permissions.Contains(p.Id)).ToList();
+            List<Menu> permissionMenus = allMenus.Where(p => request.Permissions.Contains(p.Id)).ToList();
             List<long> distPermissions = new List<long>(request.Permissions);
             foreach (var item in permissionMenus)
             {
@@ -194,7 +194,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                List<RolePermissions> permissions = distPermissions.Select(p => new RolePermissions()
+                List<RolePermission> permissions = distPermissions.Select(p => new RolePermission()
                 {
                     Id = _idGenerator.NewId(),
                     RoleId = request.RoleId,
@@ -212,12 +212,12 @@ namespace OnceMi.Framework.Service.Admin
 
         #region private
 
-        private async Task<List<RolePermissions>> QueryRolePermissionsFromCache()
+        private async Task<List<RolePermission>> QueryRolePermissionsFromCache()
         {
             //从缓存中取出所有菜单
-            List<RolePermissions> allPermissions = await _cache.GetOrCreateAsync(CacheConstant.RolePermissionsKey, async (cache) =>
+            List<RolePermission> allPermissions = await _cache.GetOrCreateAsync(CacheConstant.RolePermissionsKey, async (cache) =>
             {
-                List<RolePermissions> permissions = await _repository.Select
+                List<RolePermission> permissions = await _repository.Select
                     .LeftJoin(p => p.Menu.Id == p.MenuId)
                     .LeftJoin(p => p.Role.Id == p.RoleId)
                     .Where(p => !p.IsDeleted && !p.Menu.IsDeleted && p.Menu.IsEnabled && !p.Role.IsDeleted && p.Role.IsEnabled)
@@ -228,8 +228,8 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     return permissions;
                 }
-                List<Views> views = await _repository.Orm.Select<Views>().Where(p => !p.IsDeleted).NoTracking().ToListAsync();
-                List<Apis> apis = await _repository.Orm.Select<Apis>().Where(p => !p.IsDeleted).NoTracking().ToListAsync();
+                List<View> views = await _repository.Orm.Select<View>().Where(p => !p.IsDeleted).NoTracking().ToListAsync();
+                List<Api> apis = await _repository.Orm.Select<Api>().Where(p => !p.IsDeleted).NoTracking().ToListAsync();
                 foreach (var item in permissions)
                 {
                     if (item.Menu == null) continue;
@@ -247,7 +247,7 @@ namespace OnceMi.Framework.Service.Admin
             return allPermissions;
         }
 
-        private void FindMenuParents(List<Menus> source, Menus target, List<long> dist)
+        private void FindMenuParents(List<Menu> source, Menu target, List<long> dist)
         {
             if (!dist.Contains(target.Id))
             {
@@ -255,13 +255,13 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (target.ParentId != null && target.ParentId != 0)
             {
-                Menus parent = source.Where(p => p.Id == target.ParentId).FirstOrDefault();
+                Menu parent = source.Where(p => p.Id == target.ParentId).FirstOrDefault();
                 if (parent == null) return;
                 FindMenuParents(source, parent, dist);
             }
         }
 
-        private void MapMenuToUserMenuResponse(List<Menus> source, Menus input, UserMenuResponse target)
+        private void MapMenuToUserMenuResponse(List<Menu> source, Menu input, UserMenuResponse target)
         {
             if (input == null
                 || (input.Type != MenuType.Group && input.Type != MenuType.View)
@@ -288,7 +288,7 @@ namespace OnceMi.Framework.Service.Admin
                 }
             };
             target.Children.Add(nextTarget);
-            List<Menus> childs = source.Where(p => p.ParentId == input.Id && (p.Type == MenuType.Group || p.Type == MenuType.View))
+            List<Menu> childs = source.Where(p => p.ParentId == input.Id && (p.Type == MenuType.Group || p.Type == MenuType.View))
                 .OrderBy(p => p.Sort)
                 .ThenBy(p => p.Id)
                 .ToList();

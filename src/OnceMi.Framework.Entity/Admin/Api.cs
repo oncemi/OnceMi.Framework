@@ -6,8 +6,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 接口
     /// </summary>
-    [Table(Name = nameof(Apis))]
-    public class Apis : IBaseEntity
+    [Table(Name = "sys_apis")]
+    public class Api : IBaseEntity
     {
         [Column(IsNullable = true)]
         public long? ParentId { get; set; }
@@ -75,7 +75,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// 子条目
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<Apis> Children { get; set; }
+        public List<Api> Children { get; set; }
 
         /// <summary>
         /// 参数字典

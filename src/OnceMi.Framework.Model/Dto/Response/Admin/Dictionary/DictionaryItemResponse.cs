@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperFrom(typeof(Dictionaries))]
+    [MapperFrom(typeof(Dictionary))]
     [MapperTo(typeof(ICascaderResponse))]
     public class DictionaryItemResponse : ITreeResponse<DictionaryItemResponse>
     {

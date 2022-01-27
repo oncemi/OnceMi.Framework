@@ -8,8 +8,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 任务执行记录
     /// </summary>
-    [Table(Name = nameof(JobHistories))]
-    public class JobHistories : IBaseEntity
+    [Table(Name = "sys_job_history")]
+    public class JobHistory : IBaseEntity
     {
         public long JobId { get; set; }
 

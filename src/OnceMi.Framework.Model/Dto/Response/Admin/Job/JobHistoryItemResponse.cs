@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperFrom(typeof(JobHistories))]
+    [MapperFrom(typeof(JobHistory))]
     public class JobHistoryItemResponse : IResponse
     {
         /// <summary>

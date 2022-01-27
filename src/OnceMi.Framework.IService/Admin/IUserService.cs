@@ -39,7 +39,7 @@ namespace OnceMi.Framework.IService.Admin
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<Users> Query(string inputInfo, bool isQueryEnabled = false);
+        Task<UserInfo> Query(string inputInfo, bool isQueryEnabled = false);
 
         /// <summary>
         /// 新增

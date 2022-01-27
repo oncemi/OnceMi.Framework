@@ -19,7 +19,7 @@ using System.Linq.Expressions;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class MenuService : BaseService<Menus, long>, IMenuService
+    public class MenuService : BaseService<Menu, long>, IMenuService
     {
         private readonly IMenuRepository _repository;
         private readonly ILogger<MenuService> _logger;
@@ -78,7 +78,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<MenuItemResponse> response = new IPageResponse<MenuItemResponse>();
             //get from db or cache
-            List<Menus> allMenus = await QueryMenusFromCache();
+            List<Menu> allMenus = await QueryMenusFromCache();
             if (allMenus == null || allMenus.Count == 0)
             {
                 return new IPageResponse<MenuItemResponse>()
@@ -94,8 +94,8 @@ namespace OnceMi.Framework.Service.Admin
             var selector = allMenus
                 .Where(p => !p.IsDeleted)
                 .OrderBy(request.OrderByModels);
-            if (selector is IOrderedEnumerable<Menus>)
-                selector = (selector as IOrderedEnumerable<Menus>).ThenBy(p => p.Sort);
+            if (selector is IOrderedEnumerable<Menu>)
+                selector = (selector as IOrderedEnumerable<Menu>).ThenBy(p => p.Sort);
             else
                 selector = selector.OrderBy(p => p.Sort).ThenBy(p => p.Id);
 
@@ -110,7 +110,7 @@ namespace OnceMi.Framework.Service.Admin
             //get count
             int count = selector.Count();
             //get page
-            List<Menus> allParents = selector
+            List<Menu> allParents = selector
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size)
                 .ToList();
@@ -126,7 +126,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (isSearchQuery)
             {
-                List<Menus> removeMenus = new List<Menus>();
+                List<Menu> removeMenus = new List<Menu>();
                 foreach (var item in allParents)
                 {
                     GetQueryMenuChild(allParents, item, removeMenus);
@@ -161,8 +161,8 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<MenuItemResponse> Query(long id)
         {
-            List<Menus> allMenus = await QueryMenusFromCache();
-            Menus queryMenu = allMenus.Where(p => p.Id == id).FirstOrDefault();
+            List<Menu> allMenus = await QueryMenusFromCache();
+            Menu queryMenu = allMenus.Where(p => p.Id == id).FirstOrDefault();
             if (queryMenu == null)
                 return null;
 
@@ -171,19 +171,19 @@ namespace OnceMi.Framework.Service.Admin
             return result;
         }
 
-        public async Task<List<Menus>> Query(List<long> menuIds)
+        public async Task<List<Menu>> Query(List<long> menuIds)
         {
             if (menuIds == null || menuIds.Count == 0)
             {
                 return null;
             }
             //从缓存中取出所有菜单
-            List<Menus> allMenus = await QueryMenusFromCache();
+            List<Menu> allMenus = await QueryMenusFromCache();
             if (allMenus == null)
             {
                 return null;
             }
-            List<Menus> menus = allMenus.Where(p => !p.IsDeleted && p.IsEnabled && menuIds.Contains(p.Id))
+            List<Menu> menus = allMenus.Where(p => !p.IsDeleted && p.IsEnabled && menuIds.Contains(p.Id))
                 .ToList();
             return menus;
         }
@@ -192,10 +192,10 @@ namespace OnceMi.Framework.Service.Admin
         [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
         public async Task<MenuItemResponse> Insert(CreateMenuRequest request)
         {
-            Menus menu = _mapper.Map<Menus>(request);
+            Menu menu = _mapper.Map<Menu>(request);
             if (menu == null)
             {
-                throw new Exception($"Map '{nameof(CreateMenuRequest)}' DTO to '{nameof(Menus)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateMenuRequest)}' DTO to '{nameof(Menu)}' entity failed.");
             }
             if ((menu.ParentId != null && menu.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == menu.ParentId && !p.IsDeleted))
@@ -210,7 +210,7 @@ namespace OnceMi.Framework.Service.Admin
             //更新sort
             if (request.Sort == 0)
             {
-                Expression<Func<Menus, bool>> getSortExp = p => !p.IsDeleted;
+                Expression<Func<Menu, bool>> getSortExp = p => !p.IsDeleted;
                 if (menu.ParentId != null)
                 {
                     getSortExp = getSortExp.And(p => p.ParentId == menu.ParentId);
@@ -227,7 +227,7 @@ namespace OnceMi.Framework.Service.Admin
             //验证视图
             if (menu.Type == MenuType.View && menu.ViewId != null && menu.ViewId > 0)
             {
-                Views view = await _repository.Orm.Select<Views>().Where(p => p.Id == menu.ViewId && !p.IsDeleted).FirstAsync();
+                View view = await _repository.Orm.Select<View>().Where(p => p.Id == menu.ViewId && !p.IsDeleted).FirstAsync();
                 if (view == null)
                 {
                     throw new BusException(ResultCode.MENU_VIEW_NOT_EXISTS, "指定的视图不存在");
@@ -236,7 +236,7 @@ namespace OnceMi.Framework.Service.Admin
             //验证Api
             if (menu.Type == MenuType.Api)
             {
-                Apis api = await _repository.Orm.Select<Apis>().Where(p => p.Id == menu.ApiId).FirstAsync();
+                Api api = await _repository.Orm.Select<Api>().Where(p => p.Id == menu.ApiId).FirstAsync();
                 if (api == null)
                 {
                     throw new BusException(ResultCode.MENU_API_NOT_EXISTS, "指定的Api不存在");
@@ -271,7 +271,7 @@ namespace OnceMi.Framework.Service.Admin
         [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
         public async Task Update(UpdateMenuRequest request)
         {
-            Menus menu = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Menu menu = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (menu == null)
             {
                 throw new BusException(ResultCode.MENU_NOT_EXISTS, "修改的条目不存在");
@@ -295,7 +295,7 @@ namespace OnceMi.Framework.Service.Admin
             //验证view是否正确
             if (menu.Type == MenuType.View && menu.ViewId != null && menu.ViewId > 0)
             {
-                Views view = await _repository.Orm.Select<Views>().Where(p => p.Id == menu.ViewId && !p.IsDeleted).FirstAsync();
+                View view = await _repository.Orm.Select<View>().Where(p => p.Id == menu.ViewId && !p.IsDeleted).FirstAsync();
                 if (view == null)
                 {
                     throw new BusException(ResultCode.MENU_VIEW_NOT_EXISTS, "指定的视图不存在。");
@@ -304,7 +304,7 @@ namespace OnceMi.Framework.Service.Admin
             //验证api是否正确
             if (menu.Type == MenuType.Api)
             {
-                Apis api = await _repository.Orm.Select<Apis>().Where(p => p.Id == menu.ApiId).FirstAsync();
+                Api api = await _repository.Orm.Select<Api>().Where(p => p.Id == menu.ApiId).FirstAsync();
                 if (api == null)
                 {
                     throw new BusException(ResultCode.MENU_API_NOT_EXISTS, "指定的Api不存在。");
@@ -332,7 +332,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.MENU_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
-            List<Menus> allMenus = await _repository
+            List<Menu> allMenus = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -351,19 +351,19 @@ namespace OnceMi.Framework.Service.Admin
             }
             List<long> permissionIds = await GetPermissionIncludeMenus(delIds);
             if (delIds != null)
-                await _repository.Orm.Delete<Menus>().Where(p => delIds.Contains(p.Id)).ExecuteAffrowsAsync();
+                await _repository.Orm.Delete<Menu>().Where(p => delIds.Contains(p.Id)).ExecuteAffrowsAsync();
             if (permissionIds != null)
-                await _repository.Orm.Delete<RolePermissions>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
+                await _repository.Orm.Delete<RolePermission>().Where(p => permissionIds.Contains(p.Id)).ExecuteAffrowsAsync();
         }
 
         #region private
 
-        private async Task<List<Menus>> QueryMenusFromCache()
+        private async Task<List<Menu>> QueryMenusFromCache()
         {
             //从缓存中取出所有菜单
-            List<Menus> allMenus = await _cache.GetOrCreateAsync(CacheConstant.SystemMenusKey, async (cache) =>
+            List<Menu> allMenus = await _cache.GetOrCreateAsync(CacheConstant.SystemMenusKey, async (cache) =>
              {
-                 List<Menus> menus = await _repository
+                 List<Menu> menus = await _repository
                      .Where(p => !p.IsDeleted)
                      .LeftJoin(p => p.Api.Id == p.ApiId)
                      .LeftJoin(p => p.View.Id == p.ViewId)
@@ -397,7 +397,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelMenus(List<Menus> source, long id, List<long> dest)
+        private void SearchDelMenus(List<Menu> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -408,7 +408,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
-            List<Menus> child = source.Where(p => p.ParentId == id).ToList();
+            List<Menu> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelMenus(source, citem.Id, dest);
@@ -421,7 +421,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="menu"></param>
         /// <param name="removeMenus"></param>
-        private void GetQueryMenuChild(List<Menus> source, Menus menu, List<Menus> removeMenus = null)
+        private void GetQueryMenuChild(List<Menu> source, Menu menu, List<Menu> removeMenus = null)
         {
             var childs = source.Where(p => p.ParentId == menu.Id).ToList();
             if (childs == null || childs.Count == 0)
@@ -448,7 +448,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (delIds == null || delIds.Count == 0)
                 return null;
-            List<RolePermissions> allPermissions = await _repository.Orm.Select<RolePermissions>()
+            List<RolePermission> allPermissions = await _repository.Orm.Select<RolePermission>()
                 .Where(p => delIds.Contains(p.MenuId))
                 .NoTracking()
                 .ToListAsync();

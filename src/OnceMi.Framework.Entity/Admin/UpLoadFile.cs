@@ -7,8 +7,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 上传文件表
     /// </summary>
-    [Table(Name = nameof(UpLoadFiles))]
-    public class UpLoadFiles : IBaseEntity<long>
+    [Table(Name = "sys_upload_files")]
+    public class UpLoadFile : IBaseEntity<long>
     {
         [MaxLength(120)]
         [Column(IsNullable = false)]
@@ -54,7 +54,7 @@ namespace OnceMi.Framework.Entity.Admin
         public string Url { get; set; }
 
         [Navigate(nameof(CreatedUserId))]
-        public Users Owner { get; set; }
+        public UserInfo Owner { get; set; }
 
     }
 

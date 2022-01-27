@@ -25,7 +25,7 @@ namespace OnceMi.Framework.Extension.Job
         public async Task Execute(IJobExecutionContext context)
         {
             JobExcuteResult result = null;
-            Jobs job = null;
+            Entity.Admin.Job job = null;
             try
             {
                 if (string.IsNullOrEmpty(context.JobDetail.Key.Name) || !long.TryParse(context.JobDetail.Key.Name, out long jobId))
@@ -83,6 +83,6 @@ namespace OnceMi.Framework.Extension.Job
             }
         }
 
-        public abstract Task<object> Execute(IJobExecutionContext context, Jobs job);
+        public abstract Task<object> Execute(IJobExecutionContext context, Entity.Admin.Job job);
     }
 }

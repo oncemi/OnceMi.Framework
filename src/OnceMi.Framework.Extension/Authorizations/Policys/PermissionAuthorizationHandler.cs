@@ -75,7 +75,7 @@ namespace OnceMi.Framework.Extension.Authorizations
                 context.Fail();
                 return;
             }
-            List<Menus> menus = await _menusService.Query(menuIds);
+            List<Menu> menus = await _menusService.Query(menuIds);
             foreach (var item in menus)
             {
                 if (item.Type == MenuType.Api
@@ -100,7 +100,7 @@ namespace OnceMi.Framework.Extension.Authorizations
         /// <param name="requestPath"></param>
         /// <param name="requestMethod"></param>
         /// <returns></returns>
-        private bool CompareMenu(Menus menu, string requestPath, string requestMethod)
+        private bool CompareMenu(Menu menu, string requestPath, string requestMethod)
         {
             if (string.IsNullOrEmpty(requestPath))
                 return false;

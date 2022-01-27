@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(Views))]
+    [MapperTo(typeof(View))]
     public class CreateViewRequest : IRequest
     {
         private long? _parentId;

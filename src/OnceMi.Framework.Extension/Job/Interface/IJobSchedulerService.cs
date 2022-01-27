@@ -14,48 +14,48 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task Add(Jobs job);
+        Task Add(Entity.Admin.Job job);
 
         /// <summary>
         /// 删除任务
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task Delete(Jobs job);
+        Task Delete(Entity.Admin.Job job);
 
         /// <summary>
         /// 暂停任务
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task Pause(Jobs job);
+        Task Pause(Entity.Admin.Job job);
 
         /// <summary>
         /// 恢复任务
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task Resume(Jobs job);
+        Task Resume(Entity.Admin.Job job);
 
         /// <summary>
         /// 停止任务
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task Stop(Jobs job);
+        Task Stop(Entity.Admin.Job job);
 
         /// <summary>
         /// 立即执行任务
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task Trigger(Jobs job);
+        Task Trigger(Entity.Admin.Job job);
 
         /// <summary>
         /// 作业是否存在
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        Task<bool> Exists(Jobs job);
+        Task<bool> Exists(Entity.Admin.Job job);
     }
 }

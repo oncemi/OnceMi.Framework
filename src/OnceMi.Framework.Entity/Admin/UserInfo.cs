@@ -12,9 +12,9 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 用户表
     /// </summary>
-    [Table(Name = nameof(Users))]
+    [Table(Name = "user_info")]
     [Index("index_{TableName}_" + nameof(UserName), nameof(UserName), true)]
-    public class Users : IBaseEntity
+    public class UserInfo : IBaseEntity
     {
         /// <summary>
         /// 
@@ -108,26 +108,26 @@ namespace OnceMi.Framework.Entity.Admin
         /// 通过导航关系配置
         /// </summary>
         [Navigate(ManyToMany = typeof(UserRole))]
-        public List<Roles> Roles { get; set; }
+        public List<Role> Roles { get; set; }
 
         /// <summary>
         /// 所属组织
         /// 通过导航关系配置
         /// </summary>
         [Navigate(ManyToMany = typeof(UserOrganize))]
-        public List<Organizes> Organizes { get; set; }
+        public List<Organize> Organizes { get; set; }
 
         /// <summary>
         /// 创建用户
         /// </summary>
         [Navigate(nameof(CreatedUserId))]
-        public Users CreateUser { get; set; }
+        public UserInfo CreateUser { get; set; }
 
         /// <summary>
         /// 更新用户
         /// </summary>
         [Navigate(nameof(UpdatedUserId))]
-        public Users UpdateUser { get; set; }
+        public UserInfo UpdateUser { get; set; }
 
         #region Method
 

@@ -11,8 +11,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 任务分组
     /// </summary>
-    [Table(Name = nameof(JobGroups))]
-    public class JobGroups : IBaseEntity
+    [Table(Name = "sys_job_groups")]
+    public class JobGroup : IBaseEntity
     {
         /// <summary>
         /// 名称

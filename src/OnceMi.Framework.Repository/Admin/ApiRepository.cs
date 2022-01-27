@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class ApiRepository : BaseUnitOfWorkRepository<Apis, long>, IApiRepository
+    public class ApiRepository : BaseUnitOfWorkRepository<Api, long>, IApiRepository
     {
         private readonly ILogger<ApiRepository> _logger;
         private readonly IFreeSql _db;

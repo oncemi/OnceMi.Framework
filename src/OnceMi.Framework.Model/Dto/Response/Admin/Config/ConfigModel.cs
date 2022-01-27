@@ -3,7 +3,7 @@ using OnceMi.Framework.Model.Attributes;
 
 namespace OnceMi.Framework.Model.Dto.Response.Admin.Config
 {
-    [MapperFrom(typeof(Configs))]
+    [MapperFrom(typeof(Entity.Admin.Config))]
     public class ConfigModel<T> where T : class, new()
     {
         public long Id { get; set; }

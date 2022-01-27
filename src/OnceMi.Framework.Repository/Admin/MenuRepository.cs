@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class MenuRepository : BaseUnitOfWorkRepository<Menus, long>, IMenuRepository
+    public class MenuRepository : BaseUnitOfWorkRepository<Menu, long>, IMenuRepository
     {
         private readonly ILogger<MenuRepository> _logger;
         private readonly IFreeSql _db;

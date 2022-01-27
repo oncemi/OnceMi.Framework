@@ -1435,7 +1435,7 @@
             修改时间
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.SystemHardwareInfo.OSDescription">
+        <member name="P:OnceMi.Framework.Model.Dto.SystemInfo.OSDescription">
             <summary>
             操作系统的版本描述
             <para>
@@ -1446,7 +1446,7 @@
             </para>
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.SystemHardwareInfo.OSArchitecture">
+        <member name="P:OnceMi.Framework.Model.Dto.SystemInfo.OSArchitecture">
             <summary>
             操作系统架构，可点击 <see cref="T:System.Runtime.InteropServices.Architecture" /> 获取详细的信息
             <para>
@@ -1458,12 +1458,12 @@
             </para>
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.SystemHardwareInfo.OSTickMins">
+        <member name="P:OnceMi.Framework.Model.Dto.SystemInfo.OSTickMins">
             <summary>
             开机时间 分钟
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.SystemHardwareInfo.ProcessArchitecture">
+        <member name="P:OnceMi.Framework.Model.Dto.SystemInfo.ProcessArchitecture">
             <summary>
             进程的架构，可点击 <see cref="T:System.Runtime.InteropServices.Architecture" /> 获取详细的信息
             <para>

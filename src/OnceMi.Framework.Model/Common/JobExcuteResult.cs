@@ -41,6 +41,6 @@ namespace OnceMi.Framework.Model.Common
         public System.Exception Exception { get; set; }
 
         [JsonIgnore]
-        public Jobs Job { get; set; }
+        public Job Job { get; set; }
     }
 }

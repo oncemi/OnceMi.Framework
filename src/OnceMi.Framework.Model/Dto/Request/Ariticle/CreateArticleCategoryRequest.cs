@@ -3,7 +3,7 @@ using OnceMi.Framework.Model.Attributes;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(ArticleCategories))]
+    [MapperTo(typeof(ArticleCategory))]
     public class CreateArticleCategoryRequest : IRequest
     {
         private long? _parentId;

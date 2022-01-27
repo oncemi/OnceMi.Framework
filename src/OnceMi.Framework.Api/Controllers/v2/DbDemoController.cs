@@ -37,7 +37,7 @@ namespace OnceMi.Framework.Api.Controllers.v2
         [HttpGet]
         [Route("[action]")]
         [AllowAnonymous]
-        public async Task<List<Configs>> GetAllConfigs()
+        public async Task<List<Entity.Admin.Config>> GetAllConfigs()
         {
             if (!_env.IsDevelopment())
             {

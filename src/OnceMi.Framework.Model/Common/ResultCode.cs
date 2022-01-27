@@ -298,7 +298,7 @@ namespace OnceMi.Framework.Model.Common
         [Description("当前组织机构下包含未删除的角色组")]
         ORG_HAS_ROLES = 31009,
 
-        [Description("当前组织机构下包含未删除的用户")]
+        [Description("当前组织机构下包含启用的用户")]
         ORG_HAS_USERS = 31011,
 
         [Description("所选部门负责人不正确")]

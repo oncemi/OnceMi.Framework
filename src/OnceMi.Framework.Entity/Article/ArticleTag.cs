@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 namespace OnceMi.Framework.Entity.Article
 {
     /// <summary>
-    /// 文章封面
+    /// 文章标签
     /// </summary>
-    [Table(Name = nameof(ArticleCovers))]
-    public class ArticleCovers : IBaseEntity
+    [Table(Name = "article_tags")]
+    public class ArticleTag : IBaseEntity
     {
         /// <summary>
         /// 文章Id
@@ -19,10 +19,10 @@ namespace OnceMi.Framework.Entity.Article
         public long ArticleId { get; set; }
 
         /// <summary>
-        /// 链接
+        /// 标签
         /// </summary>
-        [Column(StringLength = -1, IsNullable = false)]
-        public string Url { get; set; }
+        [Column(StringLength = 100, IsNullable = false)]
+        public string Tag { get; set; }
 
         //[Navigate(nameof(ArticleId))]
         //public Articles Article { get; set; }

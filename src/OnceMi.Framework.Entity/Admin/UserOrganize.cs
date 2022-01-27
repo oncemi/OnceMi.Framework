@@ -10,7 +10,7 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 用户所属组织
     /// </summary>
-    [Table(Name = nameof(UserOrganize))]
+    [Table(Name = "user_organizes")]
     public class UserOrganize : IBaseEntity
     {
         [Column(IsNullable = false)]
@@ -20,9 +20,9 @@ namespace OnceMi.Framework.Entity.Admin
         public long OrganizeId { get; set; }
 
         [Navigate(nameof(OrganizeId))]
-        public Organizes Organize { get; set; }
+        public Organize Organize { get; set; }
 
         [Navigate(nameof(UserId))]
-        public Users User { get; set; }
+        public UserInfo User { get; set; }
     }
 }

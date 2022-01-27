@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Article
 {
-    public interface IArticleService : IBaseService<Articles, long>
+    public interface IArticleService : IBaseService<Entity.Article.ArticleInfo, long>
     {
         /// <summary>
         /// 分页查询

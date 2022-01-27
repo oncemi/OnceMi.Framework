@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class DictionaryRepository : BaseUnitOfWorkRepository<Dictionaries, long>, IDictionaryRepository
+    public class DictionaryRepository : BaseUnitOfWorkRepository<Dictionary, long>, IDictionaryRepository
     {
         private readonly ILogger<DictionaryRepository> _logger;
         private readonly IFreeSql _db;

@@ -7,8 +7,8 @@ namespace OnceMi.Framework.Entity.Article
     /// <summary>
     /// 文章
     /// </summary>
-    [Table(Name = nameof(Articles))]
-    public class Articles : IBaseEntity
+    [Table(Name = "article_info")]
+    public class ArticleInfo : IBaseEntity
     {
         /// <summary>
         /// 标题
@@ -62,31 +62,31 @@ namespace OnceMi.Framework.Entity.Article
         /// <summary>
         /// 文章分类
         /// </summary>
-        [Navigate(ManyToMany = typeof(ArticleCategoriesMiddle))]
-        public virtual List<ArticleCategories> ArticleCategories { get; set; }
+        [Navigate(ManyToMany = typeof(ArticleBelongCategory))]
+        public virtual List<ArticleCategory> ArticleCategories { get; set; }
 
         /// <summary>
         /// 评论
         /// </summary>
-        [Navigate(nameof(Article.ArticleComments.ArticleId))]
-        public virtual List<ArticleComments> ArticleComments { get; set; }
+        [Navigate(nameof(Entity.Article.ArticleComment.ArticleId))]
+        public virtual List<ArticleComment> ArticleComments { get; set; }
 
         /// <summary>
         /// 标签
         /// </summary>
-        [Navigate(nameof(Article.ArticleTags.ArticleId))]
-        public virtual List<ArticleTags> ArticleTags { get; set; }
+        [Navigate(nameof(Entity.Article.ArticleTag.ArticleId))]
+        public virtual List<ArticleTag> ArticleTags { get; set; }
 
         /// <summary>
         /// 封面
         /// </summary>
-        [Navigate(nameof(Article.ArticleCovers.ArticleId))]
-        public virtual List<ArticleCovers> ArticleCovers { get; set; }
+        [Navigate(nameof(Entity.Article.ArticleCover.ArticleId))]
+        public virtual List<ArticleCover> ArticleCovers { get; set; }
 
         /// <summary>
         /// 创建人
         /// </summary>
         [Navigate(nameof(CreatedUserId))]
-        public virtual Users CreateUser { get; set; }
+        public virtual UserInfo CreateUser { get; set; }
     }
 }

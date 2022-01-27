@@ -41,7 +41,7 @@ namespace OnceMi.Framework.IService.Admin
         /// </summary>
         /// <param name="roleId"></param>
         /// <returns></returns>
-        Task<List<Users>> QueryRoleUsers(long roleId);
+        Task<List<UserInfo>> QueryRoleUsers(long roleId);
 
         /// <summary>
         /// 创建

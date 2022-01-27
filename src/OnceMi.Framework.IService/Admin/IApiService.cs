@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IApiService : IBaseService<Apis, long>
+    public interface IApiService : IBaseService<Api, long>
     {
         /// <summary>
         /// 查询Api的版本

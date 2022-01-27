@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class JobHistoryService : BaseService<JobHistories, long>, IJobHistoryService
+    public class JobHistoryService : BaseService<JobHistory, long>, IJobHistoryService
     {
         private readonly IJobHistoryRepository _repository;
         private readonly ILogger<JobHistoryService> _logger;
@@ -34,12 +34,12 @@ namespace OnceMi.Framework.Service.Admin
             IPageResponse<JobHistoryItemResponse> response = new IPageResponse<JobHistoryItemResponse>();
             if (request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(JobHistories.Id)},desc" };
+                request.OrderBy = new string[] { $"{nameof(JobHistory.Id)},desc" };
             }
-            Expression<Func<JobHistories, bool>> exp = p => !p.IsDeleted && p.JobId == request.JobId;
+            Expression<Func<JobHistory, bool>> exp = p => !p.IsDeleted && p.JobId == request.JobId;
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<JobHistories> allParents = await _repository.Select
+            List<JobHistory> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)

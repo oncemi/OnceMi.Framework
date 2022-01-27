@@ -9,14 +9,14 @@ namespace OnceMi.Framework.Extension.AutoMapper
     {
         public DefaultMapperConfig()
         {
-            CreateMap<Roles, RoleItemResponse>()
+            CreateMap<Role, RoleItemResponse>()
                 .ForMember(dest => dest.OrganizeName, opts => opts.MapFrom(src => src.Organize == null ? null : src.Organize.Name));
 
-            CreateMap<CreateOrganizeRequest, Organizes>()
+            CreateMap<CreateOrganizeRequest, Organize>()
                 .ForMember(dest => dest.DepartLeaders, opts => opts.Ignore())
                 .ForMember(dest => dest.HeadLeaders, opts => opts.Ignore());
 
-            CreateMap<Articles, ArticleResponse>()
+            CreateMap<ArticleInfo, ArticleResponse>()
                 .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.ArticleCategories == null ? null : src.ArticleCategories))
                 .ForMember(dest => dest.Comments, opts => opts.MapFrom(src => src.ArticleComments == null ? null : src.ArticleComments))
                 .ForMember(dest => dest.Tags, opts => opts.MapFrom(src => src.ArticleTags == null ? null : src.ArticleTags))

@@ -75,7 +75,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<OrganizeItemResponse> response = new IPageResponse<OrganizeItemResponse>();
             bool isSearchQuery = false;
-            Expression<Func<Organizes, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<Organize, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 isSearchQuery = true;
@@ -97,7 +97,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Organizes> allParents = await _repository.Select
+            List<Organize> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)
@@ -115,11 +115,11 @@ namespace OnceMi.Framework.Service.Admin
             }
 
             //设置用户
-            List<Users> allUser = await _userRepository.Where(p => !p.IsDeleted).ToListAsync();
+            List<UserInfo> allUser = await _userRepository.Where(p => !p.IsDeleted).ToListAsync();
             await SetLeaders(allParents, allUser);
             if (isSearchQuery)
             {
-                List<Organizes> removeOrganizes = new List<Organizes>();
+                List<Organize> removeOrganizes = new List<Organize>();
                 foreach (var item in allParents)
                 {
                     GetQueryOrganizeChild(allParents, item, removeOrganizes);
@@ -134,12 +134,12 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                Expression<Func<Organizes, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
+                Expression<Func<Organize, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
                 if (onlyQueryEnabled)
                 {
                     allQueryExp = allQueryExp.And(p => p.IsEnabled);
                 }
-                List<Organizes> allOrganizes = await _repository
+                List<Organize> allOrganizes = await _repository
                     .Where(allQueryExp)
                     .NoTracking()
                     .ToListAsync();
@@ -160,16 +160,16 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<OrganizeItemResponse> Query(long id)
         {
-            List<Organizes> allOrganizes = await _repository
+            List<Organize> allOrganizes = await _repository
                 .Where(p => !p.IsDeleted)
                 .IncludeMany(p => p.DepartLeaders.Where(t => t.OrganizeId == p.Id))
                 .IncludeMany(p => p.HeadLeaders.Where(t => t.OrganizeId == p.Id))
                 .NoTracking()
                 .ToListAsync();
             //设置用户
-            List<Users> allUser = await _userRepository.Where(p => !p.IsDeleted).ToListAsync();
+            List<UserInfo> allUser = await _userRepository.Where(p => !p.IsDeleted).ToListAsync();
             await SetLeaders(allOrganizes, allUser);
-            Organizes queryOrganize = allOrganizes.Where(p => p.Id == id).FirstOrDefault();
+            Organize queryOrganize = allOrganizes.Where(p => p.Id == id).FirstOrDefault();
             if (queryOrganize == null)
                 return null;
 
@@ -182,10 +182,10 @@ namespace OnceMi.Framework.Service.Admin
         [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
         public async Task<OrganizeItemResponse> Insert(CreateOrganizeRequest request)
         {
-            Organizes organize = _mapper.Map<Organizes>(request);
+            Organize organize = _mapper.Map<Organize>(request);
             if (organize == null)
             {
-                throw new Exception($"Map '{nameof(CreateOrganizeRequest)}' DTO to '{nameof(Organizes)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateOrganizeRequest)}' DTO to '{nameof(Organize)}' entity failed.");
             }
             if ((organize.ParentId != null && organize.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == organize.ParentId && !p.IsDeleted))
@@ -196,7 +196,7 @@ namespace OnceMi.Framework.Service.Admin
             organize.Id = _idGenerator.NewId();
             organize.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             organize.CreatedTime = DateTime.Now;
-            List<OrganizeManagers> managers = await GenerateOrganizeManagers(request, organize.Id);
+            List<OrganizeManager> managers = await GenerateOrganizeManagers(request, organize.Id);
 
             if (managers.Count > 0)
             {
@@ -212,7 +212,7 @@ namespace OnceMi.Framework.Service.Admin
         [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
         public async Task Update(UpdateOrganizeRequest request)
         {
-            Organizes organize = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Organize organize = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (organize == null)
             {
                 throw new BusException(ResultCode.ORG_UPDATE_NOT_EXISTS, "修改的条目不存在");
@@ -226,7 +226,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ORG_PARENT_CANNOT_SELF, "父条目不能为本身");
             }
-            List<OrganizeManagers> managers = await GenerateOrganizeManagers(request);
+            List<OrganizeManager> managers = await GenerateOrganizeManagers(request);
             //将请求Map到要修改的对象
             organize = request.MapTo(organize);
             organize.ParentId = request.ParentId == 0 ? null : request.ParentId;
@@ -234,7 +234,7 @@ namespace OnceMi.Framework.Service.Admin
             organize.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
 
             //删除之前的OrganizeManagers
-            await _repository.Orm.Select<OrganizeManagers>()
+            await _repository.Orm.Select<OrganizeManager>()
                 .Where(p => p.OrganizeId == organize.Id)
                 .ToDelete()
                 .ExecuteAffrowsAsync();
@@ -262,7 +262,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ORG_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
-            List<Organizes> allOrganizes = await _repository
+            List<Organize> allOrganizes = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -281,15 +281,15 @@ namespace OnceMi.Framework.Service.Admin
             }
             bool canNotDelete = true;
             //判断角色
-            canNotDelete = await _repository.Orm.Select<Roles>().AnyAsync(p => delIds.Contains(p.OrganizeId) && !p.IsDeleted);
+            canNotDelete = await _repository.Orm.Select<Role>().AnyAsync(p => delIds.Contains(p.OrganizeId) && !p.IsDeleted);
             if (canNotDelete)
             {
                 throw new BusException(ResultCode.ORG_HAS_ROLES, "删除失败，当前组织机构下包含未删除的角色组");
             }
-            canNotDelete = await _repository.Orm.Select<Users>().AnyAsync(p => p.Organizes.AsSelect().Any(q => delIds.Contains(q.Id)) && !p.IsDeleted);
+            canNotDelete = await _repository.Orm.Select<UserInfo>().AnyAsync(p => p.Organizes.AsSelect().Any(q => delIds.Contains(q.Id)) && !p.IsDeleted);
             if (canNotDelete)
             {
-                throw new BusException(ResultCode.ORG_HAS_USERS, "删除失败，当前组织机构下包含未删除的用户");
+                throw new BusException(ResultCode.ORG_HAS_USERS, "删除失败，当前组织机构下包含启用的用户");
             }
             if (delIds != null)
             {
@@ -308,7 +308,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelOrganizes(List<Organizes> source, long id, List<long> dest)
+        private void SearchDelOrganizes(List<Organize> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -319,14 +319,14 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
-            List<Organizes> child = source.Where(p => p.ParentId == id).ToList();
+            List<Organize> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelOrganizes(source, citem.Id, dest);
             }
         }
 
-        private void GetQueryOrganizeChild(List<Organizes> source, Organizes organize, List<Organizes> removeOrganizes = null)
+        private void GetQueryOrganizeChild(List<Organize> source, Organize organize, List<Organize> removeOrganizes = null)
         {
             var childs = source.Where(p => p.ParentId == organize.Id).ToList();
             if (childs == null || childs.Count == 0)
@@ -350,7 +350,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="managers"></param>
         /// <param name="organizes"></param>
         /// <param name="allUser"></param>
-        private async Task SetLeaders(List<Organizes> organizes, List<Users> allUser)
+        private async Task SetLeaders(List<Organize> organizes, List<UserInfo> allUser)
         {
             if (allUser == null || allUser.Count == 0)
                 return;
@@ -358,7 +358,7 @@ namespace OnceMi.Framework.Service.Admin
                 return;
 
             List<long> allOrganizeIds = organizes.Select(p => p.Id).ToList();
-            List<OrganizeManagers> managers = await _repository.Orm.Select<OrganizeManagers>()
+            List<OrganizeManager> managers = await _repository.Orm.Select<OrganizeManager>()
                 .Where(p => allOrganizeIds.Contains(p.OrganizeId))
                 .ToListAsync();
 
@@ -383,7 +383,7 @@ namespace OnceMi.Framework.Service.Admin
             }
         }
 
-        private async Task<List<OrganizeManagers>> GenerateOrganizeManagers(UpdateOrganizeRequest request)
+        private async Task<List<OrganizeManager>> GenerateOrganizeManagers(UpdateOrganizeRequest request)
         {
             return await GenerateOrganizeManagers(new CreateOrganizeRequest()
             {
@@ -397,20 +397,20 @@ namespace OnceMi.Framework.Service.Admin
             }, request.Id);
         }
 
-        private async Task<List<OrganizeManagers>> GenerateOrganizeManagers(CreateOrganizeRequest request, long id)
+        private async Task<List<OrganizeManager>> GenerateOrganizeManagers(CreateOrganizeRequest request, long id)
         {
             //保存分管领导信息
-            List<OrganizeManagers> managers = new List<OrganizeManagers>();
+            List<OrganizeManager> managers = new List<OrganizeManager>();
             if (request.DepartLeaders != null && request.DepartLeaders.Count > 0)
             {
-                List<Users> departLeaderUsers = await _userRepository.Where(p => request.DepartLeaders.Contains(p.Id) && !p.IsDeleted).ToListAsync();
+                List<UserInfo> departLeaderUsers = await _userRepository.Where(p => request.DepartLeaders.Contains(p.Id) && !p.IsDeleted).ToListAsync();
                 if (request.DepartLeaders.Count != departLeaderUsers.Count)
                 {
                     throw new BusException(ResultCode.ORG_SELECT_DL_ERROR, "所选部门负责人不正确");
                 }
                 if (departLeaderUsers != null && departLeaderUsers.Count > 0)
                 {
-                    var departLeaders = request.DepartLeaders.Select(p => new OrganizeManagers()
+                    var departLeaders = request.DepartLeaders.Select(p => new OrganizeManager()
                     {
                         Id = _idGenerator.NewId(),
                         UserId = departLeaderUsers.SingleOrDefault(q => q.Id == p).Id,
@@ -424,14 +424,14 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (request.HeadLeaders != null && request.HeadLeaders.Count > 0)
             {
-                List<Users> hesderLeaderUsers = await _userRepository.Where(p => request.HeadLeaders.Contains(p.Id) && !p.IsDeleted).ToListAsync();
+                List<UserInfo> hesderLeaderUsers = await _userRepository.Where(p => request.HeadLeaders.Contains(p.Id) && !p.IsDeleted).ToListAsync();
                 if (request.HeadLeaders.Count != hesderLeaderUsers.Count)
                 {
                     throw new BusException(ResultCode.ORG_SELECT_HL_ERROR, "所选分管领导不正确");
                 }
                 if (hesderLeaderUsers != null && hesderLeaderUsers.Count > 0)
                 {
-                    var headLeaders = request.HeadLeaders.Select(p => new OrganizeManagers()
+                    var headLeaders = request.HeadLeaders.Select(p => new OrganizeManager()
                     {
                         Id = _idGenerator.NewId(),
                         UserId = hesderLeaderUsers.SingleOrDefault(q => q.Id == p).Id,

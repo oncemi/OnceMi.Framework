@@ -9,7 +9,7 @@ namespace OnceMi.Framework.Model.Dto
     /// <summary>
     /// API DTO
     /// </summary>
-    [MapperFrom(typeof(Users))]
+    [MapperFrom(typeof(UserInfo))]
     public class UserItemResponse : IResponse
     {
         public long Id { get; set; }

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class JobGroupService : BaseService<JobGroups, long>, IJobGroupService
+    public class JobGroupService : BaseService<JobGroup, long>, IJobGroupService
     {
         private readonly IJobGroupRepository _repository;
         private readonly ILogger<JobGroupService> _logger;
@@ -45,14 +45,14 @@ namespace OnceMi.Framework.Service.Admin
         public async Task<IPageResponse<JobGroupItemResponse>> Query(IPageRequest request)
         {
             IPageResponse<JobGroupItemResponse> response = new IPageResponse<JobGroupItemResponse>();
-            Expression<Func<JobGroups, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<JobGroup, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 exp = exp.And(p => p.Name.Contains(request.Search) || p.Code.Contains(request.Search));
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<JobGroups> allJobGroups = await _repository.Select
+            List<JobGroup> allJobGroups = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)
@@ -80,7 +80,7 @@ namespace OnceMi.Framework.Service.Admin
         public async Task<JobGroupItemResponse> Query(long id)
         {
             //查询分组
-            JobGroups jobGroup = await _repository.Where(p => p.Id == id && !p.IsDeleted)
+            JobGroup jobGroup = await _repository.Where(p => p.Id == id && !p.IsDeleted)
                 .FirstAsync();
             if (jobGroup == null)
                 return null;
@@ -89,10 +89,10 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<JobGroupItemResponse> Insert(CreateJobGroupRequest request)
         {
-            JobGroups jobGroup = _mapper.Map<JobGroups>(request);
+            JobGroup jobGroup = _mapper.Map<JobGroup>(request);
             if (jobGroup == null)
             {
-                throw new Exception($"Map '{nameof(CreateJobGroupRequest)}' DTO to '{nameof(JobGroups)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateJobGroupRequest)}' DTO to '{nameof(JobGroup)}' entity failed.");
             }
             //判断分组是否存在
             if (await _repository.Select.AnyAsync(p => p.Name == request.Name && !p.IsDeleted))
@@ -120,7 +120,7 @@ namespace OnceMi.Framework.Service.Admin
         public async Task Update(UpdateJobGroupRequest request)
         {
             //判断分组是否存在
-            JobGroups jobGroup = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
+            JobGroup jobGroup = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
             if (jobGroup == null)
             {
                 throw new BusException(ResultCode.JOBG_NOT_EXISTS, $"修改的分组不存在");
@@ -148,12 +148,12 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.JOBG_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
-            List<JobGroups> allDelGroups = await _repository.Where(p => ids.Contains(p.Id))
+            List<JobGroup> allDelGroups = await _repository.Where(p => ids.Contains(p.Id))
                 .NoTracking()
                 .ToListAsync();
             foreach (var item in allDelGroups)
             {
-                if (await _repository.Orm.Select<Jobs>().AnyAsync(p => p.GroupId == item.Id && !p.IsDeleted))
+                if (await _repository.Orm.Select<Job>().AnyAsync(p => p.GroupId == item.Id && !p.IsDeleted))
                 {
                     throw new BusException(ResultCode.JOBG_IN_USED, $"分组“{item.Name}”正在使用，无法删除");
                 }

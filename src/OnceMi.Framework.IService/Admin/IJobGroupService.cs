@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IJobGroupService : IBaseService<JobGroups, long>
+    public interface IJobGroupService : IBaseService<JobGroup, long>
     {
         /// <summary>
         /// 分页查询

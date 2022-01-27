@@ -14,7 +14,7 @@ namespace OnceMi.Framework.Model.Dto
     /// <summary>
     /// 菜单DTO
     /// </summary>
-    [MapperFrom(typeof(Menus))]
+    [MapperFrom(typeof(Menu))]
     [MapperTo(typeof(ICascaderResponse))]
     public class MenuItemResponse : ITreeResponse<MenuItemResponse>
     {

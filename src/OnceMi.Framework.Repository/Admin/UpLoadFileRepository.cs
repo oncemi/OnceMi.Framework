@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class UpLoadFileRepository : BaseUnitOfWorkRepository<UpLoadFiles, long>, IUpLoadFileRepository
+    public class UpLoadFileRepository : BaseUnitOfWorkRepository<UpLoadFile, long>, IUpLoadFileRepository
     {
         private readonly ILogger<UpLoadFileRepository> _logger;
         private readonly IFreeSql _db;

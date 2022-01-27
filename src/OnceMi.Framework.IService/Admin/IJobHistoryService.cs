@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IJobHistoryService : IBaseService<JobHistories, long>
+    public interface IJobHistoryService : IBaseService<JobHistory, long>
     {
         Task<IPageResponse<JobHistoryItemResponse>> Query(JobHistoryPageRequest request);
     }

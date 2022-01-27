@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(Roles))]
+    [MapperTo(typeof(Role))]
     public class CreateRoleRequest : IRequest
     {
         private long? _parentId;

@@ -19,7 +19,7 @@ using System.Text;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class ConfigService : BaseService<Configs, long>, IConfigService
+    public class ConfigService : BaseService<Entity.Admin.Config, long>, IConfigService
     {
         private readonly IConfigRepository _repository;
         private readonly ILogger<ConfigService> _logger;
@@ -45,9 +45,9 @@ namespace OnceMi.Framework.Service.Admin
 
         #region 硬件信息
 
-        public Task<SystemHardwareInfo> HardwareInfo()
+        public Task<SystemInfo> HardwareInfo()
         {
-            SystemHardwareInfo hardwareInfo = new SystemHardwareInfo();
+            SystemInfo hardwareInfo = new SystemInfo();
 
             IHardwareInfo hardwareInfoHandler = new HardwareInfo();
             hardwareInfoHandler.RefreshMemoryStatus();
@@ -87,18 +87,18 @@ namespace OnceMi.Framework.Service.Admin
         {
             DatabaseEntities data = new DatabaseEntities
             {
-                Apis = await _repository.Orm.Select<Apis>().ToListAsync(),
-                Views = await _repository.Orm.Select<Views>().ToListAsync(),
-                Menus = await _repository.Orm.Select<Menus>().ToListAsync(),
-                RolePermissions = await _repository.Orm.Select<RolePermissions>().ToListAsync(),
-                Users = await _repository.Orm.Select<Users>().ToListAsync(),
-                Organizes = await _repository.Orm.Select<Organizes>().ToListAsync(),
+                Apis = await _repository.Orm.Select<Api>().ToListAsync(),
+                Views = await _repository.Orm.Select<View>().ToListAsync(),
+                Menus = await _repository.Orm.Select<Menu>().ToListAsync(),
+                RolePermissions = await _repository.Orm.Select<RolePermission>().ToListAsync(),
+                Users = await _repository.Orm.Select<UserInfo>().ToListAsync(),
+                Organizes = await _repository.Orm.Select<Organize>().ToListAsync(),
                 UserOrganize = await _repository.Orm.Select<UserOrganize>().ToListAsync(),
-                Roles = await _repository.Orm.Select<Roles>().ToListAsync(),
+                Roles = await _repository.Orm.Select<Role>().ToListAsync(),
                 UserRole = await _repository.Orm.Select<UserRole>().ToListAsync(),
-                Jobs = await _repository.Orm.Select<Jobs>().ToListAsync(),
-                JobGroups = await _repository.Orm.Select<JobGroups>().ToListAsync(),
-                ArticleCategories = await _repository.Orm.Select<ArticleCategories>().ToListAsync(),
+                Jobs = await _repository.Orm.Select<Job>().ToListAsync(),
+                JobGroups = await _repository.Orm.Select<JobGroup>().ToListAsync(),
+                ArticleCategories = await _repository.Orm.Select<ArticleCategory>().ToListAsync(),
             };
             string source = JsonUtil.SerializeToString(data);
             if (source == null)
@@ -137,9 +137,9 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.CONFIG_KEY_CANNOT_NULL, "获取配置项失败，参数KEY不能为空");
             }
-            return await _redisClient.GetOrCreateAsync<ConfigModel<T>>(CacheConstant.GetConfigKey(key), async () =>
+            return await _redisClient.GetOrCreateAsync(CacheConstant.GetConfigKey(key), async () =>
             {
-                Configs config = await _repository.Where(p => p.Key == key).FirstAsync();
+                Entity.Admin.Config config = await _repository.Where(p => p.Key == key).FirstAsync();
                 if (config == null)
                 {
                     throw new BusException(ResultCode.CONFIG_CANNOT_FING_KEY, $"获取配置项失败，未找到配置项：{key}");
@@ -147,7 +147,7 @@ namespace OnceMi.Framework.Service.Admin
                 ConfigModel<T> result = _mapper.Map<ConfigModel<T>>(config);
                 if (result == null)
                 {
-                    throw new Exception($"AutoMapper映射对象{nameof(Configs)}至{nameof(ConfigModel<T>)}时失败");
+                    throw new Exception($"AutoMapper映射对象{nameof(Config)}至{nameof(ConfigModel<T>)}时失败");
                 }
                 if (string.IsNullOrEmpty(config.Content))
                 {
@@ -180,10 +180,10 @@ namespace OnceMi.Framework.Service.Admin
             {
                 content = JsonUtil.SerializeToString(data.Data);
             }
-            Configs config = await _repository.Where(p => p.Key == data.Key).FirstAsync();
+            Entity.Admin.Config config = await _repository.Where(p => p.Key == data.Key).FirstAsync();
             if (config == null)
             {
-                config = new Configs()
+                config = new Entity.Admin.Config()
                 {
                     Id = _idGenerator.NewId(),
                     Content = content,

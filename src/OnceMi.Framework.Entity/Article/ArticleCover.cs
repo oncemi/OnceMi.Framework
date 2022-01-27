@@ -1,17 +1,12 @@
 ﻿using FreeSql.DataAnnotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Article
 {
     /// <summary>
-    /// 文章标签
+    /// 文章封面
     /// </summary>
-    [Table(Name = nameof(ArticleTags))]
-    public class ArticleTags : IBaseEntity
+    [Table(Name = "article_cover")]
+    public class ArticleCover : IBaseEntity
     {
         /// <summary>
         /// 文章Id
@@ -19,10 +14,10 @@ namespace OnceMi.Framework.Entity.Article
         public long ArticleId { get; set; }
 
         /// <summary>
-        /// 标签
+        /// 链接
         /// </summary>
-        [Column(StringLength = 100, IsNullable = false)]
-        public string Tag { get; set; }
+        [Column(StringLength = -1, IsNullable = false)]
+        public string Url { get; set; }
 
         //[Navigate(nameof(ArticleId))]
         //public Articles Article { get; set; }

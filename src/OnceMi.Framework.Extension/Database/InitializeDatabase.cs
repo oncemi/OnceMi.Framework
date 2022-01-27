@@ -29,13 +29,13 @@ namespace OnceMi.Framework.Extension.Database
             }
             _fsql.Transaction(() =>
             {
-                if (_fsql.Select<Users>().Count() == 0 && data.Users != null && data.Users.Count > 0)
+                if (_fsql.Select<UserInfo>().Count() == 0 && data.Users != null && data.Users.Count > 0)
                 {
                     _logger.LogInformation("初始化用户数据...");
                     _fsql.Insert(data.Users).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<Organizes>().Count() == 0 && data.Organizes != null && data.Organizes.Count > 0)
+                if (_fsql.Select<Organize>().Count() == 0 && data.Organizes != null && data.Organizes.Count > 0)
                 {
                     _logger.LogInformation("初始化组织机构数据...");
                     _fsql.Insert(data.Organizes).ExecuteAffrows();
@@ -47,7 +47,7 @@ namespace OnceMi.Framework.Extension.Database
                     _fsql.Insert(data.UserOrganize).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<Roles>().Count() == 0 && data.Roles != null && data.Roles.Count > 0)
+                if (_fsql.Select<Role>().Count() == 0 && data.Roles != null && data.Roles.Count > 0)
                 {
                     _logger.LogInformation("初始化角色数据...");
                     _fsql.Insert(data.Roles).ExecuteAffrows();
@@ -59,43 +59,43 @@ namespace OnceMi.Framework.Extension.Database
                     _fsql.Insert(data.UserRole).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<RolePermissions>().Count() == 0 && data.RolePermissions != null && data.RolePermissions.Count > 0)
+                if (_fsql.Select<RolePermission>().Count() == 0 && data.RolePermissions != null && data.RolePermissions.Count > 0)
                 {
                     _logger.LogInformation("初始化角色权限数据...");
                     _fsql.Insert(data.RolePermissions).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<Apis>().Count() == 0 && data.Apis != null && data.Apis.Count > 0)
+                if (_fsql.Select<Api>().Count() == 0 && data.Apis != null && data.Apis.Count > 0)
                 {
                     _logger.LogInformation("初始化系统默认API数据...");
                     _fsql.Insert(data.Apis).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<JobGroups>().Count() == 0 && data.JobGroups != null && data.JobGroups.Count > 0)
+                if (_fsql.Select<JobGroup>().Count() == 0 && data.JobGroups != null && data.JobGroups.Count > 0)
                 {
                     _logger.LogInformation("初始化作业默认分组数据...");
                     _fsql.Insert(data.JobGroups).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<Jobs>().Count() == 0 && data.Jobs != null && data.Jobs.Count > 0)
+                if (_fsql.Select<Entity.Admin.Job>().Count() == 0 && data.Jobs != null && data.Jobs.Count > 0)
                 {
                     _logger.LogInformation("初始化作业默认数据...");
                     _fsql.Insert(data.Jobs).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<Menus>().Count() == 0 && data.Menus != null && data.Menus.Count > 0)
+                if (_fsql.Select<Menu>().Count() == 0 && data.Menus != null && data.Menus.Count > 0)
                 {
                     _logger.LogInformation("初始化菜单数据...");
                     _fsql.Insert(data.Menus).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<Views>().Count() == 0 && data.Views != null && data.Views.Count > 0)
+                if (_fsql.Select<View>().Count() == 0 && data.Views != null && data.Views.Count > 0)
                 {
                     _logger.LogInformation("初始化视图数据...");
                     _fsql.Insert(data.Views).ExecuteAffrows();
                 }
 
-                if (_fsql.Select<ArticleCategories>().Count() == 0 && data.ArticleCategories != null && data.ArticleCategories.Count > 0)
+                if (_fsql.Select<ArticleCategory>().Count() == 0 && data.ArticleCategories != null && data.ArticleCategories.Count > 0)
                 {
                     _logger.LogInformation("初始化文章分类数据...");
                     _fsql.Insert(data.ArticleCategories).ExecuteAffrows();

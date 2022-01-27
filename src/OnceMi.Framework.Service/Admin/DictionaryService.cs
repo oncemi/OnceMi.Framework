@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class DictionaryService : BaseService<Dictionaries, long>, IDictionaryService
+    public class DictionaryService : BaseService<Dictionary, long>, IDictionaryService
     {
         private readonly IDictionaryRepository _repository;
         private readonly ILogger<DictionaryService> _logger;
@@ -57,7 +57,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<DictionaryItemResponse> response = new IPageResponse<DictionaryItemResponse>();
             bool isSearchQuery = false;
-            Expression<Func<Dictionaries, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<Dictionary, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 isSearchQuery = true;
@@ -69,7 +69,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Dictionaries> allParents = await _repository.Select
+            List<Dictionary> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)
@@ -87,7 +87,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (isSearchQuery)
             {
-                List<Dictionaries> removeDics = new List<Dictionaries>();
+                List<Dictionary> removeDics = new List<Dictionary>();
                 foreach (var item in allParents)
                 {
                     GetQueryDictionaryChild(allParents, item, removeDics);
@@ -102,7 +102,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                List<Dictionaries> allDics = await _repository
+                List<Dictionary> allDics = await _repository
                     .Where(p => !p.IsDeleted && p.ParentId != null)
                     .NoTracking()
                     .ToListAsync();
@@ -124,7 +124,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (!string.IsNullOrEmpty(request.Code) && (request.Id == null || request.Id == 0))
             {
-                Dictionaries queryDic = await _repository
+                Dictionary queryDic = await _repository
                     .Where(p => !p.IsDeleted && p.Code == request.Code)
                     .NoTracking()
                     .FirstAsync();
@@ -136,7 +136,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (request.IncludeChild)
             {
-                List<Dictionaries> allDics = await _repository
+                List<Dictionary> allDics = await _repository
                     .Where(p => !p.IsDeleted)
                     .NoTracking()
                     .ToListAsync();
@@ -144,7 +144,7 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     throw new BusException(ResultCode.DIC_QUERY_FAILED, $"查询字典信息失败");
                 }
-                Dictionaries queryDic = allDics.Where(p => p.Id == request.Id).FirstOrDefault();
+                Dictionary queryDic = allDics.Where(p => p.Id == request.Id).FirstOrDefault();
                 if (queryDic == null)
                     return null;
 
@@ -154,7 +154,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                Dictionaries queryDic = await _repository
+                Dictionary queryDic = await _repository
                     .Where(p => !p.IsDeleted && p.Id == request.Id)
                     .NoTracking()
                     .FirstAsync();
@@ -165,10 +165,10 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<DictionaryItemResponse> Insert(CreateDictionaryRequest request)
         {
-            Dictionaries dictionary = _mapper.Map<Dictionaries>(request);
+            Dictionary dictionary = _mapper.Map<Dictionary>(request);
             if (dictionary == null)
             {
-                throw new Exception($"Map '{nameof(CreateDictionaryRequest)}' DTO to '{nameof(Dictionaries)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateDictionaryRequest)}' DTO to '{nameof(Dictionary)}' entity failed.");
             }
             if ((dictionary.ParentId != null && dictionary.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == dictionary.ParentId && !p.IsDeleted))
@@ -194,7 +194,7 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task Update(UpdateDictionaryRequest request)
         {
-            Dictionaries dictionary = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Dictionary dictionary = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (dictionary == null)
             {
                 throw new BusException(ResultCode.DIC_UPDATE_ITEM_NOTEXISTS, "修改的条目不存在");
@@ -225,7 +225,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.DIC_DELETE_NOT_EISTS, "没有要删除的条目");
             }
-            List<Dictionaries> allDics = await _repository
+            List<Dictionary> allDics = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -242,7 +242,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 return;
             }
-            await _repository.Orm.Select<Dictionaries>()
+            await _repository.Orm.Select<Dictionary>()
                 .Where(p => delIds.Contains(p.Id))
                 .ToDelete()
                 .ExecuteAffrowsAsync();
@@ -254,7 +254,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelDictionaries(List<Dictionaries> source, long id, List<long> dest)
+        private void SearchDelDictionaries(List<Dictionary> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -265,14 +265,14 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
-            List<Dictionaries> child = source.Where(p => p.ParentId == id).ToList();
+            List<Dictionary> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelDictionaries(source, citem.Id, dest);
             }
         }
 
-        private void GetQueryDictionaryChild(List<Dictionaries> source, Dictionaries view, List<Dictionaries> removeDics = null)
+        private void GetQueryDictionaryChild(List<Dictionary> source, Dictionary view, List<Dictionary> removeDics = null)
         {
             var childs = source.Where(p => p.ParentId == view.Id).ToList();
             if (childs == null || childs.Count == 0)

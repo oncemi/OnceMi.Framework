@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    public class SystemHardwareInfo
+    public class SystemInfo
     {
         /// <summary>
         /// 操作系统的版本描述

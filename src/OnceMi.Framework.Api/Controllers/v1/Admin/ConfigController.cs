@@ -30,7 +30,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// <returns></returns>
         [HttpGet]
         [Route("[action]")]
-        public async Task<SystemHardwareInfo> HardwareInfo()
+        public async Task<SystemInfo> HardwareInfo()
         {
             return await _configsService.HardwareInfo();
         }

@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IJobService : IBaseService<Jobs, long>
+    public interface IJobService : IBaseService<Job, long>
     {
         /// <summary>
         /// 查询job by id
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task<Jobs> QueryJobById(long Id);
+        Task<Job> QueryJobById(long Id);
 
         /// <summary>
         /// 分页查询
@@ -26,9 +26,9 @@ namespace OnceMi.Framework.IService.Admin
         /// 查询初始化作业
         /// </summary>
         /// <returns></returns>
-        Task<List<Jobs>> QueryInitJobs();
+        Task<List<Job>> QueryInitJobs();
 
-        Task<Jobs> Insert(CreateJobRequest request);
+        Task<Job> Insert(CreateJobRequest request);
 
         Task Update(UpdateJobRequest request);
 

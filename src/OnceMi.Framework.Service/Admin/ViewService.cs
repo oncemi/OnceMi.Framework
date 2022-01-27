@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class ViewService : BaseService<Views, long>, IViewService
+    public class ViewService : BaseService<View, long>, IViewService
     {
         private readonly IViewRepository _repository;
         private readonly ILogger<ViewService> _logger;
@@ -48,7 +48,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<ViewItemResponse> response = new IPageResponse<ViewItemResponse>();
             bool isSearchQuery = false;
-            Expression<Func<Views, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<View, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 isSearchQuery = true;
@@ -64,7 +64,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Views> allParents = await _repository.Select
+            List<View> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)
@@ -82,7 +82,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (isSearchQuery)
             {
-                List<Views> removeViews = new List<Views>();
+                List<View> removeViews = new List<View>();
                 foreach (var item in allParents)
                 {
                     GetQueryViewChild(allParents, item, removeViews);
@@ -97,12 +97,12 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                Expression<Func<Views, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
+                Expression<Func<View, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
                 if (onlyQueryEnabled)
                 {
                     allQueryExp = allQueryExp.And(p => p.IsEnabled);
                 }
-                List<Views> allViews = await _repository
+                List<View> allViews = await _repository
                     .Where(allQueryExp)
                     .NoTracking()
                     .ToListAsync();
@@ -122,11 +122,11 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<ViewItemResponse> Query(long id)
         {
-            List<Views> allViews = await _repository
+            List<View> allViews = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
-            Views queryView = allViews.Where(p => p.Id == id).FirstOrDefault();
+            View queryView = allViews.Where(p => p.Id == id).FirstOrDefault();
             if (queryView == null)
                 return null;
 
@@ -137,10 +137,10 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<ViewItemResponse> Insert(CreateViewRequest request)
         {
-            Views view = _mapper.Map<Views>(request);
+            View view = _mapper.Map<View>(request);
             if (view == null)
             {
-                throw new Exception($"Map '{nameof(CreateViewRequest)}' DTO to '{nameof(Views)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateViewRequest)}' DTO to '{nameof(View)}' entity failed.");
             }
             if ((view.ParentId != null && view.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == view.ParentId && !p.IsDeleted))
@@ -160,7 +160,7 @@ namespace OnceMi.Framework.Service.Admin
         [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
         public async Task Update(UpdateViewRequest request)
         {
-            Views view = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            View view = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (view == null)
             {
                 throw new BusException(ResultCode.VIEW_UPDATE_NOT_EXISTS, "修改的条目不存在");
@@ -201,7 +201,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.VIEW_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
-            List<Views> allViews = await _repository
+            List<View> allViews = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -228,19 +228,19 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (menuIds != null && menuIds.Count > 0)
             {
-                await _repository.Orm.Delete<Menus>()
+                await _repository.Orm.Delete<Menu>()
                     .Where(p => menuIds.Contains(p.Id))
                     .ExecuteAffrowsAsync();
             }
             if (permissionIds != null && permissionIds.Count > 0)
             {
-                await _repository.Orm.Delete<RolePermissions>()
+                await _repository.Orm.Delete<RolePermission>()
                     .Where(p => permissionIds.Contains(p.Id))
                     .ExecuteAffrowsAsync();
             }
         }
 
-        private void GetQueryViewChild(List<Views> source, Views view, List<Views> removeViews = null)
+        private void GetQueryViewChild(List<View> source, View view, List<View> removeViews = null)
         {
             var childs = source.Where(p => p.ParentId == view.Id).ToList();
             if (childs == null || childs.Count == 0)
@@ -267,7 +267,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (delIds == null || delIds.Count == 0)
                 return null;
-            List<Menus> allMenus = await _repository.Orm.Select<Menus>()
+            List<Menu> allMenus = await _repository.Orm.Select<Menu>()
                 .Where(p => p.ViewId != null)
                 .NoTracking()
                 .ToListAsync();
@@ -296,7 +296,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (delIds == null || delIds.Count == 0)
                 return null;
-            List<RolePermissions> allPermissions = await _repository.Orm.Select<RolePermissions>()
+            List<RolePermission> allPermissions = await _repository.Orm.Select<RolePermission>()
                 .Where(p => delIds.Contains(p.MenuId))
                 .NoTracking()
                 .ToListAsync();
@@ -311,7 +311,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelViews(List<Views> source, long id, List<long> dest)
+        private void SearchDelViews(List<View> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -322,14 +322,14 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
-            List<Views> child = source.Where(p => p.ParentId == id).ToList();
+            List<View> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelViews(source, citem.Id, dest);
             }
         }
 
-        private void SearchDelMenus(List<Menus> source, long id, List<long> dest)
+        private void SearchDelMenus(List<Menu> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -341,7 +341,7 @@ namespace OnceMi.Framework.Service.Admin
                 dest.Add(item.Id);
             }
             //查找ParentId为id的子节点
-            List<Menus> child = source.Where(p => p.ParentId == id).ToList();
+            List<Menu> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelMenus(source, citem.Id, dest);

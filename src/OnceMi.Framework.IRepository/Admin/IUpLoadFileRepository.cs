@@ -3,7 +3,7 @@ using OnceMi.Framework.Entity.Admin;
 
 namespace OnceMi.Framework.IRepository
 {
-    public interface IUpLoadFileRepository : IBaseRepository<UpLoadFiles, long>, IRepositoryDependency
+    public interface IUpLoadFileRepository : IBaseRepository<UpLoadFile, long>, IRepositoryDependency
     {
 
     }

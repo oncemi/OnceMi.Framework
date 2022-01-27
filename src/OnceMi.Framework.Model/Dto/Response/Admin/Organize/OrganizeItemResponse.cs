@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperFrom(typeof(Organizes))]
+    [MapperFrom(typeof(Organize))]
     [MapperTo(typeof(ICascaderResponse))]
     public class OrganizeItemResponse : ITreeResponse<OrganizeItemResponse>
     {
@@ -64,7 +64,7 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 部门领导
         /// </summary>
-        public List<OrganizeManagers> DepartLeaders { get; set; }
+        public List<OrganizeManager> DepartLeaders { get; set; }
 
         /// <summary>
         /// 分管领导名字
@@ -83,7 +83,7 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 分管领导
         /// </summary>
-        public List<OrganizeManagers> HeadLeaders { get; set; }
+        public List<OrganizeManager> HeadLeaders { get; set; }
 
         /// <summary>
         /// 树标签

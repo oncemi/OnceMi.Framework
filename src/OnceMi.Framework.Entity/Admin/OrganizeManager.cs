@@ -5,8 +5,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 组织机构管理人员（领导，分管领导）
     /// </summary>
-    [Table(Name = nameof(OrganizeManagers))]
-    public class OrganizeManagers : IBaseEntity
+    [Table(Name = "sys_organize_manager")]
+    public class OrganizeManager : IBaseEntity
     {
         /// <summary>
         /// 组织Id
@@ -32,13 +32,13 @@ namespace OnceMi.Framework.Entity.Admin
         /// 关联的组织结构
         /// </summary>
         [Navigate(nameof(OrganizeId))]
-        public Organizes Organize { get; set; }
+        public Organize Organize { get; set; }
 
         /// <summary>
         /// 关联的用户
         /// </summary>
         [Navigate(nameof(UserId))]
-        public Users User { get; set; }
+        public UserInfo User { get; set; }
     }
 
     public enum OrganizeManagerType

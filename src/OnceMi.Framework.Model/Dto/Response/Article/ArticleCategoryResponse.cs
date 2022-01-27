@@ -11,7 +11,7 @@ namespace OnceMi.Framework.Model.Dto
     /// <summary>
     /// 文章分类DTO
     /// </summary>
-    [MapperFrom(typeof(ArticleCategories))]
+    [MapperFrom(typeof(ArticleCategory))]
     [MapperTo(typeof(ICascaderResponse))]
     public class ArticleCategoryResponse : ITreeResponse<ArticleCategoryResponse>
     {

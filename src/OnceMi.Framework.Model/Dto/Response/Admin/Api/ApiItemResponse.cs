@@ -10,7 +10,7 @@ namespace OnceMi.Framework.Model.Dto
     /// <summary>
     /// API DTO
     /// </summary>
-    [MapperFrom(typeof(Apis))]
+    [MapperFrom(typeof(Api))]
     [MapperTo(typeof(ICascaderResponse))]
     public class ApiItemResponse : IResponse
     {

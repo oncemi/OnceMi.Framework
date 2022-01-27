@@ -8,10 +8,10 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 组织机构
     /// </summary>
-    [Table(Name = nameof(Organizes))]
+    [Table(Name = "sys_organizes")]
     [Index("index_{TableName}_" + nameof(Name), nameof(Name), false)]
     [Index("index_{TableName}_" + nameof(Code), nameof(Code), false)]
-    public class Organizes : IBaseEntity
+    public class Organize : IBaseEntity
     {
         [Column(Position = 2, IsNullable = true)]
         public long? ParentId { get; set; }
@@ -42,13 +42,13 @@ namespace OnceMi.Framework.Entity.Admin
         /// 部门领导
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<OrganizeManagers> DepartLeaders { get; set; }
+        public List<OrganizeManager> DepartLeaders { get; set; }
 
         /// <summary>
         /// 分管领导
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<OrganizeManagers> HeadLeaders { get; set; }
+        public List<OrganizeManager> HeadLeaders { get; set; }
 
         /// <summary>
         /// 描述
@@ -60,16 +60,16 @@ namespace OnceMi.Framework.Entity.Admin
         /// Users导航属性
         /// </summary>
         [Navigate(ManyToMany = typeof(UserOrganize))]
-        public List<Users> Users { get; set; }
+        public List<UserInfo> Users { get; set; }
 
         /// <summary>
         /// Roles导航属性
         /// </summary>
-        [Navigate(nameof(Admin.Roles.OrganizeId))]
-        public List<Roles> Roles { get; set; }
+        [Navigate(nameof(Admin.Role.OrganizeId))]
+        public List<Role> Roles { get; set; }
 
         [Column(IsIgnore = true)]
-        public List<Organizes> Children { get; set; }
+        public List<Organize> Children { get; set; }
     }
 
     public enum OrganizeType

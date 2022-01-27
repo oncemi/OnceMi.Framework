@@ -14,7 +14,7 @@ namespace OnceMi.Framework.Model.Dto
     /// <summary>
     /// 作业分组DTO
     /// </summary>
-    [MapperFrom(typeof(JobGroups))]
+    [MapperFrom(typeof(JobGroup))]
     public class JobGroupItemResponse : IResponse
     {
         public long Id { get; set; }

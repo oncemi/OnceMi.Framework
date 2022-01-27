@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Article
 {
-    public class ArticleCategoryService : BaseService<ArticleCategories, long>, IArticleCategoryService
+    public class ArticleCategoryService : BaseService<ArticleCategory, long>, IArticleCategoryService
     {
         private readonly IArticleCategoryRepository _repository;
         private readonly ILogger<ArticleCategoryService> _logger;
@@ -42,7 +42,7 @@ namespace OnceMi.Framework.Service.Article
         {
             IPageResponse<ArticleCategoryResponse> response = new IPageResponse<ArticleCategoryResponse>();
             bool isSearchQuery = false;
-            Expression<Func<ArticleCategories, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<ArticleCategory, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 isSearchQuery = true;
@@ -58,7 +58,7 @@ namespace OnceMi.Framework.Service.Article
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<ArticleCategories> allParentCategoris = await _repository.Select
+            List<ArticleCategory> allParentCategoris = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)
@@ -76,7 +76,7 @@ namespace OnceMi.Framework.Service.Article
             }
             if (isSearchQuery)
             {
-                List<ArticleCategories> removeCategories = new List<ArticleCategories>();
+                List<ArticleCategory> removeCategories = new List<ArticleCategory>();
                 foreach (var item in allParentCategoris)
                 {
                     GetQueryArticleCategoryChild(allParentCategoris, item, removeCategories);
@@ -91,12 +91,12 @@ namespace OnceMi.Framework.Service.Article
             }
             else
             {
-                Expression<Func<ArticleCategories, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
+                Expression<Func<ArticleCategory, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
                 if (onlyQueryEnabled)
                 {
                     allQueryExp = allQueryExp.And(p => p.IsEnabled);
                 }
-                List<ArticleCategories> allCategories = await _repository.Select
+                List<ArticleCategory> allCategories = await _repository.Select
                     .Where(allQueryExp)
                     .NoTracking()
                     .ToListAsync();
@@ -116,11 +116,11 @@ namespace OnceMi.Framework.Service.Article
 
         public async Task<ArticleCategoryResponse> Query(long id)
         {
-            List<ArticleCategories> allCategories = await _repository.Select
+            List<ArticleCategory> allCategories = await _repository.Select
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
-            ArticleCategories queryCategory = allCategories.Where(p => p.Id == id).FirstOrDefault();
+            ArticleCategory queryCategory = allCategories.Where(p => p.Id == id).FirstOrDefault();
             if (queryCategory == null)
                 return null;
 
@@ -131,10 +131,10 @@ namespace OnceMi.Framework.Service.Article
 
         public async Task<ArticleCategoryResponse> Insert(CreateArticleCategoryRequest request)
         {
-            ArticleCategories category = _mapper.Map<ArticleCategories>(request);
+            ArticleCategory category = _mapper.Map<ArticleCategory>(request);
             if (category == null)
             {
-                throw new Exception($"Map '{nameof(CreateArticleCategoryRequest)}' DTO to '{nameof(ArticleCategories)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateArticleCategoryRequest)}' DTO to '{nameof(ArticleCategory)}' entity failed.");
             }
             if ((category.ParentId != null && category.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == category.ParentId && !p.IsDeleted))
@@ -157,7 +157,7 @@ namespace OnceMi.Framework.Service.Article
 
         public async Task Update(UpdateArticleCategoryRequest request)
         {
-            ArticleCategories category = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            ArticleCategory category = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (category == null)
             {
                 throw new BusException(ResultCode.ARITICLECATEGORY_UPDATE_NOT_EXISTS, "修改的条目不存在");
@@ -184,7 +184,7 @@ namespace OnceMi.Framework.Service.Article
             {
                 throw new BusException(ResultCode.ARITICLECATEGORY_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
-            List<ArticleCategories> allCategories = await _repository
+            List<ArticleCategory> allCategories = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -213,7 +213,7 @@ namespace OnceMi.Framework.Service.Article
 
         #region private
 
-        private void GetQueryArticleCategoryChild(List<ArticleCategories> source, ArticleCategories category, List<ArticleCategories> removeCategories = null)
+        private void GetQueryArticleCategoryChild(List<ArticleCategory> source, ArticleCategory category, List<ArticleCategory> removeCategories = null)
         {
             var childs = source.Where(p => p.ParentId == category.Id).ToList();
             if (childs == null || childs.Count == 0)
@@ -237,7 +237,7 @@ namespace OnceMi.Framework.Service.Article
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelCategories(List<ArticleCategories> source, long id, List<long> dest)
+        private void SearchDelCategories(List<ArticleCategory> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -252,7 +252,7 @@ namespace OnceMi.Framework.Service.Article
             {
                 dest.Add(item.Id);
             }
-            List<ArticleCategories> child = source.Where(p => p.ParentId == id).ToList();
+            List<ArticleCategory> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelCategories(source, citem.Id, dest);

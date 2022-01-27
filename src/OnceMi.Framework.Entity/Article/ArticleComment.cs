@@ -1,17 +1,12 @@
 ﻿using FreeSql.DataAnnotations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Article
 {
     /// <summary>
     /// 文章评论
     /// </summary>
-    [Table(Name = nameof(ArticleComments))]
-    public class ArticleComments : IBaseEntity
+    [Table(Name = "article_comments")]
+    public class ArticleComment : IBaseEntity
     {
         /// <summary>
         /// 父Id
@@ -59,6 +54,6 @@ namespace OnceMi.Framework.Entity.Article
         /// 子条目
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<ArticleComments> Children { get; set; }
+        public List<ArticleComment> Children { get; set; }
     }
 }

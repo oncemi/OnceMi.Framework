@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IMenuService : IBaseService<Menus, long>
+    public interface IMenuService : IBaseService<Menu, long>
     {
         /// <summary>
         /// 获取菜单类型
@@ -40,7 +40,7 @@ namespace OnceMi.Framework.IService.Admin
         /// </summary>
         /// <param name="roleIds"></param>
         /// <returns></returns>
-        Task<List<Menus>> Query(List<long> menuIds);
+        Task<List<Menu>> Query(List<long> menuIds);
 
         Task<MenuItemResponse> Insert(CreateMenuRequest request);
 

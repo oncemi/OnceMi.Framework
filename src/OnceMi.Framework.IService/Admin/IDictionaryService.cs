@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IDictionaryService : IBaseService<Dictionaries, long>
+    public interface IDictionaryService : IBaseService<Dictionary, long>
     {
         ValueTask<int> QueryNextSortValue(long? parentId);
 

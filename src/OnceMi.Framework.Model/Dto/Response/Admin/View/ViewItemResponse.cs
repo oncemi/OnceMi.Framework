@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperFrom(typeof(Views))]
+    [MapperFrom(typeof(View))]
     [MapperTo(typeof(ICascaderResponse))]
     public class ViewItemResponse : IResponse
     {

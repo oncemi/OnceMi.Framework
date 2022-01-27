@@ -20,7 +20,7 @@ using System.Linq.Expressions;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class ApiService : BaseService<Apis, long>, IApiService
+    public class ApiService : BaseService<Api, long>, IApiService
     {
         private readonly IApiRepository _repository;
         private readonly ILogger<ApiService> _logger;
@@ -67,7 +67,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<ApiItemResponse> response = new IPageResponse<ApiItemResponse>();
             bool isSearchQuery = false;
-            Expression<Func<Apis, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<Api, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 isSearchQuery = true;
@@ -88,7 +88,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Apis> allParentApis = await _repository.Select
+            List<Api> allParentApis = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Where(exp)
@@ -106,7 +106,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (isSearchQuery)
             {
-                List<Apis> removeApis = new List<Apis>();
+                List<Api> removeApis = new List<Api>();
                 foreach (var item in allParentApis)
                 {
                     GetQueryApiChild(allParentApis, item, removeApis);
@@ -121,12 +121,12 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                Expression<Func<Apis, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
+                Expression<Func<Api, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
                 if (onlyQueryEnabled)
                 {
                     allQueryExp = allQueryExp.And(p => p.IsEnabled);
                 }
-                List<Apis> allApis = await _repository
+                List<Api> allApis = await _repository
                     .Where(allQueryExp)
                     .NoTracking()
                     .ToListAsync();
@@ -146,11 +146,11 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<ApiItemResponse> Query(long id)
         {
-            List<Apis> allApis = await _repository
+            List<Api> allApis = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
-            Apis queryApi = allApis.Where(p => p.Id == id).FirstOrDefault();
+            Api queryApi = allApis.Where(p => p.Id == id).FirstOrDefault();
             if (queryApi == null)
                 return null;
 
@@ -161,10 +161,10 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<ApiItemResponse> Insert(CreateApiRequest request)
         {
-            Apis api = _mapper.Map<Apis>(request);
+            Api api = _mapper.Map<Api>(request);
             if (api == null)
             {
-                throw new Exception($"Map '{nameof(CreateApiRequest)}' DTO to '{nameof(Apis)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateApiRequest)}' DTO to '{nameof(Api)}' entity failed.");
             }
             if ((api.ParentId != null && api.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == api.ParentId && !p.IsDeleted))
@@ -197,7 +197,7 @@ namespace OnceMi.Framework.Service.Admin
         [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
         public async Task Update(UpdateApiRequest request)
         {
-            Apis api = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Api api = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (api == null)
             {
                 throw new BusException(ResultCode.API_FOR_CURRENT_NOT_EXISTS, "修改的条目不存在");
@@ -233,8 +233,8 @@ namespace OnceMi.Framework.Service.Admin
         {
             List<ApiDocInfo> apis = ResolveApi();
             //按照Controller分组
-            List<Apis> newParentApis = apis.GroupBy(p => new { p.Controller, p.ControllerName, p.Version })
-                .Select(p => new Apis()
+            List<Api> newParentApis = apis.GroupBy(p => new { p.Controller, p.ControllerName, p.Version })
+                .Select(p => new Api()
                 {
                     Id = _idGenerator.NewId(),
                     OperationId = p.Key.Controller + "-Controller",
@@ -249,8 +249,8 @@ namespace OnceMi.Framework.Service.Admin
                     CreateMethod = ApiCreateMethod.AutoSync,
                 }).ToList();
 
-            List<Apis> newApis = apis
-                .Select(p => new Apis()
+            List<Api> newApis = apis
+                .Select(p => new Api()
                 {
                     Id = _idGenerator.NewId(),
                     ParentId = newParentApis.Where(x => x.Path == p.Controller).FirstOrDefault()?.Id,
@@ -270,7 +270,7 @@ namespace OnceMi.Framework.Service.Admin
                 .ToList();
             newApis.AddRange(newParentApis);
             //获取当前已经存在的
-            List<Apis> oldApis = await _repository
+            List<Api> oldApis = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -288,7 +288,7 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.InsertAsync(oldApis);
             //查询菜单列表中不存在的接口（自动解析后被删除的）
             List<long> allApiIds = oldApis.Select(p => p.Id).ToList();
-            List<Menus> allApiMenus = await _repository.Orm.Select<Menus>()
+            List<Menu> allApiMenus = await _repository.Orm.Select<Menu>()
                 .Where(p => p.Type == MenuType.Api && !allApiIds.Contains(p.ApiId.Value))
                 .ToListAsync();
             if (allApiMenus != null && allApiMenus.Count > 0)
@@ -320,7 +320,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.API_FOR_DELETE_NOT_EISTS, "没有要删除的条目");
             }
-            List<Apis> allApis = await _repository
+            List<Api> allApis = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -347,19 +347,19 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (menuIds != null && menuIds.Count > 0)
             {
-                await _repository.Orm.Delete<Menus>()
+                await _repository.Orm.Delete<Menu>()
                     .Where(p => menuIds.Contains(p.Id))
                     .ExecuteAffrowsAsync();
             }
             if (permissionIds != null && permissionIds.Count > 0)
             {
-                await _repository.Orm.Delete<RolePermissions>()
+                await _repository.Orm.Delete<RolePermission>()
                     .Where(p => permissionIds.Contains(p.Id))
                     .ExecuteAffrowsAsync();
             }
         }
 
-        private void GetQueryApiChild(List<Apis> source, Apis api, List<Apis> removeApis = null)
+        private void GetQueryApiChild(List<Api> source, Api api, List<Api> removeApis = null)
         {
             var childs = source.Where(p => p.ParentId == api.Id).ToList();
             if (childs == null || childs.Count == 0)
@@ -386,7 +386,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (delIds == null || delIds.Count == 0)
                 return null;
-            List<Menus> allMenus = await _repository.Orm.Select<Menus>()
+            List<Menu> allMenus = await _repository.Orm.Select<Menu>()
                 .Where(p => p.ApiId != null)
                 .NoTracking()
                 .ToListAsync();
@@ -415,7 +415,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             if (delIds == null || delIds.Count == 0)
                 return null;
-            List<RolePermissions> allPermissions = await _repository.Orm.Select<RolePermissions>()
+            List<RolePermission> allPermissions = await _repository.Orm.Select<RolePermission>()
                 .Where(p => delIds.Contains(p.MenuId))
                 .NoTracking()
                 .ToListAsync();
@@ -430,7 +430,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelApis(List<Apis> source, long id, List<long> dest)
+        private void SearchDelApis(List<Api> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -441,14 +441,14 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
-            List<Apis> child = source.Where(p => p.ParentId == id).ToList();
+            List<Api> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelApis(source, citem.Id, dest);
             }
         }
 
-        private void SearchDelMenus(List<Menus> source, long id, List<long> dest)
+        private void SearchDelMenus(List<Menu> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -460,7 +460,7 @@ namespace OnceMi.Framework.Service.Admin
                 dest.Add(item.Id);
             }
             //查找ParentId为id的子节点
-            List<Menus> child = source.Where(p => p.ParentId == id).ToList();
+            List<Menu> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelMenus(source, citem.Id, dest);
@@ -468,9 +468,9 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         #region Resolver
-        private void DifferApis(List<Apis> oldApis, List<Apis> newApis)
+        private void DifferApis(List<Api> oldApis, List<Api> newApis)
         {
-            List<Apis> tempApis = new List<Apis>();
+            List<Api> tempApis = new List<Api>();
             //查找需要新增的
             foreach (var newItem in newApis)
             {
@@ -640,7 +640,7 @@ namespace OnceMi.Framework.Service.Admin
         /// </summary>
         /// <param name="source"></param>
         /// <param name="api"></param>
-        private void DeleteApis(List<Apis> source, Apis api)
+        private void DeleteApis(List<Api> source, Api api)
         {
             if (source.Any(p => p.Id == api.Id))
             {
@@ -649,7 +649,7 @@ namespace OnceMi.Framework.Service.Admin
             //搜索是否需要删除子节点
             if (source.Any(p => p.ParentId == api.Id))
             {
-                List<Apis> temp = source.Where(p => p.ParentId == api.Id).ToList();
+                List<Api> temp = source.Where(p => p.ParentId == api.Id).ToList();
                 foreach (var item in temp)
                 {
                     DeleteApis(source, item);
@@ -657,9 +657,9 @@ namespace OnceMi.Framework.Service.Admin
             }
         }
 
-        private void DeleteApis(List<Apis> source)
+        private void DeleteApis(List<Api> source)
         {
-            List<Apis> delApis = new List<Apis>();
+            List<Api> delApis = new List<Api>();
             foreach (var item in source)
             {
                 if (item.ParentId != null && item.ParentId > 0)
@@ -679,7 +679,7 @@ namespace OnceMi.Framework.Service.Admin
             }
         }
 
-        private void InsertApis(List<Apis> oldSource, List<Apis> newSource, Apis api)
+        private void InsertApis(List<Api> oldSource, List<Api> newSource, Api api)
         {
             if (api.ParentId == null || api.ParentId == 0)
             {
@@ -709,7 +709,7 @@ namespace OnceMi.Framework.Service.Admin
             //搜索是否需要插入子节点
             if (newSource.Any(p => p.ParentId == api.Id))
             {
-                List<Apis> temp = newSource.Where(p => p.ParentId == api.Id).ToList();
+                List<Api> temp = newSource.Where(p => p.ParentId == api.Id).ToList();
                 foreach (var item in temp)
                 {
                     InsertApis(oldSource, newSource, item);

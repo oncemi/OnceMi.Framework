@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(Apis))]
+    [MapperTo(typeof(Api))]
     public class CreateApiRequest : IRequest
     {
         private long? _parentId;

@@ -11,15 +11,11 @@ using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Exception;
 using OnceMi.Framework.Util.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Article
 {
-    public class ArticleService : BaseService<Articles, long>, IArticleService
+    public class ArticleService : BaseService<ArticleInfo, long>, IArticleService
     {
         private readonly IArticleRepository _repository;
         private readonly ILogger<ArticleService> _logger;
@@ -46,7 +42,7 @@ namespace OnceMi.Framework.Service.Article
         public async Task<IPageResponse<ArticleResponse>> Query(QueryArticlePageRequest request)
         {
             IPageResponse<ArticleResponse> response = new IPageResponse<ArticleResponse>();
-            Expression<Func<Articles, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<Entity.Article.ArticleInfo, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 exp = exp.And(p => p.Title.Contains(request.Search) || p.SubTitle.Contains(request.Search));
@@ -58,11 +54,11 @@ namespace OnceMi.Framework.Service.Article
             //默认排序
             if (request.OrderByModels == null || request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(Articles.CreatedTime)},desc" };
+                request.OrderBy = new string[] { $"{nameof(Entity.Article.ArticleInfo.CreatedTime)},desc" };
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Articles> articles = await _repository.Where(exp)
+            List<ArticleInfo> articles = await _repository.Where(exp)
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .IncludeMany(u => u.ArticleCategories)
@@ -70,7 +66,7 @@ namespace OnceMi.Framework.Service.Article
                 .IncludeMany(u => u.ArticleCovers)
                 .Include(u => u.CreateUser)
                 .NoTracking()
-                .ToListAsync(u => new Articles()
+                .ToListAsync(u => new ArticleInfo()
                 {
                     Id = u.Id,
                     Title = u.Title,
@@ -108,9 +104,9 @@ namespace OnceMi.Framework.Service.Article
 
         public async Task<ArticleResponse> Query(long id)
         {
-            Expression<Func<Articles, bool>> exp = p => !p.IsDeleted && p.Id == id;
+            Expression<Func<Entity.Article.ArticleInfo, bool>> exp = p => !p.IsDeleted && p.Id == id;
             //查询
-            Articles article = await _repository.Where(exp)
+            Entity.Article.ArticleInfo article = await _repository.Where(exp)
                 .IncludeMany(u => u.ArticleCategories)
                 .IncludeMany(u => u.ArticleTags)
                 .IncludeMany(u => u.ArticleCovers)
@@ -125,7 +121,7 @@ namespace OnceMi.Framework.Service.Article
         [Transaction]
         public async Task<ArticleResponse> Insert(CreateOrUpdateArticleRequest request)
         {
-            Articles article = new Articles()
+            Entity.Article.ArticleInfo article = new Entity.Article.ArticleInfo()
             {
                 Id = _idGenerator.NewId(),
                 Title = request.Title,
@@ -145,7 +141,7 @@ namespace OnceMi.Framework.Service.Article
                 throw new BusException(ResultCode.ARTICLE_CATEGORY_CANNOT_NULL, "文章分类不能为空");
             }
             //查询出全部分类
-            var allCategories = await _repository.Orm.Select<ArticleCategories>().ToListAsync();
+            var allCategories = await _repository.Orm.Select<ArticleCategory>().ToListAsync();
             if (allCategories == null || allCategories.Count == 0)
             {
                 throw new BusException(ResultCode.ARTICLE_NO_CATEGORY_IN_DB, "数据库中无可用文章分类");
@@ -154,7 +150,7 @@ namespace OnceMi.Framework.Service.Article
                 .GroupBy(p => p)
                 .Select(p => p.Key)
                 .ToList();
-            List<ArticleCategoriesMiddle> articleCategories = new List<ArticleCategoriesMiddle>();
+            List<ArticleBelongCategory> articleCategories = new List<ArticleBelongCategory>();
             foreach (var item in request.Categories)
             {
                 var categoryItem = allCategories.Where(p => p.Id == item).FirstOrDefault();
@@ -166,7 +162,7 @@ namespace OnceMi.Framework.Service.Article
                 {
                     throw new BusException(ResultCode.ARTICLE_CATEGORY_DISABLED, $"所选文章分类【{categoryItem.Name}】已经被禁用");
                 }
-                articleCategories.Add(new ArticleCategoriesMiddle()
+                articleCategories.Add(new ArticleBelongCategory()
                 {
                     Id = _idGenerator.NewId(),
                     CategoryId = item,
@@ -183,7 +179,7 @@ namespace OnceMi.Framework.Service.Article
             if (request.Tags != null && request.Tags.Count > 0)
             {
                 request.Tags = request.Tags.GroupBy(p => p).Select(p => p.Key).ToList();
-                List<ArticleTags> articleTags = new List<ArticleTags>();
+                List<ArticleTag> articleTags = new List<ArticleTag>();
                 foreach (var item in request.Tags)
                 {
                     if (string.IsNullOrEmpty(item))
@@ -194,7 +190,7 @@ namespace OnceMi.Framework.Service.Article
                     {
                         throw new BusException(ResultCode.ARTICLE_TAG_TOO_LONG, $"标签长度不能大于20");
                     }
-                    articleTags.Add(new ArticleTags()
+                    articleTags.Add(new ArticleTag()
                     {
                         Id = _idGenerator.NewId(),
                         ArticleId = article.Id,
@@ -211,14 +207,14 @@ namespace OnceMi.Framework.Service.Article
             //封面
             if (request.Covers != null && request.Covers.Count > 0)
             {
-                List<ArticleCovers> articleCovers = new List<ArticleCovers>();
+                List<ArticleCover> articleCovers = new List<ArticleCover>();
                 foreach (var item in request.Covers)
                 {
                     if (string.IsNullOrEmpty(item))
                     {
                         continue;
                     }
-                    articleCovers.Add(new ArticleCovers()
+                    articleCovers.Add(new ArticleCover()
                     {
                         Id = _idGenerator.NewId(),
                         ArticleId = article.Id,
@@ -242,7 +238,7 @@ namespace OnceMi.Framework.Service.Article
             {
                 throw new BusException(ResultCode.ARTICLE_ID_CANNOT_NULL, "更新文章时文章Id不能为空");
             }
-            Articles article = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Entity.Article.ArticleInfo article = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (article == null)
             {
                 throw new BusException(ResultCode.ARTICLE_UPDATE_NOT_EXIST, "更新文章不存在");
@@ -263,7 +259,7 @@ namespace OnceMi.Framework.Service.Article
                 throw new BusException(ResultCode.ARTICLE_CATEGORY_CANNOT_NULL, "文章分类不能为空");
             }
             //查询出全部分类
-            var allCategories = await _repository.Orm.Select<ArticleCategories>().ToListAsync();
+            var allCategories = await _repository.Orm.Select<ArticleCategory>().ToListAsync();
             if (allCategories == null || allCategories.Count == 0)
             {
                 throw new BusException(ResultCode.ARTICLE_NO_CATEGORY_IN_DB, "数据库中无可用文章分类");
@@ -272,7 +268,7 @@ namespace OnceMi.Framework.Service.Article
                 .GroupBy(p => p)
                 .Select(p => p.Key)
                 .ToList();
-            List<ArticleCategoriesMiddle> articleCategories = new List<ArticleCategoriesMiddle>();
+            List<ArticleBelongCategory> articleCategories = new List<ArticleBelongCategory>();
             foreach (var item in request.Categories)
             {
                 var categoryItem = allCategories.Where(p => p.Id == item).FirstOrDefault();
@@ -284,7 +280,7 @@ namespace OnceMi.Framework.Service.Article
                 {
                     throw new BusException(ResultCode.ARTICLE_CATEGORY_DISABLED, $"所选文章分类【{categoryItem.Name}】已经被禁用");
                 }
-                articleCategories.Add(new ArticleCategoriesMiddle()
+                articleCategories.Add(new ArticleBelongCategory()
                 {
                     Id = _idGenerator.NewId(),
                     CategoryId = item,
@@ -295,7 +291,7 @@ namespace OnceMi.Framework.Service.Article
                 });
             }
             //先删除原有的分类
-            await _repository.Orm.Delete<ArticleCategoriesMiddle>()
+            await _repository.Orm.Delete<ArticleBelongCategory>()
                 .Where(p => p.ArticleId == article.Id)
                 .ExecuteAffrowsAsync();
             //重新插入
@@ -305,7 +301,7 @@ namespace OnceMi.Framework.Service.Article
             if (request.Tags != null && request.Tags.Count > 0)
             {
                 request.Tags = request.Tags.GroupBy(p => p).Select(p => p.Key).ToList();
-                List<ArticleTags> articleTags = new List<ArticleTags>();
+                List<ArticleTag> articleTags = new List<ArticleTag>();
                 foreach (var item in request.Tags)
                 {
                     if (string.IsNullOrEmpty(item))
@@ -316,7 +312,7 @@ namespace OnceMi.Framework.Service.Article
                     {
                         throw new BusException(ResultCode.ARTICLE_TAG_TOO_LONG, $"标签长度不能大于20");
                     }
-                    articleTags.Add(new ArticleTags()
+                    articleTags.Add(new ArticleTag()
                     {
                         Id = _idGenerator.NewId(),
                         ArticleId = article.Id,
@@ -327,7 +323,7 @@ namespace OnceMi.Framework.Service.Article
                     });
                 }
                 //先删除原有的标签
-                await _repository.Orm.Delete<ArticleTags>()
+                await _repository.Orm.Delete<ArticleTag>()
                     .Where(p => p.ArticleId == article.Id)
                     .ExecuteAffrowsAsync();
                 //重新插入
@@ -337,21 +333,21 @@ namespace OnceMi.Framework.Service.Article
             else
             {
                 //删除原有的标签
-                await _repository.Orm.Delete<ArticleTags>()
+                await _repository.Orm.Delete<ArticleTag>()
                     .Where(p => p.ArticleId == article.Id)
                     .ExecuteAffrowsAsync();
             }
             //封面
             if (request.Covers != null && request.Covers.Count > 0)
             {
-                List<ArticleCovers> articleCovers = new List<ArticleCovers>();
+                List<ArticleCover> articleCovers = new List<ArticleCover>();
                 foreach (var item in request.Covers)
                 {
                     if (string.IsNullOrEmpty(item))
                     {
                         continue;
                     }
-                    articleCovers.Add(new ArticleCovers()
+                    articleCovers.Add(new ArticleCover()
                     {
                         Id = _idGenerator.NewId(),
                         ArticleId = article.Id,
@@ -362,7 +358,7 @@ namespace OnceMi.Framework.Service.Article
                     });
                 }
                 //先删除原有的封面
-                await _repository.Orm.Delete<ArticleCovers>()
+                await _repository.Orm.Delete<ArticleCover>()
                     .Where(p => p.ArticleId == article.Id)
                     .ExecuteAffrowsAsync();
                 //重新插入
@@ -372,7 +368,7 @@ namespace OnceMi.Framework.Service.Article
             else
             {
                 //删除原有的封面
-                await _repository.Orm.Delete<ArticleCovers>()
+                await _repository.Orm.Delete<ArticleCover>()
                     .Where(p => p.ArticleId == article.Id)
                     .ExecuteAffrowsAsync();
             }
@@ -385,7 +381,7 @@ namespace OnceMi.Framework.Service.Article
             {
                 throw new BusException(ResultCode.ARTICLE_DELETE_NOT_EXIST, "没有要删除的条目");
             }
-            List<Articles> articles = await _repository.Where(p => ids.Contains(p.Id)).ToListAsync();
+            List<Entity.Article.ArticleInfo> articles = await _repository.Where(p => ids.Contains(p.Id)).ToListAsync();
             if (articles == null || articles.Count == 0)
             {
                 return;
@@ -393,13 +389,13 @@ namespace OnceMi.Framework.Service.Article
             foreach (var item in articles)
             {
                 //删除文章
-                await _repository.Orm.Delete<Articles>().Where(p => p.Id == item.Id).ExecuteAffrowsAsync();
+                await _repository.Orm.Delete<ArticleInfo>().Where(p => p.Id == item.Id).ExecuteAffrowsAsync();
                 //删除文章分类数据
-                await _repository.Orm.Delete<ArticleCategoriesMiddle>().Where(p => p.ArticleId == item.Id).ExecuteAffrowsAsync();
+                await _repository.Orm.Delete<ArticleBelongCategory>().Where(p => p.ArticleId == item.Id).ExecuteAffrowsAsync();
                 //删除文章标签
-                await _repository.Orm.Delete<ArticleTags>().Where(p => p.ArticleId == item.Id).ExecuteAffrowsAsync();
+                await _repository.Orm.Delete<ArticleTag>().Where(p => p.ArticleId == item.Id).ExecuteAffrowsAsync();
                 //删除文章封面
-                await _repository.Orm.Delete<ArticleCovers>().Where(p => p.ArticleId == item.Id).ExecuteAffrowsAsync();
+                await _repository.Orm.Delete<ArticleCover>().Where(p => p.ArticleId == item.Id).ExecuteAffrowsAsync();
             }
         }
     }

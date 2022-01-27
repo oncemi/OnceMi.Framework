@@ -38,7 +38,7 @@ namespace OnceMi.Framework.Extension.Job
             this._redis = redis ?? throw new ArgumentNullException(nameof(redis));
         }
 
-        public override async Task<object> Execute(IJobExecutionContext context, Entity.Admin.Jobs job)
+        public override async Task<object> Execute(IJobExecutionContext context, Entity.Admin.Job job)
         {
             string url;
             bool isInnerRequest = !job.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase);

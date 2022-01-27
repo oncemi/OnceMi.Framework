@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Article
 {
-    public interface IArticleCategoryService : IBaseService<ArticleCategories, long>
+    public interface IArticleCategoryService : IBaseService<ArticleCategory, long>
     {
         Task<IPageResponse<ArticleCategoryResponse>> Query(IPageRequest request, bool onlyQueryEnabled = false);
 

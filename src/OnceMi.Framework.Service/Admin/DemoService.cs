@@ -19,7 +19,7 @@ using System.Text;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class DemoService : BaseService<Configs, long>, IDemoService
+    public class DemoService : BaseService<Entity.Admin.Config, long>, IDemoService
     {
         private readonly IDemoRepository _repository;
         private readonly ILogger<DemoService> _logger;
@@ -45,7 +45,7 @@ namespace OnceMi.Framework.Service.Admin
 
         #region 分库查询
 
-        public async Task<List<Configs>> GetAllConfigs()
+        public async Task<List<Entity.Admin.Config>> GetAllConfigs()
         {
             return await _repository.GetAllConfigs();
         }

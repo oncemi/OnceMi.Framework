@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(JobGroups))]
+    [MapperTo(typeof(JobGroup))]
     public class CreateJobGroupRequest : IRequest
     {
         /// <summary>

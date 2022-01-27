@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IDemoService : IBaseService<Configs, long>
+    public interface IDemoService : IBaseService<Config, long>
     {
-        Task<List<Configs>> GetAllConfigs();
+        Task<List<Config>> GetAllConfigs();
     }
 }

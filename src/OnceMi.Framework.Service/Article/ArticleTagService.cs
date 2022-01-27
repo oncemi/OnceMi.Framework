@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Article
 {
-    public class ArticleTagService : BaseService<ArticleTags, long>, IArticleTagService
+    public class ArticleTagService : BaseService<ArticleTag, long>, IArticleTagService
     {
         private readonly IArticleTagRepository _repository;
         private readonly ILogger<ArticleTagService> _logger;
@@ -32,7 +32,7 @@ namespace OnceMi.Framework.Service.Article
 
         public async Task<List<ArticleTagResponse>> QueryAllTags()
         {
-            List<ArticleTagResponse> responses = await _repository.Orm.Select<ArticleTags>()
+            List<ArticleTagResponse> responses = await _repository.Orm.Select<ArticleTag>()
                 .GroupBy(p => new { p.Tag })
                 .ToListAsync(p => new ArticleTagResponse()
                 {

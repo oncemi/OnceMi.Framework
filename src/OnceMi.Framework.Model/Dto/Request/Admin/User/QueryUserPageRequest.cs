@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(Users))]
+    [MapperTo(typeof(UserInfo))]
     public class QueryUserPageRequest : IPageRequest
     {
         /// <summary>

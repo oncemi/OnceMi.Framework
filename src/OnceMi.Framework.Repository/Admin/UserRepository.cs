@@ -5,7 +5,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class UserRepository : BaseUnitOfWorkRepository<Users, long>, IUserRepository
+    public class UserRepository : BaseUnitOfWorkRepository<UserInfo, long>, IUserRepository
     {
         private readonly ILogger<UserRepository> _logger;
         private readonly IFreeSql _db;

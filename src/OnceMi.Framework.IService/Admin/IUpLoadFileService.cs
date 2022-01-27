@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IUpLoadFileService : IBaseService<UpLoadFiles, long>
+    public interface IUpLoadFileService : IBaseService<UpLoadFile, long>
     {
         Task<UploadFileInfo> Upload(IFormFile file
             , long owner

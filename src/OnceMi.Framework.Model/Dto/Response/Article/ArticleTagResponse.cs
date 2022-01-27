@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperFrom(typeof(ArticleTags))]
+    [MapperFrom(typeof(ArticleTag))]
     public class ArticleTagResponse
     {
         public long Id { get; set; }

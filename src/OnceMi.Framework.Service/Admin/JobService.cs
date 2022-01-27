@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class JobService : BaseService<Jobs, long>, IJobService
+    public class JobService : BaseService<Job, long>, IJobService
     {
         private readonly IJobRepository _repository;
         private readonly ILogger<JobService> _logger;
@@ -49,9 +49,9 @@ namespace OnceMi.Framework.Service.Admin
 
         #region Query
 
-        public async Task<Jobs> QueryJobById(long id)
+        public async Task<Job> QueryJobById(long id)
         {
-            Jobs job = _redis.Get<Jobs>(CacheConstant.GetJobKey(id));
+            Job job = _redis.Get<Job>(CacheConstant.GetJobKey(id));
             if (job == null)
             {
                 job = await _repository.Where(p => p.Id == id && !p.IsDeleted && p.AppId == _config.AppSettings.AppId)
@@ -74,7 +74,7 @@ namespace OnceMi.Framework.Service.Admin
                 _redis.Set(CacheConstant.GetJobKey(job.Id), job);
             }
             //深拷贝
-            Jobs newJob = TransExp<Jobs, Jobs>.Copy(job);
+            Job newJob = TransExp<Job, Job>.Copy(job);
             return newJob;
         }
 
@@ -82,7 +82,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<JobItemResponse> response = new IPageResponse<JobItemResponse>();
             //查询出全部job，然后与缓存中的合并
-            List<Jobs> allJobs = await _repository.Select
+            List<Job> allJobs = await _repository.Select
                 .Include(p => p.Group)
                 .Include(p => p.NoticeRole)
                 .Where(p => !p.IsDeleted && p.AppId == _config.AppSettings.AppId).ToListAsync();
@@ -96,7 +96,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 foreach (var item in keys)
                 {
-                    Jobs cacheJob = _redis.Get<Jobs>(item);
+                    Job cacheJob = _redis.Get<Job>(item);
                     if (cacheJob == null)
                     {
                         continue;
@@ -113,7 +113,7 @@ namespace OnceMi.Framework.Service.Admin
             //默认排序
             if (request.OrderByModels == null || request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(Jobs.Id)},desc" };
+                request.OrderBy = new string[] { $"{nameof(Job.Id)},desc" };
             }
             //get order result
             var selector = allJobs
@@ -142,7 +142,7 @@ namespace OnceMi.Framework.Service.Admin
             //get count
             int count = selector.Count();
             //get page
-            List<Jobs> pageData = selector
+            List<Job> pageData = selector
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size)
                 .ToList();
@@ -155,7 +155,7 @@ namespace OnceMi.Framework.Service.Admin
             };
         }
 
-        public async Task<List<Jobs>> QueryInitJobs()
+        public async Task<List<Job>> QueryInitJobs()
         {
             var allJobs = await _repository
                 .Where(p => !p.IsDeleted
@@ -166,7 +166,7 @@ namespace OnceMi.Framework.Service.Admin
                 .ToListAsync();
             if (allJobs == null)
             {
-                return new List<Jobs>();
+                return new List<Job>();
             }
             return allJobs;
         }
@@ -175,14 +175,14 @@ namespace OnceMi.Framework.Service.Admin
 
         #region Insert
 
-        public async Task<Jobs> Insert(CreateJobRequest request)
+        public async Task<Job> Insert(CreateJobRequest request)
         {
-            Jobs job = _mapper.Map<Jobs>(request);
+            Job job = _mapper.Map<Job>(request);
             if (job == null)
             {
-                throw new Exception($"Map '{nameof(CreateOrganizeRequest)}' DTO to '{nameof(Jobs)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateOrganizeRequest)}' DTO to '{nameof(Job)}' entity failed.");
             }
-            if (!await _repository.Orm.Select<JobGroups>().AnyAsync(p => p.Id == request.GroupId && !p.IsDeleted))
+            if (!await _repository.Orm.Select<JobGroup>().AnyAsync(p => p.Id == request.GroupId && !p.IsDeleted))
             {
                 throw new BusException(ResultCode.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
             }
@@ -206,12 +206,12 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task Update(UpdateJobRequest request)
         {
-            Jobs job = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Job job = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (job == null)
             {
                 throw new BusException(ResultCode.JOB_UPDATE_ITEM_NOT_EXISTS, "修改的条目不存在");
             }
-            if (!await _repository.Orm.Select<JobGroups>().AnyAsync(p => p.Id == request.GroupId && !p.IsDeleted))
+            if (!await _repository.Orm.Select<JobGroup>().AnyAsync(p => p.Id == request.GroupId && !p.IsDeleted))
             {
                 throw new BusException(ResultCode.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
             }
@@ -262,7 +262,7 @@ namespace OnceMi.Framework.Service.Admin
             //save to db
             if (isSaveToDb)
             {
-                int result = await _repository.Orm.Update<Jobs>()
+                int result = await _repository.Orm.Update<Job>()
                     .Set(p => p.Status, job.Status)
                     .Set(p => p.FireCount, job.FireCount)
                     .Set(p => p.LastFireTime, job.LastFireTime)

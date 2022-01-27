@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IConfigService : IBaseService<Configs, long>
+    public interface IConfigService : IBaseService<Config, long>
     {
         Task<Stream> ExportTestData();
 
@@ -14,6 +14,6 @@ namespace OnceMi.Framework.IService.Admin
         /// 获取应用程序信息
         /// </summary>
         /// <returns></returns>
-        Task<SystemHardwareInfo> HardwareInfo();
+        Task<SystemInfo> HardwareInfo();
     }
 }

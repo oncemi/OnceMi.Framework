@@ -40,7 +40,7 @@
             无需授权，但是需要登录后才能访问
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Authorizations.PermissionAuthorizationHandler.CompareMenu(OnceMi.Framework.Entity.Admin.Menus,System.String,System.String)">
+        <member name="M:OnceMi.Framework.Extension.Authorizations.PermissionAuthorizationHandler.CompareMenu(OnceMi.Framework.Entity.Admin.Menu,System.String,System.String)">
             <summary>
             比较请求的菜单和用户权限菜单是否相同
             </summary>
@@ -129,49 +129,49 @@
             一些重写规则
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             添加（开始）任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Delete(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Delete(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             删除任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Pause(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Pause(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             暂停任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Resume(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Resume(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             恢复任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Stop(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Stop(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             停止任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Trigger(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Trigger(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             立即执行任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Exists(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.IJobSchedulerService.Exists(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             作业是否存在
             </summary>
@@ -189,7 +189,7 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Add(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             添加作业
             状态变更：
@@ -198,14 +198,14 @@
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Delete(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Delete(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             删除任务
             </summary>
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Pause(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Pause(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             暂停任务
             状态变更：
@@ -214,7 +214,7 @@
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Resume(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Resume(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             恢复
             状态变更：
@@ -224,7 +224,7 @@
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Stop(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Stop(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             停止作业
             状态变更：
@@ -235,7 +235,7 @@
             <param name="job"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Trigger(OnceMi.Framework.Entity.Admin.Jobs)">
+        <member name="M:OnceMi.Framework.Extension.Job.JobSchedulerService.Trigger(OnceMi.Framework.Entity.Admin.Job)">
             <summary>
             立即执行
             </summary>

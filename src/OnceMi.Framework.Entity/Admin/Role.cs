@@ -6,10 +6,10 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 角色表
     /// </summary>
-    [Table(Name = nameof(Roles))]
+    [Table(Name = "sys_roles")]
     [Index("index_{TableName}_" + nameof(Name), nameof(Name), false)]
     [Index("index_{TableName}_" + nameof(Code), nameof(Code), false)]
-    public class Roles : IBaseEntity
+    public class Role : IBaseEntity
     {
         [Column(Position = 2, IsNullable = true)]
         public long? ParentId { get; set; }
@@ -51,15 +51,15 @@ namespace OnceMi.Framework.Entity.Admin
         /// 本角色所属组织机构
         /// </summary>
         [Navigate(nameof(OrganizeId))]
-        public Organizes Organize { get; set; }
+        public Organize Organize { get; set; }
 
         /// <summary>
         /// Users导航属性
         /// </summary>
         [Navigate(ManyToMany = typeof(UserRole))]
-        public List<Users> Users { get; set; }
+        public List<UserInfo> Users { get; set; }
 
         [Column(IsIgnore = true)]
-        public List<Roles> Children { get; set; }
+        public List<Role> Children { get; set; }
     }
 }

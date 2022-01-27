@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class ViewRepository : BaseUnitOfWorkRepository<Views, long>, IViewRepository
+    public class ViewRepository : BaseUnitOfWorkRepository<View, long>, IViewRepository
     {
         private readonly ILogger<ViewRepository> _logger;
         private readonly IFreeSql _db;

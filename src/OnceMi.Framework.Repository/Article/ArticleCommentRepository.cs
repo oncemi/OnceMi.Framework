@@ -5,7 +5,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class ArticleCommentRepository : BaseUnitOfWorkRepository<ArticleComments, long>, IArticleCommentRepository
+    public class ArticleCommentRepository : BaseUnitOfWorkRepository<ArticleComment, long>, IArticleCommentRepository
     {
         private readonly ILogger<ArticleCommentRepository> _logger;
         private readonly IFreeSql _db;

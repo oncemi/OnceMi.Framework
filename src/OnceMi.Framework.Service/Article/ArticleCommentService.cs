@@ -8,7 +8,7 @@ using System;
 
 namespace OnceMi.Framework.Service.Article
 {
-    public class ArticleCommentService : BaseService<ArticleComments, long>, IArticleCommentService
+    public class ArticleCommentService : BaseService<ArticleComment, long>, IArticleCommentService
     {
         private readonly IArticleCommentRepository _repository;
         private readonly ILogger<ArticleCommentService> _logger;

@@ -3,7 +3,7 @@ using OnceMi.Framework.Entity.Article;
 
 namespace OnceMi.Framework.IRepository
 {
-    public interface IArticleCategoryRepository : IBaseRepository<ArticleCategories, long>, IRepositoryDependency
+    public interface IArticleCategoryRepository : IBaseRepository<ArticleCategory, long>, IRepositoryDependency
     {
 
     }

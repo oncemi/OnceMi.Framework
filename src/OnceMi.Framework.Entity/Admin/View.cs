@@ -10,8 +10,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 视图表
     /// </summary>
-    [Table(Name = nameof(Views))]
-    public class Views : IBaseEntity
+    [Table(Name = "sys_views")]
+    public class View : IBaseEntity
     {
         [Column(IsNullable = true)]
         public long? ParentId { get; set; }
@@ -59,6 +59,6 @@ namespace OnceMi.Framework.Entity.Admin
         public bool IsEnabled { get; set; } = true;
 
         [Column(IsIgnore = true)]
-        public List<Views> Children { get; set; }
+        public List<View> Children { get; set; }
     }
 }

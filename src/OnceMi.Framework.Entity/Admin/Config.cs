@@ -6,9 +6,9 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 配置项
     /// </summary>
-    [Table(Name = nameof(Configs))]
+    [Table(Name = "sys_configs")]
     [Index("index_{TableName}_" + nameof(Key), nameof(Key), false)]
-    public class Configs : IBaseEntity
+    public class Config : IBaseEntity
     {
         /// <summary>
         /// 键名

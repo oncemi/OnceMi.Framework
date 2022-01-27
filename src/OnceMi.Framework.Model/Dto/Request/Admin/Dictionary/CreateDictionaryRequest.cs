@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(Dictionaries))]
+    [MapperTo(typeof(Dictionary))]
     public class CreateDictionaryRequest : IRequest
     {
         /// <summary>

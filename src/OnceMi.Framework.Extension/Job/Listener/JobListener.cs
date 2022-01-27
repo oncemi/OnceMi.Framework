@@ -63,7 +63,7 @@ namespace OnceMi.Framework.Extension.Job
                     , context.NextFireTimeUtc?.ToLocalTime().DateTime
                     , false);
                 //写记录
-                JobHistories histories = new JobHistories()
+                JobHistory histories = new JobHistory()
                 {
                     JobId = jobId,
                     FiredTime = context.FireTimeUtc.ToLocalTime().DateTime,
@@ -126,7 +126,7 @@ namespace OnceMi.Framework.Extension.Job
                 //更新作业状态
                 await _jobsService.UpdateJobStatus(jobId, status, true);
                 //写记录
-                JobHistories histories = new JobHistories()
+                JobHistory histories = new JobHistory()
                 {
                     JobId = jobId,
                     FiredTime = context.FireTimeUtc.ToLocalTime().DateTime,

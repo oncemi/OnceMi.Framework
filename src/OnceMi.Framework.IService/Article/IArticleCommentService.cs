@@ -2,7 +2,7 @@
 
 namespace OnceMi.Framework.IService.Article
 {
-    public interface IArticleCommentService : IBaseService<ArticleComments, long>
+    public interface IArticleCommentService : IBaseService<ArticleComment, long>
     {
         
     }

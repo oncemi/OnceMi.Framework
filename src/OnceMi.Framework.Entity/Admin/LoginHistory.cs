@@ -5,7 +5,7 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 登录历史记录
     /// </summary>
-    [Table(Name = nameof(LoginHistory))]
+    [Table(Name = "user_login_history")]
     public class LoginHistory : IBaseEntity
     {
         public long UserId { get; set; }

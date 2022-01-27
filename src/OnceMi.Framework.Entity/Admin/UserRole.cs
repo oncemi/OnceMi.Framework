@@ -5,7 +5,7 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 用户角色
     /// </summary>
-    [Table(Name = nameof(UserRole))]
+    [Table(Name = "user_roles")]
     public class UserRole : IBaseEntity
     {
         [Column(IsNullable = false)]
@@ -15,9 +15,9 @@ namespace OnceMi.Framework.Entity.Admin
         public long RoleId { get; set; }
 
         [Navigate(nameof(RoleId))]
-        public Roles Role { get; set; }
+        public Role Role { get; set; }
 
         [Navigate(nameof(UserId))]
-        public Users User { get; set; }
+        public UserInfo User { get; set; }
     }
 }

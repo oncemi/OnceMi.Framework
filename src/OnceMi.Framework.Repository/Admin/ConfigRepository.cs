@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class ConfigRepository : BaseUnitOfWorkRepository<Configs, long>, IConfigRepository
+    public class ConfigRepository : BaseUnitOfWorkRepository<Config, long>, IConfigRepository
     {
         private readonly ILogger<ConfigRepository> _logger;
         private readonly IFreeSql _db;

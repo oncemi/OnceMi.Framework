@@ -5,7 +5,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class JobRepository : BaseUnitOfWorkRepository<Jobs, long>, IJobRepository
+    public class JobRepository : BaseUnitOfWorkRepository<Job, long>, IJobRepository
     {
         private readonly ILogger<JobRepository> _logger;
         private readonly IFreeSql _db;

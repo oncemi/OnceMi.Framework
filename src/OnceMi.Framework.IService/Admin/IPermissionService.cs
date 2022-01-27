@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IPermissionService : IBaseService<RolePermissions, long>
+    public interface IPermissionService : IBaseService<RolePermission, long>
     {
         /// <summary>
         /// 查询所有角色和所有菜单

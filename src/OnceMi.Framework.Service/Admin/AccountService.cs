@@ -60,7 +60,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ACT_FUNCTION_DISABLED_NOT_SUPPORT, "当前应用启用了IdentityServer认证中心，此功能被禁用");
             }
-            Users user = await _userService.Query(request.Username, true);
+            UserInfo user = await _userService.Query(request.Username, true);
             if (user == null)
             {
                 throw new BusException(ResultCode.ACT_USERNAME_OR_PASSWORD_ERROR, "用户名或密码错误");
@@ -116,7 +116,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ACT_REFESH_TOKEN_TIMEOUT, "登录已过期，请重新登录");
             }
-            Users user = await _userService.Query(userToken.UserId.ToString(), true);
+            UserInfo user = await _userService.Query(userToken.UserId.ToString(), true);
             if (user == null)
             {
                 throw new BusException(ResultCode.ACT_USER_DISABLED, "用户被删除或停用");
@@ -127,7 +127,7 @@ namespace OnceMi.Framework.Service.Admin
 
         #region Private methods
 
-        private async Task<LoginResponse> BuildJwtToken(Users user)
+        private async Task<LoginResponse> BuildJwtToken(UserInfo user)
         {
             long issuedAt = TimeUtil.Timestamp();
             DateTime expiresTime = TimeUtil.UnixTimeStampToDateTime(issuedAt + _config.TokenManagement.AccessExpiration);
@@ -178,7 +178,7 @@ namespace OnceMi.Framework.Service.Admin
             return response;
         }
 
-        private async Task<string> GenerateRefreshToken(Users user, string token)
+        private async Task<string> GenerateRefreshToken(UserInfo user, string token)
         {
             string refeshToken = AES.AESEncrypt($"{Guid.NewGuid():N}_{user.Id}_{TimeUtil.Timestamp()}", _config.AppSettings.AESSecretKey, _config.AppSettings.AESVector);
             UserToken userToken = await _repository.Orm.Select<UserToken>().Where(p => p.UserId == user.Id).ToOneAsync();

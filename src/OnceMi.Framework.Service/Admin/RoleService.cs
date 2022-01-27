@@ -67,7 +67,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             IPageResponse<RoleItemResponse> response = new IPageResponse<RoleItemResponse>();
             bool isSearchQuery = false;
-            Expression<Func<Roles, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<Role, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 isSearchQuery = true;
@@ -83,7 +83,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Roles> allParentRoles = await _repository.Select
+            List<Role> allParentRoles = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .OrderBy(p => p.Sort)
@@ -103,7 +103,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (isSearchQuery)
             {
-                List<Roles> removeRoles = new List<Roles>();
+                List<Role> removeRoles = new List<Role>();
                 foreach (var item in allParentRoles)
                 {
                     GetQueryRoleChild(allParentRoles, item, removeRoles);
@@ -118,12 +118,12 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                Expression<Func<Roles, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
+                Expression<Func<Role, bool>> allQueryExp = p => !p.IsDeleted && p.ParentId != null;
                 if (onlyQueryEnabled)
                 {
                     allQueryExp = allQueryExp.And(p => p.IsEnabled);
                 }
-                List<Roles> allRoles = await _repository.Select
+                List<Role> allRoles = await _repository.Select
                     .LeftJoin(p => p.Organize.Id == p.OrganizeId)
                     .Where(allQueryExp)
                     .NoTracking()
@@ -144,12 +144,12 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<List<RoleItemResponse>> Query(List<long> ids, bool onlyQueryEnabled = false)
         {
-            Expression<Func<Roles, bool>> exp = p => ids.Contains(p.Id) && !p.IsDeleted;
+            Expression<Func<Role, bool>> exp = p => ids.Contains(p.Id) && !p.IsDeleted;
             if (onlyQueryEnabled)
             {
                 exp = exp.And(p => p.IsEnabled);
             }
-            List<Roles> roles = await _repository.Select
+            List<Role> roles = await _repository.Select
                 .LeftJoin(p => p.Organize.Id == p.OrganizeId)
                 .Where(exp)
                 .NoTracking()
@@ -159,12 +159,12 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<RoleItemResponse> Query(long id)
         {
-            List<Roles> allRoles = await _repository.Select
+            List<Role> allRoles = await _repository.Select
                 .LeftJoin(p => p.Organize.Id == p.OrganizeId)
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
-            Roles queryRole = allRoles.Where(p => p.Id == id).FirstOrDefault();
+            Role queryRole = allRoles.Where(p => p.Id == id).FirstOrDefault();
             if (queryRole == null)
                 return null;
 
@@ -173,7 +173,7 @@ namespace OnceMi.Framework.Service.Admin
             return result;
         }
 
-        public async Task<List<Users>> QueryRoleUsers(long roleId)
+        public async Task<List<UserInfo>> QueryRoleUsers(long roleId)
         {
             var roleUsers = await _repository.Select
                 .IncludeMany(p => p.Users)
@@ -189,10 +189,10 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<RoleItemResponse> Insert(CreateRoleRequest request)
         {
-            Roles role = _mapper.Map<Roles>(request);
+            Role role = _mapper.Map<Role>(request);
             if (role == null)
             {
-                throw new Exception($"Map '{nameof(CreateRoleRequest)}' DTO to '{nameof(Roles)}' entity failed.");
+                throw new Exception($"Map '{nameof(CreateRoleRequest)}' DTO to '{nameof(Role)}' entity failed.");
             }
             if ((role.ParentId != null && role.ParentId != 0)
                 && !await _repository.Select.AnyAsync(p => p.Id == role.ParentId && !p.IsDeleted))
@@ -203,7 +203,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ROLE_CODE_EXISTS, $"当前添加的角色编码‘{role.Code}’已存在");
             }
-            if (!await _repository.Orm.Select<Organizes>().AnyAsync(p => p.Id == request.OrganizeId && p.IsEnabled && !p.IsDeleted))
+            if (!await _repository.Orm.Select<Organize>().AnyAsync(p => p.Id == request.OrganizeId && p.IsEnabled && !p.IsDeleted))
             {
                 throw new BusException(ResultCode.ROLE_ORGANIZES_NOT_EXISTS, $"所选组织不存在或已被停用");
             }
@@ -226,7 +226,7 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task Update(UpdateRoleRequest request)
         {
-            Roles role = await _repository.Where(p => p.Id == request.Id).FirstAsync();
+            Role role = await _repository.Where(p => p.Id == request.Id).FirstAsync();
             if (role == null)
             {
                 throw new BusException(ResultCode.ROLE_UPDATE_NOT_EXISTS, "修改的条目不存在");
@@ -240,7 +240,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ROLE_CODE_EXISTS, $"当前修改的角色编码‘{request.Code}’已存在");
             }
-            if (!await _repository.Orm.Select<Organizes>().AnyAsync(p => p.Id == request.OrganizeId && p.IsEnabled && !p.IsDeleted))
+            if (!await _repository.Orm.Select<Organize>().AnyAsync(p => p.Id == request.OrganizeId && p.IsEnabled && !p.IsDeleted))
             {
                 throw new BusException(ResultCode.ROLE_ORGANIZES_NOT_EXISTS, $"所选组织不存在或已被停用");
             }
@@ -291,7 +291,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.ROLE_DELETE_NOT_EXISTS, "没有要删除的条目");
             }
-            List<Roles> allRoles = await _repository
+            List<Role> allRoles = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
@@ -330,11 +330,11 @@ namespace OnceMi.Framework.Service.Admin
 
         #region private
 
-        private async Task<Roles> GetDeveloperRole()
+        private async Task<Role> GetDeveloperRole()
         {
-            Roles role = await _cache.GetOrCreateAsync(CacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName), async (cache) =>
+            Role role = await _cache.GetOrCreateAsync(CacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName), async (cache) =>
             {
-                Roles developRole = await _repository.Select
+                Role developRole = await _repository.Select
                     .LeftJoin(p => p.Organize.Id == p.OrganizeId)
                     .Where(p => p.Code == _config.AppSettings.DeveloperRoleName && !p.IsDeleted && p.IsEnabled)
                     .FirstAsync();
@@ -343,7 +343,7 @@ namespace OnceMi.Framework.Service.Admin
             return role;
         }
 
-        private void GetQueryRoleChild(List<Roles> source, Roles role, List<Roles> removeRoles = null)
+        private void GetQueryRoleChild(List<Role> source, Role role, List<Role> removeRoles = null)
         {
             var childs = source.Where(p => p.ParentId == role.Id).ToList();
             if (childs == null || childs.Count == 0)
@@ -367,7 +367,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="source"></param>
         /// <param name="id"></param>
         /// <param name="dest"></param>
-        private void SearchDelRoles(List<Roles> source, long id, List<long> dest)
+        private void SearchDelRoles(List<Role> source, long id, List<long> dest)
         {
             var item = source.Where(p => p.Id == id).FirstOrDefault();
             if (item == null)
@@ -378,7 +378,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 dest.Add(item.Id);
             }
-            List<Roles> child = source.Where(p => p.ParentId == id).ToList();
+            List<Role> child = source.Where(p => p.ParentId == id).ToList();
             foreach (var citem in child)
             {
                 SearchDelRoles(source, citem.Id, dest);

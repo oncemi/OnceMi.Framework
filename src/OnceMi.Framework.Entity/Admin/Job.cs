@@ -9,8 +9,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 定时任务表
     /// </summary>
-    [Table(Name = nameof(Jobs))]
-    public class Jobs : IBaseEntity
+    [Table(Name = "sys_jobs")]
+    public class Job : IBaseEntity
     {
         /// <summary>
         /// 名称
@@ -28,7 +28,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// 分组，字典
         /// </summary>
         [Navigate(nameof(GroupId))]
-        public JobGroups Group { get; set; }
+        public JobGroup Group { get; set; }
 
         /// <summary>
         /// 任务地址
@@ -86,7 +86,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// 通知发送角色组
         /// </summary>
         [Navigate(nameof(NoticeRoleId))]
-        public Roles NoticeRole { get; set; }
+        public Role NoticeRole { get; set; }
 
         /// <summary>
         /// 邮件通知地址，半角分号';'隔开
@@ -130,8 +130,8 @@ namespace OnceMi.Framework.Entity.Admin
         /// </summary>
         public int AppId { get; set; }
 
-        [Navigate(nameof(Admin.JobHistories.JobId))]
-        public List<JobHistories> JobHistories { get; set; }
+        [Navigate(nameof(Admin.JobHistory.JobId))]
+        public List<JobHistory> JobHistories { get; set; }
     }
 
     public enum NoticePolicy

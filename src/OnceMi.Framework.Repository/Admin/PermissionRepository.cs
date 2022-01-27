@@ -7,7 +7,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class PermissionRepository : BaseUnitOfWorkRepository<RolePermissions, long>, IPermissionRepository
+    public class PermissionRepository : BaseUnitOfWorkRepository<RolePermission, long>, IPermissionRepository
     {
         private readonly ILogger<PermissionRepository> _logger;
         private readonly IFreeSql _db;

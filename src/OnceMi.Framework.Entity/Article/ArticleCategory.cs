@@ -1,13 +1,12 @@
 ﻿using FreeSql.DataAnnotations;
-using System.Collections.Generic;
 
 namespace OnceMi.Framework.Entity.Article
 {
     /// <summary>
     /// 文章分类
     /// </summary>
-    [Table(Name = nameof(ArticleCategories))]
-    public class ArticleCategories : IBaseEntity
+    [Table(Name = "article_categories")]
+    public class ArticleCategory : IBaseEntity
     {
         [Column(IsNullable = true)]
         public long? ParentId { get; set; }
@@ -38,9 +37,9 @@ namespace OnceMi.Framework.Entity.Article
         /// 子条目
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<ArticleCategories> Children { get; set; }
+        public List<ArticleCategory> Children { get; set; }
 
-        [Navigate(ManyToMany = typeof(ArticleCategoriesMiddle))]
-        public virtual List<Articles> Users { get; set; }
+        [Navigate(ManyToMany = typeof(ArticleBelongCategory))]
+        public virtual List<ArticleInfo> Users { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class OrganizeRepository : BaseUnitOfWorkRepository<Organizes, long>, IOrganizeRepository
+    public class OrganizeRepository : BaseUnitOfWorkRepository<Organize, long>, IOrganizeRepository
     {
         private readonly ILogger<OrganizeRepository> _logger;
         private readonly IFreeSql _db;

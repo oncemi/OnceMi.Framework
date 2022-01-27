@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IViewService : IBaseService<Views, long>
+    public interface IViewService : IBaseService<View, long>
     {
         Task<ViewItemResponse> Query(long id);
 

@@ -11,9 +11,9 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 字典表
     /// </summary>
-    [Table(Name = nameof(Dictionaries))]
+    [Table(Name = "sys_dictionaries")]
     [Index("index_{TableName}_" + nameof(Name), nameof(Name), true)]
-    public class Dictionaries : IBaseEntity
+    public class Dictionary : IBaseEntity
     {
         /// <summary>
         /// 字典父级
@@ -59,6 +59,6 @@ namespace OnceMi.Framework.Entity.Admin
         /// 子条目
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<Dictionaries> Children { get; set; }
+        public List<Dictionary> Children { get; set; }
     }
 }

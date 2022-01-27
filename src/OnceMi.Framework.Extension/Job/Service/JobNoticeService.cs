@@ -32,7 +32,7 @@ namespace OnceMi.Framework.Extension.Job
         {
             try
             {
-                Jobs job = result.Job;
+                Entity.Admin.Job job = result.Job;
                 if (job == null)
                     job = await _jobsService.QueryJobById(jobId);
                 if (job == null)
@@ -98,14 +98,14 @@ namespace OnceMi.Framework.Extension.Job
             }
         }
 
-        private Task SendMessage(Jobs job, List<string> phones)
+        private Task SendMessage(Entity.Admin.Job job, List<string> phones)
         {
             //发送短信的业务代码
 
             return Task.CompletedTask;
         }
 
-        private Task SendEmail(Jobs job, List<string> emails)
+        private Task SendEmail(Entity.Admin.Job job, List<string> emails)
         {
             //发送邮件的业务代码
 

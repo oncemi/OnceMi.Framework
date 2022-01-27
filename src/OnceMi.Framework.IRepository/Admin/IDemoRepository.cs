@@ -3,8 +3,8 @@ using OnceMi.Framework.Entity.Admin;
 
 namespace OnceMi.Framework.IRepository
 {
-    public interface IDemoRepository : IBaseRepository<Configs, long>, IRepositoryDependency
+    public interface IDemoRepository : IBaseRepository<Config, long>, IRepositoryDependency
     {
-        Task<List<Configs>> GetAllConfigs();
+        Task<List<Config>> GetAllConfigs();
     }
 }

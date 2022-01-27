@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperTo(typeof(Menus))]
+    [MapperTo(typeof(Menu))]
     public class CreateMenuRequest : IRequest
     {
         private long? _parentId;

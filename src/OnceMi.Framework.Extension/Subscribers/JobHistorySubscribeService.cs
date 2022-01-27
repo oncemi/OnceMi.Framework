@@ -12,7 +12,7 @@ namespace OnceMi.Framework.Extension.Subscribers
     /// <summary>
     /// 写作业历史记录
     /// </summary>
-    public class JobHistorySubscribeService : IQueneSubscribe<JobHistories>
+    public class JobHistorySubscribeService : IQueneSubscribe<JobHistory>
     {
         private readonly ILogger<JobHistorySubscribeService> _logger;
         private IJobHistoryService _jobHistoriesService;
@@ -27,7 +27,7 @@ namespace OnceMi.Framework.Extension.Subscribers
             _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         }
 
-        public override async Task Subscribe(JobHistories model, CancellationToken cancellationToken = default)
+        public override async Task Subscribe(JobHistory model, CancellationToken cancellationToken = default)
         {
             try
             {

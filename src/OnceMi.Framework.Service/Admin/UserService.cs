@@ -91,7 +91,7 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<List<ISelectResponse<long>>> GetUserSelectList(string query)
         {
-            Expression<Func<Users, bool>> exp = p => !p.IsDeleted && p.Status == UserStatus.Enable;
+            Expression<Func<UserInfo, bool>> exp = p => !p.IsDeleted && p.Status == UserStatus.Enable;
             if (!string.IsNullOrEmpty(query))
             {
                 exp.And(p => p.UserName.Contains(query) || p.NickName.Contains(query));
@@ -111,7 +111,7 @@ namespace OnceMi.Framework.Service.Admin
         public async Task<IPageResponse<UserItemResponse>> Query(QueryUserPageRequest request, bool onlyQueryEnabled = false)
         {
             IPageResponse<UserItemResponse> response = new IPageResponse<UserItemResponse>();
-            Expression<Func<Users, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<UserInfo, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 exp = exp.And(p => p.UserName.Contains(request.Search)
@@ -131,8 +131,8 @@ namespace OnceMi.Framework.Service.Admin
             if (request.OrganizeId != null && request.OrganizeId != 0)
             {
                 //查询全部的组织
-                List<Organizes> allOrganizes = await _repository.Orm
-                    .Select<Organizes>()
+                List<Organize> allOrganizes = await _repository.Orm
+                    .Select<Organize>()
                     .Where(p => !p.IsDeleted && p.IsEnabled)
                     .ToListAsync();
                 List<long> organizeWithChildIds = new List<long>();
@@ -145,11 +145,11 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (request.OrderByModels.Count == 0)
             {
-                request.OrderBy = new string[] { $"{nameof(Users.Id)},desc" };
+                request.OrderBy = new string[] { $"{nameof(UserInfo.Id)},desc" };
             }
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<Users> allUsers = await _repository.Select
+            List<UserInfo> allUsers = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .IncludeMany(p => p.Roles)
@@ -176,16 +176,16 @@ namespace OnceMi.Framework.Service.Admin
             };
         }
 
-        public async Task<Users> Query(string inputInfo, bool isQueryEnabled = false)
+        public async Task<UserInfo> Query(string inputInfo, bool isQueryEnabled = false)
         {
-            Expression<Func<Users, bool>> exp = p => !p.IsDeleted && (p.Id.ToString() == inputInfo || p.UserName == inputInfo);
+            Expression<Func<UserInfo, bool>> exp = p => !p.IsDeleted && (p.Id.ToString() == inputInfo || p.UserName == inputInfo);
             if (isQueryEnabled)
             {
                 exp = exp.And(p => p.Status == UserStatus.Enable);
             }
 
             //查询用户
-            Users user = await _repository.Where(exp)
+            UserInfo user = await _repository.Where(exp)
                 .IncludeMany(u => u.Roles)
                 .IncludeMany(u => u.Organizes)
                 .NoTracking()
@@ -202,7 +202,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.USER_NAME_INVALID, "用户名只能由数字和字母组成");
             }
-            Users user = _mapper.Map<Users>(request);
+            UserInfo user = _mapper.Map<UserInfo>(request);
             if (user == null)
             {
                 throw new Exception($"Map '{nameof(CreateUserRequest)}' DTO to '{nameof(user)}' entity failed.");
@@ -277,7 +277,7 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.USER_NAME_INVALID, "用户名只能由数字和字母组成");
             }
             //判断用户是否存在
-            Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
+            UserInfo user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
             if (user == null)
             {
                 throw new BusException(ResultCode.USER_UPDATE_NOT_EXISTS, $"修改的用户不存在");
@@ -382,7 +382,7 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.USER_UNKNOW_STATUS, $"未知的用户状态");
             }
             //判断用户是否存在
-            Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
+            UserInfo user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).FirstAsync();
             if (user == null)
             {
                 throw new BusException(ResultCode.USER_UPDATE_NOT_EXISTS, $"用户不存在");
@@ -402,7 +402,7 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task UpdatePassword(UpdateUserPasswordRequest request)
         {
-            Users user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).ToOneAsync();
+            UserInfo user = await _repository.Where(p => p.Id == request.Id && !p.IsDeleted).ToOneAsync();
             if (user == null)
             {
                 throw new BusException(ResultCode.USER_UPDATE_NOT_EXISTS, $"用户不存在");
@@ -508,7 +508,7 @@ namespace OnceMi.Framework.Service.Admin
             return bytes;
         }
 
-        private void BuildOrganizeWithChildList(List<Organizes> allOrganizes, long parentId, List<long> dest)
+        private void BuildOrganizeWithChildList(List<Organize> allOrganizes, long parentId, List<long> dest)
         {
             if (dest == null)
             {

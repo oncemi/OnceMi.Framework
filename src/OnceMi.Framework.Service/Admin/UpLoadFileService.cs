@@ -28,7 +28,7 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {
-    public class UpLoadFileService : BaseService<UpLoadFiles, long>, IUpLoadFileService
+    public class UpLoadFileService : BaseService<UpLoadFile, long>, IUpLoadFileService
     {
         private readonly IUpLoadFileRepository _repository;
         private readonly ILogger<UpLoadFileService> _logger;
@@ -76,7 +76,7 @@ namespace OnceMi.Framework.Service.Admin
         public async Task<IPageResponse<FileItemResponse>> Query(IPageRequest request)
         {
             IPageResponse<FileItemResponse> response = new IPageResponse<FileItemResponse>();
-            Expression<Func<UpLoadFiles, bool>> exp = p => !p.IsDeleted;
+            Expression<Func<UpLoadFile, bool>> exp = p => !p.IsDeleted;
             if (!string.IsNullOrEmpty(request.Search))
             {
                 exp = exp.And(p => p.Name.Contains(request.Search));
@@ -84,7 +84,7 @@ namespace OnceMi.Framework.Service.Admin
 
             //get count
             long count = await _repository.Where(exp).CountAsync();
-            List<UpLoadFiles> allFiles = await _repository.Select
+            List<UpLoadFile> allFiles = await _repository.Select
                 .Page(request.Page, request.Size)
                 .OrderBy(request.OrderByModels)
                 .Include(p => p.Owner)
@@ -731,7 +731,7 @@ namespace OnceMi.Framework.Service.Admin
         {
             try
             {
-                UpLoadFiles saveInfo = await _repository.InsertAsync(new UpLoadFiles()
+                UpLoadFile saveInfo = await _repository.InsertAsync(new UpLoadFile()
                 {
                     Id = _idGenerator.NewId(),
                     Name = upload.Name,
@@ -822,7 +822,7 @@ namespace OnceMi.Framework.Service.Admin
             }
         }
 
-        private string BuildFileUrl(UpLoadFiles item)
+        private string BuildFileUrl(UpLoadFile item)
         {
             UploadFileInfo fileInfo = new UploadFileInfo()
             {

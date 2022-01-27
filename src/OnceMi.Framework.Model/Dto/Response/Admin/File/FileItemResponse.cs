@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Model.Dto
 {
-    [MapperFrom(typeof(UpLoadFiles))]
+    [MapperFrom(typeof(UpLoadFile))]
     public class FileItemResponse : IResponse
     {
         public long Id { get; set; }

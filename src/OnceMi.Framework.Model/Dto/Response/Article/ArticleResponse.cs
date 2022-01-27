@@ -70,17 +70,17 @@ namespace OnceMi.Framework.Model.Dto
         /// <summary>
         /// 评论
         /// </summary>
-        public List<ArticleComments> Comments { get; set; }
+        public List<ArticleComment> Comments { get; set; }
 
         /// <summary>
         /// 标签
         /// </summary>
-        public List<ArticleTags> Tags { get; set; }
+        public List<ArticleTag> Tags { get; set; }
 
         /// <summary>
         /// 封面
         /// </summary>
-        public List<ArticleCovers> Covers { get; set; }
+        public List<ArticleCover> Covers { get; set; }
 
         /// <summary>
         /// 是否删除

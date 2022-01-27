@@ -5,8 +5,8 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 角色权限表
     /// </summary>
-    [Table(Name = nameof(RolePermissions))]
-    public class RolePermissions : IBaseEntity
+    [Table(Name = "sys_role_permissions")]
+    public class RolePermission : IBaseEntity
     {
         /// <summary>
         /// 角色Id
@@ -22,12 +22,12 @@ namespace OnceMi.Framework.Entity.Admin
         /// 角色
         /// </summary>
         [Navigate(nameof(RoleId))]
-        public Roles Role { get; set; }
+        public Role Role { get; set; }
 
         /// <summary>
         /// 菜单
         /// </summary>
         [Navigate(nameof(MenuId))]
-        public Menus Menu { get; set; }
+        public Menu Menu { get; set; }
     }
 }

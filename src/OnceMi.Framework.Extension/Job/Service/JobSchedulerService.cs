@@ -82,7 +82,7 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public async Task Add(Jobs job)
+        public async Task Add(Entity.Admin.Job job)
         {
             await Add(job, false);
         }
@@ -92,7 +92,7 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public async Task Delete(Jobs job)
+        public async Task Delete(Entity.Admin.Job job)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
 
@@ -118,7 +118,7 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public async Task Pause(Jobs job)
+        public async Task Pause(Entity.Admin.Job job)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
             if (!await _scheduler.CheckExists(key))
@@ -148,7 +148,7 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public async Task Resume(Jobs job)
+        public async Task Resume(Entity.Admin.Job job)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
             if (job.EndTime != null && job.EndTime <= DateTime.Now)
@@ -185,7 +185,7 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public async Task Stop(Jobs job)
+        public async Task Stop(Entity.Admin.Job job)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
             if (!await _scheduler.CheckExists(key))
@@ -218,7 +218,7 @@ namespace OnceMi.Framework.Extension.Job
         /// </summary>
         /// <param name="job"></param>
         /// <returns></returns>
-        public async Task Trigger(Jobs job)
+        public async Task Trigger(Entity.Admin.Job job)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
             if (!await _scheduler.CheckExists(key))
@@ -237,7 +237,7 @@ namespace OnceMi.Framework.Extension.Job
             await _scheduler.TriggerJob(key, new JobDataMap(map));
         }
 
-        public async Task<bool> Exists(Jobs job)
+        public async Task<bool> Exists(Entity.Admin.Job job)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
             return await _scheduler.CheckExists(key);
@@ -245,7 +245,7 @@ namespace OnceMi.Framework.Extension.Job
 
         #region private
 
-        private async Task Add(Jobs job, bool isLoading)
+        private async Task Add(Entity.Admin.Job job, bool isLoading)
         {
             var key = new JobKey(job.Id.ToString(), job.Group.Code);
             if (await _scheduler.CheckExists(key))
@@ -283,7 +283,7 @@ namespace OnceMi.Framework.Extension.Job
             //if is not load job from db, write history
             if (!isLoading)
             {
-                await _messageQuene.Publish(new JobHistories()
+                await _messageQuene.Publish(new JobHistory()
                 {
                     JobId = job.Id,
                     FiredTime = DateTime.Now,
@@ -300,7 +300,7 @@ namespace OnceMi.Framework.Extension.Job
 
         #region Create job and trigger
 
-        private IJobDetail CreateJob(Jobs jobItem)
+        private IJobDetail CreateJob(Entity.Admin.Job jobItem)
         {
             IJobDetail result = JobBuilder.Create<HttpExcuteJob>()
                 .WithIdentity(new JobKey(jobItem.Id.ToString(), jobItem.Group.Code))
@@ -312,7 +312,7 @@ namespace OnceMi.Framework.Extension.Job
             return result;
         }
 
-        private ITrigger CreateTrigger(Jobs jobItem)
+        private ITrigger CreateTrigger(Entity.Admin.Job jobItem)
         {
             if (jobItem.EndTime != null && jobItem.EndTime < DateTime.Now)
             {

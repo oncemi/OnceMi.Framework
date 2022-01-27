@@ -6,7 +6,7 @@ namespace OnceMi.Framework.Entity.Admin
     /// <summary>
     /// 用户Token表
     /// </summary>
-    [Table(Name = nameof(UserToken))]
+    [Table(Name = "user_tokens")]
     [Index("index_{TableName}_" + nameof(UserId), nameof(UserId), true)]
     public class UserToken : IBaseEntity
     {

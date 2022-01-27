@@ -1,18 +1,13 @@
 ﻿using FreeSql.DataAnnotations;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Entity.Admin
 {
     /// <summary>
     /// 菜单表
     /// </summary>
-    [Table(Name = nameof(Menus))]
-    public class Menus : IBaseEntity
+    [Table(Name = "sys_menus")]
+    public class Menu : IBaseEntity
     {
         [Column(IsNullable = true)]
         public long? ParentId { get; set; }
@@ -79,7 +74,7 @@ namespace OnceMi.Framework.Entity.Admin
         public long? ViewId { get; set; }
 
         [Navigate(nameof(ViewId))]
-        public Views View { get; set; }
+        public View View { get; set; }
 
         /// <summary>
         /// ApiId
@@ -88,13 +83,13 @@ namespace OnceMi.Framework.Entity.Admin
         public long? ApiId { get; set; }
 
         [Navigate(nameof(ApiId))]
-        public Apis Api { get; set; }
+        public Api Api { get; set; }
 
         /// <summary>
         /// 子条目
         /// </summary>
         [Column(IsIgnore = true)]
-        public List<Menus> Children { get; set; }
+        public List<Menu> Children { get; set; }
     }
 
     public enum MenuType
