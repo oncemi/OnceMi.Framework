@@ -56,6 +56,12 @@ namespace OnceMi.Framework.Model.Common
         [Description("JWT禁用黑名单")]
         public const string JwtBlackListKey = "admin:sys:jwtblacklist:{0}";
 
+        /// <summary>
+        /// 用户请求限制KEY
+        /// </summary>
+        [Description("用户请求限制KEY")]
+        public const string RequestLimitKey = "admin:sys:requestlimit:{0}:{1}";
+
         #region Methods
 
         /// <summary>
@@ -120,6 +126,15 @@ namespace OnceMi.Framework.Model.Common
                 throw new ArgumentNullException(nameof(jwt));
             }
             return string.Format(JwtBlackListKey, SHA.SHA256(jwt));
+        }
+
+        public static string GetRequestLimitKey(string jwt, string controller, string action, string method)
+        {
+            if (string.IsNullOrEmpty(jwt) || string.IsNullOrEmpty(controller) || string.IsNullOrEmpty(action))
+            {
+                throw new ArgumentNullException();
+            }
+            return string.Format(RequestLimitKey, SHA.SHA256(jwt), $"{controller}_{action}_{method}");
         }
 
         #endregion

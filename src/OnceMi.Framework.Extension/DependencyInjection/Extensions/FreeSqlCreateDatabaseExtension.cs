@@ -159,7 +159,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
 
             using SqlConnection cnn =
                 new SqlConnection(
-                    $"Data Source={builder.DataSource};Integrated Security = True;User ID={builder.UserID};Password={builder.Password};Initial Catalog=master;Min pool size=1");
+                    $"Data Source={builder.DataSource};Integrated Security = True;User ID={builder.UserID};Password={builder.Password};Initial Catalog=master;Min pool size=1;Encrypt={builder.Encrypt};TrustServerCertificate={builder.TrustServerCertificate};Trusted_Connection=False;");
             cnn.Open();
             using SqlCommand cmd = cnn.CreateCommand();
             cmd.CommandText = $"select * from sysdatabases where name = '{builder.InitialCatalog}'";

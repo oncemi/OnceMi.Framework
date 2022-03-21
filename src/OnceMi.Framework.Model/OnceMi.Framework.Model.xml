@@ -92,6 +92,11 @@
             禁用或者删除用户,JWT禁用黑名单
             </summary>
         </member>
+        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.RequestLimitKey">
+            <summary>
+            用户请求限制KEY
+            </summary>
+        </member>
         <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetRoleKey(System.String)">
             <summary>
             获取角色主键

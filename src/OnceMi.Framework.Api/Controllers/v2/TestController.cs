@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnceMi.AspNetCore.MQ;
+using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
@@ -70,6 +71,18 @@ namespace OnceMi.Framework.Api.Controllers.v2
             }, TimeSpan.FromSeconds(val.Time));
 
             return "发送成功";
+        }
+
+        /// <summary>
+        /// 调用频率限制测试
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("[action]")]
+        [RequestLimit(Count = 10, LimitSeconds = 10)]
+        public string RequestLimitTest()
+        {
+            return "哈哈";
         }
     }
 

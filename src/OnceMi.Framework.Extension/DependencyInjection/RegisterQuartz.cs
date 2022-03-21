@@ -40,7 +40,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 q.UseJobAutoInterrupt(options =>
                 {
                     // this is the default
-                    options.DefaultMaxRunTime = TimeSpan.FromMinutes(10);
+                    options.DefaultMaxRunTime = TimeSpan.FromMinutes(60);
                 });
                 // convert time zones using converter that can handle Windows/Linux differences
                 q.UseTimeZoneConverter();

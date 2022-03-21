@@ -152,17 +152,17 @@ namespace OnceMi.Framework.Extension.Job
             return values;
         }
 
-        private async Task<IRestResponse> ExecuteHttpRequest(string url
+        private async Task<RestResponse> ExecuteHttpRequest(string url
             , Method method
             , string headers
             , string @params
             , bool isInnerRequest
             , CancellationToken cancellationToken)
         {
-            var client = new RestClient()
+            var client = new RestClient(new RestClientOptions()
             {
                 RemoteCertificateValidationCallback = (sender, certificate, chain, errors) => true
-            };
+            });
             var request = new RestRequest(url, method)
             {
                 Timeout = 360000, //一个小时
@@ -187,7 +187,7 @@ namespace OnceMi.Framework.Extension.Job
             {
                 switch (method)
                 {
-                    case Method.GET:
+                    case Method.Get:
                         {
                             Dictionary<string, string> requestParams = DeserializeJsonToDictionary(@params);
                             foreach (var item in requestParams)
@@ -196,7 +196,7 @@ namespace OnceMi.Framework.Extension.Job
                             }
                         }
                         break;
-                    case Method.POST:
+                    case Method.Post:
                         {
                             request.AddJsonBody(@params, "application/json");
                         }

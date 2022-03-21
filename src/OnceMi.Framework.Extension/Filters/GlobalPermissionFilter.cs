@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using OnceMi.Framework.Extension.Authorizations;
-using OnceMi.Framework.Model;
+using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Util.User;
@@ -36,13 +36,13 @@ namespace OnceMi.Framework.Extension.Filters
                 string jobKey = context.HttpContext.Request.Headers["JobKey"];
                 if (string.IsNullOrEmpty(jobKey))
                 {
-                    context.Result = BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
+                    context.Result = FilterHelper.BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
                     return;
                 }
                 string jobValue = _redis.Get(CacheConstant.GetJobApiKey(jobKey));
                 if (string.IsNullOrEmpty(jobValue) || !DateTime.TryParse(jobValue, out DateTime _))
                 {
-                    context.Result = BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
+                    context.Result = FilterHelper.BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
                     return;
                 }
             }
@@ -68,12 +68,12 @@ namespace OnceMi.Framework.Extension.Filters
             string jwt = context.HttpContext.GetToken();
             if (string.IsNullOrWhiteSpace(jwt))
             {
-                context.Result = BuildResult(HttpStatusCode.Unauthorized);
+                context.Result = FilterHelper.BuildResult(HttpStatusCode.Unauthorized);
                 return;
             }
             if (_redis.Exists(CacheConstant.GetJwtBlackListKey(jwt)))
             {
-                context.Result = BuildResult(HttpStatusCode.Unauthorized);
+                context.Result = FilterHelper.BuildResult(HttpStatusCode.Unauthorized);
                 return;
             }
             //自定义授权验证
@@ -85,19 +85,6 @@ namespace OnceMi.Framework.Extension.Filters
             {
                 context.Result = new ForbidResult();
             }
-        }
-
-        private IActionResult BuildResult(HttpStatusCode code, string message = "")
-        {
-            return new JsonResult(new ResultObject<object>()
-            {
-                Code = (int)code,
-                Message = string.IsNullOrEmpty(message) ? code.ToString() : message,
-                Data = null
-            })
-            {
-                StatusCode = (int)code,
-            };
         }
     }
 }

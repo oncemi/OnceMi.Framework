@@ -114,10 +114,34 @@
             全局授权过滤器
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Extension.Filters.GolbalTranActionFilter">
+        <member name="T:OnceMi.Framework.Extension.Filters.RequestLimitAttribute">
             <summary>
-            重复请求
+            请求限流
             </summary>
+            <remarks>
+            请求限流过滤器，登录用户每分钟请求次数
+            采用计数器算法和Redis，更好的可以采用令牌桶，但是令牌桶在分布式环境下实现起来有点麻烦。
+            </remarks>
+        </member>
+        <member name="P:OnceMi.Framework.Extension.Filters.RequestLimitAttribute.Count">
+            <summary>
+            限流次数
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Extension.Filters.RequestLimitAttribute.LimitSeconds">
+            <summary>
+            限流时间段，单位：秒
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Extension.Filters.RequestLimitAttribute.IsPassed(System.String,System.String,System.String,System.String)">
+            <summary>
+            接口是否在限制次数范围内
+            </summary>
+            <param name="uniqueid">标识调用的key(accesstoken/token)</param>
+            <param name="controller">服务</param>
+            <param name="action">方法</param>
+            <param name="method">请求方式</param>
+            <returns></returns>
         </member>
         <member name="T:OnceMi.Framework.Extension.Filters.TrimStringsFilterAttribute">
             <summary>

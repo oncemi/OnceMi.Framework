@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Util.Reflection
 {
+    /// <summary>
+    /// 高性能深度复制工具类
+    /// </summary>
+    /// <typeparam name="TIn"></typeparam>
+    /// <typeparam name="TOut"></typeparam>
     public static class TransExp<TIn, TOut>
     {
         private static readonly Func<TIn, TOut> cache = GetFunc();

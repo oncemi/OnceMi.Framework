@@ -7,14 +7,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="11.0.0" />
+		<PackageReference Include="AutoMapper" Version="11.0.1" />
 		<PackageReference Include="Chinese" Version="0.4.6" />
 		<PackageReference Include="IdentityModel" Version="6.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-		<PackageReference Include="FreeSql" Version="3.0.100" />
+		<PackageReference Include="FreeSql" Version="3.2.100" />
 		<PackageReference Include="FreeRedis" Version="0.3.7" />
 		<PackageReference Include="IdleBus" Version="1.5.2" />
 		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />

@@ -801,5 +801,11 @@
             <param name="val"></param>
             <returns></returns>
         </member>
+        <member name="M:OnceMi.Framework.Api.Controllers.v2.TestController.RequestLimitTest">
+            <summary>
+            调用频率限制测试
+            </summary>
+            <returns></returns>
+        </member>
     </members>
 </doc>

@@ -11,21 +11,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.0.0" />
-		<PackageReference Include="FreeSql.Provider.MySql" Version="3.0.100" />
-		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.0.100" />
-		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.0.100" />
-		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.0.100" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.1" />
+		<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
+		<PackageReference Include="FreeSql.Provider.MySql" Version="3.2.100" />
+		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.100" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.100" />
+		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.100" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="MySql.Data" Version="8.0.28" />
+		<PackageReference Include="RestSharp" Version="107.3.0" />
 		<PackageReference Include="System.Data.Odbc" Version="6.0.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.2" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.2" />
-		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.2" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.4" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
+		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.4" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
 		<PackageReference Include="Quartz" Version="3.3.3" />
 		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
 		<PackageReference Include="Quartz.Plugins" Version="3.3.3" />
@@ -42,10 +43,6 @@
 		<ProjectReference Include="..\OnceMi.Framework.IService\OnceMi.Framework.IService.csproj" />
 		<ProjectReference Include="..\OnceMi.Framework.Service\OnceMi.Framework.Service.csproj" />
 		<ProjectReference Include="..\OnceMi.Framework.Model\OnceMi.Framework.Model.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Middlewares\" />
 	</ItemGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

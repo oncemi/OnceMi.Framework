@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.AspNetCore.MQ;
-using OnceMi.AspNetCore.OSS;
 using OnceMi.Framework.Api.Middlewares;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Extension.Authorizations;
@@ -56,27 +55,12 @@ namespace OnceMi.Framework.Api
             services.AddRedisCache();
             //Swagger
             services.AddSwagger();
+            //OSS，需要在AddRedisCache后面，OSS组件依赖于Redis
+            services.AddOSS();
 
-            #region OSS
+            #region Aop
 
-            services.AddOSSService(option =>
-            {
-                OSSConfigNode config = Configuration.GetSection("OSSProvider").Get<OSSConfigNode>();
-                if (config == null
-                || string.IsNullOrWhiteSpace(config.Endpoint)
-                || string.IsNullOrWhiteSpace(config.AccessKey)
-                || string.IsNullOrWhiteSpace(config.SecretKey))
-                {
-                    throw new Exception("Configuration can not bind oss config.");
-                }
-                option.Provider = OSSProvider.Minio;
-                option.Endpoint = config.Endpoint;
-                option.Region = config.Region;
-                option.AccessKey = config.AccessKey;
-                option.SecretKey = config.SecretKey;
-                option.IsEnableCache = config.IsEnableCache;
-                option.IsEnableHttps = config.IsEnableHttps;
-            });
+            services.AddAop();
 
             #endregion
 
@@ -110,12 +94,6 @@ namespace OnceMi.Framework.Api
                 option.ProviderType = Configuration.GetValue<MqProviderType>("MessageQueneSetting:ProviderType");
                 option.Connectstring = Configuration.GetValue<string>("MessageQueneSetting:ConnectionString");
             });
-
-            #endregion
-
-            #region Aop
-
-            services.AddAop();
 
             #endregion
 
@@ -245,8 +223,6 @@ namespace OnceMi.Framework.Api
                 options.Filters.Add(typeof(GlobalApiResponseFilter));
                 //全局授权过滤器
                 options.Filters.Add(typeof(GlobalPermissionFilter));
-                //重复请求过滤器 未完成
-                //options.Filters.Add(typeof(GolbalTranActionFilter));
             })
                 .AddJsonOptions(options =>
                 {
