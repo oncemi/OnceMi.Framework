@@ -56,6 +56,9 @@ QQ交流群：460481440
 
 #### 捐赠列表  
 
-|  Name | Blog | Amount |
+|  Name | Index | Detail |
 | ------------ | ------------ | ------------ |
 |  Shao Chuang | https://github.com/jerryshao4u  | 100¥  |
+|  王* | -  | 8.8¥  |
+|  BlackPig | -  | 50¥  |
+
