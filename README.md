@@ -35,7 +35,7 @@ HealthCheck UI：https://ofw-api.demo.oncemi.com/sys/health-ui
 IdentityServer4认证中心：https://ids.demo.oncemi.com/  [IdentityServer转向商业收费，暂时关闭]
 
 ### 文档
-文档地址：https://doc.oncemi.com/web/#/5  
+文档地址：https://docs.oncemi.com/web/#/5  
 
 详细的文档才能让使用者知其然再知其所以然，如果有描述模糊的地方，还请提交iusse，我们将尽快更新。  
 
