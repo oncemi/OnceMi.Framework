@@ -6,6 +6,10 @@ using Microsoft.OpenApi.Models;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -79,8 +83,8 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                     Scheme = "Bearer",
                 });
 
-                option.OperationFilter<RemoveVersionParameterOperationFilter>();
-                option.DocumentFilter<SetVersionInPathDocumentFilter>();
+                option.OperationFilter<SwaggerParameterOperationFilter>();
+                option.DocumentFilter<SwaggerVersionDocumentFilter>();
 
                 //项目xml文档
                 string[] files = Directory.GetFiles(AppContext.BaseDirectory);

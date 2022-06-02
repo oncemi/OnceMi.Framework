@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Util.User;
+using System;
 using System.Net;
 
 namespace OnceMi.Framework.Extension.Filters
@@ -99,7 +100,7 @@ namespace OnceMi.Framework.Extension.Filters
             {
                 return true;
             }
-            string key = CacheConstant.GetRequestLimitKey(uniqueid, controller, action, method);
+            string key = GlobalCacheConstant.GetRequestLimitKey(uniqueid, controller, action, method);
             if (!_redis.Exists(key))
             {
                 _redis.Set(key, "0", LimitSeconds);

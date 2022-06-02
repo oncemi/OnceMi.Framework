@@ -86,7 +86,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<UpLoadFile> allFiles = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Include(p => p.Owner)
                 .Where(exp)
                 .NoTracking()

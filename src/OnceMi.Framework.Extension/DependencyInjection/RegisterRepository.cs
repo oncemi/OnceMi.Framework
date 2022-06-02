@@ -6,6 +6,9 @@ using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.Repository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {

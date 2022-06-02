@@ -66,7 +66,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<View> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();
@@ -156,8 +156,8 @@ namespace OnceMi.Framework.Service.Admin
             return _mapper.Map<ViewItemResponse>(result);
         }
 
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Update(UpdateViewRequest request)
         {
             View view = await _repository.Where(p => p.Id == request.Id).FirstAsync();
@@ -182,8 +182,8 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
             /*

@@ -28,31 +28,24 @@ namespace Microsoft.Extensions.DependencyInjection
             Dictionary<Type, AutoInjectionAttribute> poolDic = new Dictionary<Type, AutoInjectionAttribute>();
             foreach (var assemblyItem in assemblies)
             {
-                try
+                Type[] types = assemblyItem.GetExportedTypes();
+                foreach (var item in types)
                 {
-                    Type[] types = assemblyItem.GetExportedTypes();
-                    foreach (var item in types)
+                    var attr = item.GetCustomAttribute<AutoInjectionAttribute>();
+                    if (attr == null)
+                        continue;
+                    if (item.IsAbstract || item.IsInterface)
+                        continue;
+                    if (attr.Interface != null)
                     {
-                        var attr = item.GetCustomAttribute<AutoInjectionAttribute>();
-                        if (attr == null)
-                            continue;
-                        if (item.IsAbstract || item.IsInterface)
-                            continue;
-                        if (attr.Interface != null)
-                        {
-                            if (!attr.Interface.IsInterface)
-                                throw new ArgumentException($"指定的服务[{attr.Interface.Name}]类型只能为接口。");
-                            if (item.IsAssignableFrom(attr.Interface))
-                                throw new ArgumentException($"注入的类型[{item.Name}]未实现指定的服务[{attr.Interface.Name}]。");
-                        }
-                        if (poolDic.ContainsKey(item))
-                            continue;
-                        poolDic.Add(item, attr);
+                        if (!attr.Interface.IsInterface)
+                            throw new ArgumentException($"指定的服务[{attr.Interface.Name}]类型只能为接口。");
+                        if (item.IsAssignableFrom(attr.Interface))
+                            throw new ArgumentException($"注入的类型[{item.Name}]未实现指定的服务[{attr.Interface.Name}]。");
                     }
-                }
-                catch
-                {
-                    throw;
+                    if (poolDic.ContainsKey(item))
+                        continue;
+                    poolDic.Add(item, attr);
                 }
             }
             foreach (var item in poolDic)

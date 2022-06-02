@@ -143,7 +143,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 exp = exp.And(p => p.Status == UserStatus.Enable);
             }
-            if (request.OrderByModels.Count == 0)
+            if (request.OrderByParams.Count == 0)
             {
                 request.OrderBy = new string[] { $"{nameof(UserInfo.Id)},desc" };
             }
@@ -151,7 +151,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<UserInfo> allUsers = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .IncludeMany(p => p.Roles)
                 .IncludeMany(p => p.Organizes)
                 .Where(exp)
@@ -460,7 +460,7 @@ namespace OnceMi.Framework.Service.Admin
                         continue;
                     }
                     //在Redis中保存token黑名单
-                    _redis.Set(CacheConstant.GetJwtBlackListKey(item.Token), item, TimeSpan.FromSeconds(_config.TokenManagement.AccessExpiration));
+                    _redis.Set(GlobalCacheConstant.GetJwtBlackListKey(item.Token), item, TimeSpan.FromSeconds(_config.TokenManagement.AccessExpiration));
                 }
             }
         }
@@ -489,7 +489,7 @@ namespace OnceMi.Framework.Service.Admin
                 _logger.LogWarning($"Set user refesh token expired failed. User id is {userId}");
             }
             //在Redis中保存token黑名单
-            _redis.Set(CacheConstant.GetJwtBlackListKey(token.Token), token, TimeSpan.FromSeconds(_config.TokenManagement.AccessExpiration));
+            _redis.Set(GlobalCacheConstant.GetJwtBlackListKey(token.Token), token, TimeSpan.FromSeconds(_config.TokenManagement.AccessExpiration));
         }
 
         /// <summary>

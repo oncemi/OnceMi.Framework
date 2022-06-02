@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace OnceMi.Framework.Extension.Filters
 {
-    public class SetVersionInPathDocumentFilter : IDocumentFilter
+    public class SwaggerVersionDocumentFilter : IDocumentFilter
     {
         public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {

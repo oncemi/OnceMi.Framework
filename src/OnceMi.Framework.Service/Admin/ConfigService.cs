@@ -137,7 +137,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.CONFIG_KEY_CANNOT_NULL, "获取配置项失败，参数KEY不能为空");
             }
-            return await _redisClient.GetOrCreateAsync(CacheConstant.GetConfigKey(key), async () =>
+            return await _redisClient.GetOrCreateAsync(GlobalCacheConstant.GetConfigKey(key), async () =>
             {
                 Entity.Admin.Config config = await _repository.Where(p => p.Key == key).FirstAsync();
                 if (config == null)
@@ -200,9 +200,9 @@ namespace OnceMi.Framework.Service.Admin
                 config.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
                 await _repository.UpdateAsync(config);
                 //清空缓存，如果存在的话
-                if (_redisClient.Exists(CacheConstant.GetConfigKey(data.Key)))
+                if (_redisClient.Exists(GlobalCacheConstant.GetConfigKey(data.Key)))
                 {
-                    _redisClient.Del(CacheConstant.GetConfigKey(data.Key));
+                    _redisClient.Del(GlobalCacheConstant.GetConfigKey(data.Key));
                 }
             }
         }

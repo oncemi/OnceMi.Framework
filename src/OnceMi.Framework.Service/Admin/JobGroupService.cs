@@ -54,7 +54,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<JobGroup> allJobGroups = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();

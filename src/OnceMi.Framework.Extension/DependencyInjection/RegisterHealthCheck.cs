@@ -6,6 +6,10 @@ using OnceMi.Framework.Config;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Text.RegularExpressions;
 using OnceMi.AspNetCore.AutoInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {

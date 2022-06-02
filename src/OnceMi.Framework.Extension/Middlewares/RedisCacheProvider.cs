@@ -1,6 +1,7 @@
 ﻿using FreeRedis;
 using OnceMi.AspNetCore.OSS;
 using OnceMi.Framework.Util.Json;
+using System;
 
 namespace OnceMi.Framework.Extension.Middlewares
 {

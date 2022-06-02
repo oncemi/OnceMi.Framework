@@ -99,7 +99,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<Organize> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();
@@ -179,7 +179,7 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task<OrganizeItemResponse> Insert(CreateOrganizeRequest request)
         {
             Organize organize = _mapper.Map<Organize>(request);
@@ -209,7 +209,7 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Update(UpdateOrganizeRequest request)
         {
             Organize organize = await _repository.Where(p => p.Id == request.Id).FirstAsync();
@@ -255,7 +255,7 @@ namespace OnceMi.Framework.Service.Admin
         /// <param name="ids"></param>
         /// <returns></returns>
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
             if (ids == null || ids.Count == 0)

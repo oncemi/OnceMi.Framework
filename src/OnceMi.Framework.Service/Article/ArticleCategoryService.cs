@@ -60,7 +60,7 @@ namespace OnceMi.Framework.Service.Article
             long count = await _repository.Where(exp).CountAsync();
             List<ArticleCategory> allParentCategoris = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();

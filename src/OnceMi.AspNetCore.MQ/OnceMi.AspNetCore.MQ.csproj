@@ -6,8 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="EasyNetQ" Version="6.3.1" />
-		<PackageReference Include="FreeRedis" Version="0.3.7" />
+		<PackageReference Include="EasyNetQ" Version="6.4.1" />
+		<PackageReference Include="FreeRedis" Version="0.5.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyModel" Version="6.0.0" />

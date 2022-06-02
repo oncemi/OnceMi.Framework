@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -29,60 +30,6 @@ namespace OnceMi.Framework.Config
         {
             if (configuration == null) throw new ArgumentNullException(nameof(IConfiguration));
             this.Configuration = configuration;
-        }
-
-        public void Load()
-        {
-            if(_manager == null)
-            {
-                lock (_locker)
-                {
-                    if(_manager == null)
-                    {
-                        _manager = this;
-                    }
-                }
-            }
-        }
-
-        private T GetSection<T>(string sectionName = null)
-        {
-            string nameofT = typeof(T).Name;
-            if (string.IsNullOrEmpty(nameofT) && string.IsNullOrEmpty(sectionName))
-            {
-                return default;
-            }
-            if (string.IsNullOrEmpty(sectionName))
-            {
-                int index = nameofT.LastIndexOf("Node");
-                if (index > 0 && index == nameofT.Length - 4)
-                {
-                    nameofT = nameofT.Substring(0, index);
-                }
-            }
-            else
-            {
-                nameofT = sectionName;
-            }
-            IConfigurationSection section = this.Configuration.GetSection(nameofT);
-            if (section == null || !section.Exists())
-            {
-                return default;
-            }
-            return section.Get<T>();
-        }
-
-        /// <summary>
-        /// 根据Key获取value
-        /// Exp: AppSettings:OSS:AccessKey
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public string GetKeyValue(string key)
-        {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException(key);
-            return Configuration.GetValue<string>(key);
         }
 
         public AppSettingsNode AppSettings
@@ -132,5 +79,95 @@ namespace OnceMi.Framework.Config
                 return GetSection<IdentityServerNode>();
             }
         }
+
+        #region Methods
+
+        public void Load()
+        {
+            if (_manager == null)
+            {
+                lock (_locker)
+                {
+                    if (_manager == null)
+                    {
+                        _manager = this;
+                    }
+                }
+            }
+        }
+
+        private T GetSection<T>(string sectionName = null)
+        {
+            string nameofT = typeof(T).Name;
+            if (string.IsNullOrEmpty(nameofT) && string.IsNullOrEmpty(sectionName))
+            {
+                return default;
+            }
+            if (string.IsNullOrEmpty(sectionName))
+            {
+                int index = nameofT.LastIndexOf("Node");
+                if (index > 0 && index == nameofT.Length - 4)
+                {
+                    nameofT = nameofT.Substring(0, index);
+                }
+            }
+            else
+            {
+                nameofT = sectionName;
+            }
+            IConfigurationSection section = this.Configuration.GetSection(nameofT);
+            if (section == null || !section.Exists())
+            {
+                return default;
+            }
+            return section.Get<T>();
+        }
+
+        /// <summary>
+        /// 根据Key获取value
+        /// Exp: AppSettings:OSS:AccessKey
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetKeyValue(string key)
+        {
+            if (string.IsNullOrEmpty(key))
+                throw new ArgumentNullException(key);
+            return Configuration.GetValue<string>(key);
+        }
+
+        /// <summary>
+        /// 加载配置json文件
+        /// </summary>
+        /// <param name="hostingContext"></param>
+        /// <param name="configuration"></param>
+        /// <exception cref="Exception"></exception>
+        public static void LoadAppsettings(HostBuilderContext hostingContext, IConfigurationBuilder configuration)
+        {
+            string baseConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Base.json");
+            if (!File.Exists(baseConfigPath))
+            {
+                throw new Exception($"Base app config not exist. Please check file '{baseConfigPath}'");
+            }
+            configuration.AddJsonFile(baseConfigPath, optional: false, reloadOnChange: true);
+
+            string normalConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+            if (File.Exists(normalConfigPath))
+            {
+                configuration.AddJsonFile(normalConfigPath, optional: false, reloadOnChange: true);
+            }
+
+            string eventName = hostingContext.HostingEnvironment.EnvironmentName;
+            if (!string.IsNullOrEmpty(eventName))
+            {
+                string eventAppConfigPath = Path.Combine(AppContext.BaseDirectory, $"appsettings.{eventName}.json");
+                if (File.Exists(eventAppConfigPath))
+                {
+                    configuration.AddJsonFile(eventAppConfigPath, optional: false, reloadOnChange: true);
+                }
+            }
+        }
+
+        #endregion
     }
 }

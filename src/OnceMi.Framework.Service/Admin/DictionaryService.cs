@@ -26,31 +26,44 @@ namespace OnceMi.Framework.Service.Admin
         private readonly IIdGeneratorService _idGenerator;
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
+        private readonly RedisClient _redis;
 
         public DictionaryService(IDictionaryRepository repository
             , ILogger<DictionaryService> logger
             , IIdGeneratorService idGenerator
             , IHttpContextAccessor accessor
-            , IMapper mapper) : base(repository)
+            , IMapper mapper
+            , RedisClient redis) : base(repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _redis = redis ?? throw new ArgumentNullException(nameof(redis));
             _accessor = accessor;
         }
 
         public async ValueTask<int> QueryNextSortValue(long? parentId)
         {
-            parentId = parentId == 0 ? null : parentId;
-            var maxValueObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)
-                .OrderByDescending(p => p.Sort)
-                .FirstAsync();
-            if (maxValueObj != null)
+            using (var locker = _redis.Lock(GlobalCacheConstant.GetRedisLockKey(this.GetType().Namespace, (parentId == 0 ? 0 : parentId).ToString()), 60))
             {
-                return maxValueObj.Sort + 1;
+                try
+                {
+                    parentId = parentId == 0 ? null : parentId;
+                    var maxValueObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)
+                        .OrderByDescending(p => p.Sort)
+                        .FirstAsync();
+                    if (maxValueObj != null)
+                    {
+                        return maxValueObj.Sort + 1;
+                    }
+                    return 1;
+                }
+                finally
+                {
+                    locker?.Unlock();
+                }
             }
-            return 1;
         }
 
         public async Task<IPageResponse<DictionaryItemResponse>> Query(IPageRequest request)
@@ -71,7 +84,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<Dictionary> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();
@@ -177,11 +190,11 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (await _repository.Select.AnyAsync(p => p.Code == dictionary.Code && p.ParentId == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCode.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下Code'{request.Code}'已存在");
+                throw new BusException(ResultCode.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下编码为'{request.Code}'的字典已存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Name == dictionary.Name && p.ParentId == request.ParentId && !p.IsDeleted))
             {
-                throw new BusException(ResultCode.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下Name'{request.Name}'已存在");
+                throw new BusException(ResultCode.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下名称为'{request.Name}'的字典已存在");
             }
             dictionary.ParentId = dictionary.ParentId == 0 ? null : dictionary.ParentId;
             //view.Id = _idGenerator.NewId();
@@ -206,11 +219,11 @@ namespace OnceMi.Framework.Service.Admin
             }
             if (await _repository.Select.AnyAsync(p => p.Code == dictionary.Code && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCode.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下Code'{request.Code}'已存在");
+                throw new BusException(ResultCode.DIC_CODE_EXISTS_IN_PATH, $"当前子目录下编码为'{request.Code}'的字典已存在");
             }
             if (await _repository.Select.AnyAsync(p => p.Name == dictionary.Name && p.ParentId == request.ParentId && p.Id != request.Id && !p.IsDeleted))
             {
-                throw new BusException(ResultCode.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下Name'{request.Name}'已存在");
+                throw new BusException(ResultCode.DIC_NAME_EXISTS_IN_PATH, $"当前子目录下名称为'{request.Name}'的字典已存在");
             }
             dictionary = request.MapTo(dictionary);
             dictionary.UpdatedTime = DateTime.Now;

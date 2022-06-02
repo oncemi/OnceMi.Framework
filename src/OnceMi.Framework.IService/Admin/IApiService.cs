@@ -17,7 +17,7 @@ namespace OnceMi.Framework.IService.Admin
         /// 自动解析当前项目的API
         /// </summary>
         /// <returns></returns>
-        Task AutoResolve();
+        Task Sync();
 
         /// <summary>
         /// 根据ID查询

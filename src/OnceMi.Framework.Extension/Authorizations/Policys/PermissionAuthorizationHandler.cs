@@ -4,6 +4,10 @@ using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Util.User;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Authorizations
 {

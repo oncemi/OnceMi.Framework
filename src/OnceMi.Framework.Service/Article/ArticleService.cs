@@ -52,7 +52,7 @@ namespace OnceMi.Framework.Service.Article
                 exp = exp.And(p => p.IsDraw == request.IsDraw.Value);
             }
             //默认排序
-            if (request.OrderByModels == null || request.OrderByModels.Count == 0)
+            if (request.OrderByParams == null || request.OrderByParams.Count == 0)
             {
                 request.OrderBy = new string[] { $"{nameof(Entity.Article.ArticleInfo.CreatedTime)},desc" };
             }
@@ -60,7 +60,7 @@ namespace OnceMi.Framework.Service.Article
             long count = await _repository.Where(exp).CountAsync();
             List<ArticleInfo> articles = await _repository.Where(exp)
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .IncludeMany(u => u.ArticleCategories)
                 .IncludeMany(u => u.ArticleTags)
                 .IncludeMany(u => u.ArticleCovers)

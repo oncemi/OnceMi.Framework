@@ -85,7 +85,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<Role> allParentRoles = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .OrderBy(p => p.Sort)
                 .LeftJoin(p => p.Organize.Id == p.OrganizeId)
                 .Where(exp)
@@ -217,9 +217,9 @@ namespace OnceMi.Framework.Service.Admin
             var result = await _repository.InsertAsync(role);
 
             //清空角色权限缓存
-            _cache.Remove(CacheConstant.RolePermissionsKey);
+            _cache.Remove(GlobalCacheConstant.Key.RolePermissionsKey);
             //清空开发人员角色缓存
-            _cache.Remove(CacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName));
+            _cache.Remove(GlobalCacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName));
 
             return _mapper.Map<RoleItemResponse>(result);
         }
@@ -251,9 +251,9 @@ namespace OnceMi.Framework.Service.Admin
             role.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
 
             //清空角色权限缓存
-            _cache.Remove(CacheConstant.RolePermissionsKey);
+            _cache.Remove(GlobalCacheConstant.Key.RolePermissionsKey);
             //清空开发人员角色缓存
-            _cache.Remove(CacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName));
+            _cache.Remove(GlobalCacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName));
 
             await _repository.UpdateAsync(role);
         }
@@ -323,16 +323,16 @@ namespace OnceMi.Framework.Service.Admin
                 .ExecuteAffrowsAsync();
 
             //清空角色权限缓存
-            _cache.Remove(CacheConstant.RolePermissionsKey);
+            _cache.Remove(GlobalCacheConstant.Key.RolePermissionsKey);
             //清空开发人员角色缓存
-            _cache.Remove(CacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName));
+            _cache.Remove(GlobalCacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName));
         }
 
         #region private
 
         private async Task<Role> GetDeveloperRole()
         {
-            Role role = await _cache.GetOrCreateAsync(CacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName), async (cache) =>
+            Role role = await _cache.GetOrCreateAsync(GlobalCacheConstant.GetRoleKey(_config.AppSettings.DeveloperRoleName), async (cache) =>
             {
                 Role developRole = await _repository.Select
                     .LeftJoin(p => p.Organize.Id == p.OrganizeId)

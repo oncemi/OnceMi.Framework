@@ -17,6 +17,7 @@ using OnceMi.Framework.Util.User;
 using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace OnceMi.Framework.Service.Admin
 {
@@ -55,11 +56,42 @@ namespace OnceMi.Framework.Service.Admin
 
         public List<ISelectResponse<string>> QueryApiVersions()
         {
-            List<ISelectResponse<string>> result = _repository.Select.GroupBy(p => p.Version).Select(p => new ISelectResponse<string>
+            FieldInfo[] fields = typeof(ApiVersions).GetFields();
+            if (fields == null || !fields.Any())
+            {
+                return new List<ISelectResponse<string>>();
+            }
+            List<ISelectResponse<string>> result = new List<ISelectResponse<string>>();
+            foreach (var item in fields)
+            {
+                if (!item.IsPublic || !item.IsLiteral || !item.IsStatic)
+                {
+                    continue;
+                }
+                string value = item.GetValue(null).ToString();
+                if (string.IsNullOrEmpty(value) || !double.TryParse(value, out double val))
+                {
+                    continue;
+                }
+                result.Add(new ISelectResponse<string>()
+                {
+                    Name = $"v{value}",
+                    Value = $"v{value}",
+                });
+            }
+            List<ISelectResponse<string>> dbVersions = _repository.Select.GroupBy(p => p.Version).Select(p => new ISelectResponse<string>
             {
                 Value = p.Key,
                 Name = p.Key
             }).ToList();
+            if (dbVersions != null && dbVersions.Any())
+            {
+                var temp = dbVersions.Where(p => !result.Any(q => q.Name.Equals(p.Name, StringComparison.OrdinalIgnoreCase))).ToList();
+                if (temp.Any())
+                {
+                    result.AddRange(temp);
+                }
+            }
             return result;
         }
 
@@ -90,7 +122,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<Api> allParentApis = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();
@@ -193,8 +225,8 @@ namespace OnceMi.Framework.Service.Admin
             return _mapper.Map<ApiItemResponse>(result);
         }
 
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Update(UpdateApiRequest request)
         {
             Api api = await _repository.Where(p => p.Id == request.Id).FirstAsync();
@@ -227,9 +259,9 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
-        public async Task AutoResolve()
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
+        public async Task Sync()
         {
             List<ApiDocInfo> apis = ResolveApi();
             //按照Controller分组
@@ -268,12 +300,17 @@ namespace OnceMi.Framework.Service.Admin
                     CreateMethod = ApiCreateMethod.AutoSync
                 })
                 .ToList();
+
             newApis.AddRange(newParentApis);
             //获取当前已经存在的
             List<Api> oldApis = await _repository
                 .Where(p => !p.IsDeleted)
                 .NoTracking()
                 .ToListAsync();
+            if (oldApis == null)
+            {
+                oldApis = new List<Api>();
+            }
             //比较差异
             DifferApis(oldApis, newApis);
             //再次搜素是否有遗漏的
@@ -288,21 +325,20 @@ namespace OnceMi.Framework.Service.Admin
             await _repository.InsertAsync(oldApis);
             //查询菜单列表中不存在的接口（自动解析后被删除的）
             List<long> allApiIds = oldApis.Select(p => p.Id).ToList();
-            List<Menu> allApiMenus = await _repository.Orm.Select<Menu>()
+            List<Menu> delMenuByApis = await _repository.Orm.Select<Menu>()
                 .Where(p => p.Type == MenuType.Api && !allApiIds.Contains(p.ApiId.Value))
                 .ToListAsync();
-            if (allApiMenus != null && allApiMenus.Count > 0)
+            if (delMenuByApis != null && delMenuByApis.Count > 0)
             {
-                List<long> delMenuIds = allApiMenus.Select(p => p.Id).ToList();
-                await _menuService.Delete(delMenuIds);
+                await _menuService.Delete(delMenuByApis.Select(p => p.Id).ToList());
             }
 
-            _logger.LogInformation($"成功解析到{oldApis.Count}个Api，并已存入数据库！");
+            _logger.LogInformation($"成功解析到{oldApis.Count}个Api！");
         }
 
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
             /*
@@ -474,24 +510,14 @@ namespace OnceMi.Framework.Service.Admin
             //查找需要新增的
             foreach (var newItem in newApis)
             {
-                bool isFind = false;
-                foreach (var oldItem in oldApis)
-                {
-                    if (oldItem.Path == newItem.Path
-                        && oldItem.Version == newItem.Version
-                        && oldItem.OperationId == newItem.OperationId)
-                    {
-                        isFind = true;
-                        break;
-                    }
-                }
-                if (!isFind)
+                bool isOldApi = oldApis.Any(p => p.Path == newItem.Path && p.Version == newItem.Version && p.OperationId == newItem.OperationId);
+                if (!isOldApi)
                 {
                     tempApis.Add(newItem);
                 }
             }
             //新增
-            if (tempApis.Count > 0)
+            if (tempApis.Any())
             {
                 foreach (var item in tempApis)
                 {
@@ -503,14 +529,12 @@ namespace OnceMi.Framework.Service.Admin
             //查找需要删除和修改的
             foreach (var oldItem in oldApis)
             {
-                bool isFind = false;
+                bool isOldApi = false;
                 foreach (var newItem in newApis)
                 {
-                    if (oldItem.Path == newItem.Path
-                        && oldItem.Version == newItem.Version
-                        && oldItem.OperationId == newItem.OperationId)
+                    if (oldItem.Path == newItem.Path && oldItem.Version == newItem.Version && oldItem.OperationId == newItem.OperationId)
                     {
-                        isFind = true;
+                        isOldApi = true;
                         //需要修改的直接修改
                         if (oldItem.Name != newItem.Name
                         || oldItem.Code != newItem.Code
@@ -529,11 +553,11 @@ namespace OnceMi.Framework.Service.Admin
                         break;
                     }
                 }
-                if (!isFind)
+                if (!isOldApi && oldItem.CreateMethod != ApiCreateMethod.Manual)
                 {
                     tempApis.Add(oldItem);
                 }
-                if (isFind
+                if (isOldApi
                     && oldItem.ParentId != null
                     && !oldApis.Any(p => p.Id == oldItem.ParentId)
                     && !tempApis.Contains(oldItem))
@@ -726,7 +750,7 @@ namespace OnceMi.Framework.Service.Admin
             Dictionary<string, string> result = new Dictionary<string, string>();
             foreach (var item in parameters)
             {
-                if(item.Schema == null || string.IsNullOrEmpty(item.Schema.Type))
+                if (item.Schema == null || string.IsNullOrEmpty(item.Schema.Type))
                 {
                     continue;
                 }

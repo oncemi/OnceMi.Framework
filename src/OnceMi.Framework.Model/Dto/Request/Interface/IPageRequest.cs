@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
@@ -28,10 +24,19 @@ namespace OnceMi.Framework.Model.Dto
         public int Size { get; set; } = 20;
 
         /// <summary>
-        /// 排序
+        /// 排序字段和排序方式，可包含多个orderby参数 |
+        /// U参数示例 |
+        /// 单个排序字段：orderby=name,desc |
+        /// 多个排序字段：orderby=name,desc,createtime,asc
+        /// </summary>
+        public string[] OrderBy { get; set; }
+
+        /// <summary>
+        /// 整理后的排序规则
         /// </summary>
         [JsonIgnore]
-        public List<OrderByModel> OrderByModels
+        [IgnoreDataMember]
+        public List<OrderByModel> OrderByParams
         {
             get
             {
@@ -42,8 +47,7 @@ namespace OnceMi.Framework.Model.Dto
                 List<OrderByModel> result = new List<OrderByModel>();
                 foreach (var orderByItem in OrderBy)
                 {
-                    if (string.IsNullOrEmpty(orderByItem)
-                        || orderByItem.Equals("null", StringComparison.OrdinalIgnoreCase))
+                    if (string.IsNullOrEmpty(orderByItem) || orderByItem.Equals("null", StringComparison.OrdinalIgnoreCase))
                         continue;
                     List<string> items = orderByItem.Split(",").Where(p => !string.IsNullOrEmpty(p)).ToList();
                     //最后一个不是排序方式结尾，添加排序方式字段
@@ -81,12 +85,6 @@ namespace OnceMi.Framework.Model.Dto
                 return result;
             }
         }
-
-        /// <summary>
-        /// 排序字段和排序方式，URL参数示例：orderby=name,desc
-        /// 可包含多个orderby参数
-        /// </summary>
-        public string[] OrderBy { get; set; }
 
         /// <summary>
         /// 是否为排序字段（asc，desc）

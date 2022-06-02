@@ -5,7 +5,7 @@ using System.Data;
 namespace OnceMi.Framework.Model.Attributes
 {
     /// <summary>
-    /// 方法执行完成之后清理指定key的缓存
+    /// 标识这个接口是为一个作业请求接口
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class JobAttribute : Attribute

@@ -7,7 +7,10 @@ using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Util.User;
+using System;
+using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Filters
 {
@@ -39,7 +42,7 @@ namespace OnceMi.Framework.Extension.Filters
                     context.Result = FilterHelper.BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
                     return;
                 }
-                string jobValue = _redis.Get(CacheConstant.GetJobApiKey(jobKey));
+                string jobValue = _redis.Get(GlobalCacheConstant.GetJobApiKey(jobKey));
                 if (string.IsNullOrEmpty(jobValue) || !DateTime.TryParse(jobValue, out DateTime _))
                 {
                     context.Result = FilterHelper.BuildResult(HttpStatusCode.BadRequest, "请求被拒绝，此接口仅允许作业管理器请求。");
@@ -71,7 +74,7 @@ namespace OnceMi.Framework.Extension.Filters
                 context.Result = FilterHelper.BuildResult(HttpStatusCode.Unauthorized);
                 return;
             }
-            if (_redis.Exists(CacheConstant.GetJwtBlackListKey(jwt)))
+            if (_redis.Exists(GlobalCacheConstant.GetJwtBlackListKey(jwt)))
             {
                 context.Result = FilterHelper.BuildResult(HttpStatusCode.Unauthorized);
                 return;

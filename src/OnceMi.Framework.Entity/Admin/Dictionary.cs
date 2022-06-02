@@ -12,7 +12,7 @@ namespace OnceMi.Framework.Entity.Admin
     /// 字典表
     /// </summary>
     [Table(Name = "sys_dictionaries")]
-    [Index("index_{TableName}_" + nameof(Name), nameof(Name), true)]
+    [Index("index_{TableName}_" + nameof(Name), nameof(Name), false)]
     public class Dictionary : IBaseEntity
     {
         /// <summary>

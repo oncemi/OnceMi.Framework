@@ -32,7 +32,7 @@ namespace OnceMi.Framework.Service.Admin
         public async Task<IPageResponse<JobHistoryItemResponse>> Query(JobHistoryPageRequest request)
         {
             IPageResponse<JobHistoryItemResponse> response = new IPageResponse<JobHistoryItemResponse>();
-            if (request.OrderByModels.Count == 0)
+            if (request.OrderByParams.Count == 0)
             {
                 request.OrderBy = new string[] { $"{nameof(JobHistory.Id)},desc" };
             }
@@ -41,7 +41,7 @@ namespace OnceMi.Framework.Service.Admin
             long count = await _repository.Where(exp).CountAsync();
             List<JobHistory> allParents = await _repository.Select
                 .Page(request.Page, request.Size)
-                .OrderBy(request.OrderByModels)
+                .OrderBy(request.OrderByParams)
                 .Where(exp)
                 .NoTracking()
                 .ToListAsync();

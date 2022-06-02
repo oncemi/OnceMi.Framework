@@ -1,5 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
@@ -43,7 +48,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             var data = await _service.Query(new IPageRequest()
             {
                 Page = 1,
-                Size = 999999,
+                Size = int.MaxValue,
                 OrderBy = new string[] { "id,asc" },
             }, true);
             if (data != null && data.PageData != null && data.PageData.Any())

@@ -12,6 +12,14 @@
             <param name="key"></param>
             <returns></returns>
         </member>
+        <member name="M:OnceMi.Framework.Config.ConfigManager.LoadAppsettings(Microsoft.Extensions.Hosting.HostBuilderContext,Microsoft.Extensions.Configuration.IConfigurationBuilder)">
+            <summary>
+            加载配置json文件
+            </summary>
+            <param name="hostingContext"></param>
+            <param name="configuration"></param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
         <member name="T:OnceMi.Framework.Config.GlobalConfigConstant">
             <summary>
             全局静态配置

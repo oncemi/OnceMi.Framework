@@ -12,20 +12,12 @@ namespace OnceMi.AspNetCore.AutoInjection
 
         public List<Assembly> DomainAllAssemblies { get; set; }
 
-        private readonly string[] _ignoreNamespaces = { "dotnet-"
-            , "Microsoft."
-            , "mscorlib"
-            , "netstandard"
-            , "System"
-            , "Windows"
-            , "Castle"
-            , "AutoMapper"
-            , "Quartz"
-            , "Swashbuckle"
-            , "Newtonsoft.Json"
-            , "NLog"
-            , "FreeSql"
-            , "HealthChecks"
+        /// <summary>
+        /// 需要忽略的命名空间
+        /// </summary>
+        private readonly string[] _ignoreNamespaces = { "dotnet-","Microsoft.","mscorlib","netstandard","System","Windows","Castle","AutoMapper","Quartz","Swashbuckle","Newtonsoft","NLog","FreeSql","HealthChecks","Aliyun.",
+            "Azure.","Crc32.NET","EasyNetQ","Fractions","FreeRedis","Google.","Hardware.Info","IdentityModel","Humanizer","IdleBus","K4os","Kubernetes","Minio","MySql.Data","Ubiety.","ZstdNet",
+            "NetTopologySuite","Npgsql","NStandard","Qiniu","RestSharp","SkiaSharp","SQLite","COSXML","TimeZoneConverter","UAParser","YamlDotNet","Yitter.",
         };
 
         private readonly Func<AssemblyName, bool> _filter = null;

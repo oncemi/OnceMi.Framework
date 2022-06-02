@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
+		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
@@ -12,13 +12,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
-		<PackageReference Include="FreeSql.Provider.MySql" Version="3.2.100" />
-		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.100" />
-		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.100" />
-		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.100" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.3" />
+		<PackageReference Include="FreeSql.Provider.MySql" Version="3.2.661" />
+		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.661" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.661" />
+		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.661" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
-		<PackageReference Include="MySql.Data" Version="8.0.28" />
+		<PackageReference Include="MySql.Data" Version="8.0.29" />
 		<PackageReference Include="RestSharp" Version="107.3.0" />
 		<PackageReference Include="System.Data.Odbc" Version="6.0.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
@@ -26,11 +26,11 @@
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.4" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.4" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
-		<PackageReference Include="Quartz" Version="3.3.3" />
-		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.3.3" />
-		<PackageReference Include="Quartz.Plugins" Version="3.3.3" />
-		<PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.3.3" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+		<PackageReference Include="Quartz" Version="3.4.0" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.4.0" />
+		<PackageReference Include="Quartz.Plugins" Version="3.4.0" />
+		<PackageReference Include="Quartz.Plugins.TimeZoneConverter" Version="3.4.0" />
 	</ItemGroup>
 
 	<ItemGroup>

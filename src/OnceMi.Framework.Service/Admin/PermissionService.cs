@@ -207,7 +207,7 @@ namespace OnceMi.Framework.Service.Admin
                 await _repository.InsertAsync(permissions);
             }
             //清空角色权限缓存
-            _cache.Remove(CacheConstant.RolePermissionsKey);
+            _cache.Remove(GlobalCacheConstant.Key.RolePermissionsKey);
         }
 
         #region private
@@ -215,7 +215,7 @@ namespace OnceMi.Framework.Service.Admin
         private async Task<List<RolePermission>> QueryRolePermissionsFromCache()
         {
             //从缓存中取出所有菜单
-            List<RolePermission> allPermissions = await _cache.GetOrCreateAsync(CacheConstant.RolePermissionsKey, async (cache) =>
+            List<RolePermission> allPermissions = await _cache.GetOrCreateAsync(GlobalCacheConstant.Key.RolePermissionsKey, async (cache) =>
             {
                 List<RolePermission> permissions = await _repository.Select
                     .LeftJoin(p => p.Menu.Id == p.MenuId)

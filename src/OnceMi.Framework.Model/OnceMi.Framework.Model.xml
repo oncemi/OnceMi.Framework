@@ -21,7 +21,7 @@
         </member>
         <member name="T:OnceMi.Framework.Model.Attributes.JobAttribute">
             <summary>
-            方法执行完成之后清理指定key的缓存
+            标识这个接口是为一个作业请求接口
             </summary>
         </member>
         <member name="T:OnceMi.Framework.Model.Attributes.NoPackageAttribute">
@@ -47,96 +47,114 @@
             事务隔离级别
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Model.Common.CacheConstant">
+        <member name="T:OnceMi.Framework.Model.Common.GlobalCacheConstant">
             <summary>
             权限管理系统缓存KEY
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.RoleItemKey">
+        <member name="T:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key">
+            <summary>
+            Keys
+            </summary>
+        </member>
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.RoleItemKey">
             <summary>
             角色 admin:role:角色主键
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.SystemMenusKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.SystemMenusKey">
             <summary>
             系统菜单
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.RolePermissionsKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.RolePermissionsKey">
             <summary>
             角色权限缓存
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.SystemJobApiKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.SystemJobApiKey">
             <summary>
             作业管理请求Key
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.SystemJobKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.SystemJobKey">
             <summary>
             作业条目信息缓存
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.SystemJobNoticeTimeKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.SystemJobNoticeTimeKey">
             <summary>
             作业执行失败通知时间
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.ConfigItemKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.ConfigItemKey">
             <summary>
             配置项缓存
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.JwtBlackListKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.JwtBlackListKey">
             <summary>
             禁用或者删除用户,JWT禁用黑名单
             </summary>
         </member>
-        <member name="F:OnceMi.Framework.Model.Common.CacheConstant.RequestLimitKey">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.RequestLimitKey">
             <summary>
             用户请求限制KEY
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetRoleKey(System.String)">
+        <member name="F:OnceMi.Framework.Model.Common.GlobalCacheConstant.Key.RedisLockBaseKey">
+            <summary>
+            Redis锁基础KEY
+            </summary>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetRoleKey(System.String)">
             <summary>
             获取角色主键
             </summary>
             <param name="roleCode"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJobApiKey(System.String)">
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetJobApiKey(System.String)">
             <summary>
             获取作业请求key
             </summary>
             <param name="key"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJobKey(System.Int64)">
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetJobKey(System.Int64)">
             <summary>
             获取作业key
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJobNoticeTimeKey(System.Int64)">
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetJobNoticeTimeKey(System.Int64)">
             <summary>
             获取作业执行失败通知key
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetConfigKey(System.String)">
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetConfigKey(System.String)">
             <summary>
             获取配置项的缓存keu
             </summary>
             <param name="key">配置项key</param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Model.Common.CacheConstant.GetJwtBlackListKey(System.String)">
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetJwtBlackListKey(System.String)">
             <summary>
             JWT禁用黑名单
             </summary>
             <param name="jwt">传入的用户jwt</param>
+            <returns></returns>
+        </member>
+        <member name="M:OnceMi.Framework.Model.Common.GlobalCacheConstant.GetRedisLockKey(System.String,System.String)">
+            <summary>
+            获取redis key
+            </summary>
+            <param name="nameSpace">命名空间</param>
+            <param name="token">标识</param>
             <returns></returns>
         </member>
         <member name="P:OnceMi.Framework.Model.Common.JobExcuteResult.IsSuccessful">
@@ -1254,15 +1272,17 @@
             每页大小
             </summary>
         </member>
-        <member name="P:OnceMi.Framework.Model.Dto.IPageRequest.OrderByModels">
-            <summary>
-            排序
-            </summary>
-        </member>
         <member name="P:OnceMi.Framework.Model.Dto.IPageRequest.OrderBy">
             <summary>
-            排序字段和排序方式，URL参数示例：orderby=name,desc
-            可包含多个orderby参数
+            排序字段和排序方式，可包含多个orderby参数 |
+            U参数示例 |
+            单个排序字段：orderby=name,desc |
+            多个排序字段：orderby=name,desc,createtime,asc
+            </summary>
+        </member>
+        <member name="P:OnceMi.Framework.Model.Dto.IPageRequest.OrderByParams">
+            <summary>
+            整理后的排序规则
             </summary>
         </member>
         <member name="M:OnceMi.Framework.Model.Dto.IPageRequest.IsOrderField(System.String)">

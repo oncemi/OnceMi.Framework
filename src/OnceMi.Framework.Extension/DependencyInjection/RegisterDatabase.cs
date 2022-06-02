@@ -14,8 +14,12 @@ using OnceMi.Framework.Config;
 using OnceMi.Framework.Entity;
 using OnceMi.Framework.Extension.Database;
 using OnceMi.Framework.IRepository;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 
 namespace OnceMi.Framework.Extension.DependencyInjection

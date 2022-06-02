@@ -51,7 +51,7 @@ namespace OnceMi.Framework.Service.Admin
 
         public async Task<Job> QueryJobById(long id)
         {
-            Job job = _redis.Get<Job>(CacheConstant.GetJobKey(id));
+            Job job = _redis.Get<Job>(GlobalCacheConstant.GetJobKey(id));
             if (job == null)
             {
                 job = await _repository.Where(p => p.Id == id && !p.IsDeleted && p.AppId == _config.AppSettings.AppId)
@@ -71,7 +71,7 @@ namespace OnceMi.Framework.Service.Admin
             //只有等待运行和运行中的job才添加缓存
             if (job.Status == JobStatus.Waiting || job.Status == JobStatus.Running)
             {
-                _redis.Set(CacheConstant.GetJobKey(job.Id), job);
+                _redis.Set(GlobalCacheConstant.GetJobKey(job.Id), job);
             }
             //深拷贝
             Job newJob = TransExp<Job, Job>.Copy(job);
@@ -91,7 +91,7 @@ namespace OnceMi.Framework.Service.Admin
                 return response;
             }
             //查询全部缓存
-            string[] keys = _redis.Keys(Regex.Replace(CacheConstant.SystemJobKey, @"\{.*\}*", "*"));
+            string[] keys = _redis.Keys(Regex.Replace(GlobalCacheConstant.Key.SystemJobKey, @"\{.*\}*", "*"));
             if (keys != null && keys.Length > 0)
             {
                 foreach (var item in keys)
@@ -111,14 +111,14 @@ namespace OnceMi.Framework.Service.Admin
                 }
             }
             //默认排序
-            if (request.OrderByModels == null || request.OrderByModels.Count == 0)
+            if (request.OrderByParams == null || request.OrderByParams.Count == 0)
             {
                 request.OrderBy = new string[] { $"{nameof(Job.Id)},desc" };
             }
             //get order result
             var selector = allJobs
                 .Where(p => !p.IsDeleted)
-                .OrderBy(request.OrderByModels);
+                .OrderBy(request.OrderByParams);
             if (!string.IsNullOrEmpty(request.Search))
             {
                 selector = selector.Where(p => p.Name.Contains(request.Search));
@@ -221,7 +221,7 @@ namespace OnceMi.Framework.Service.Admin
             job.UpdatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             await _repository.UpdateAsync(job);
             //移除缓存
-            _redis.Del(CacheConstant.GetJobKey(job.Id));
+            _redis.Del(GlobalCacheConstant.GetJobKey(job.Id));
         }
 
         public async Task UpdateJobStatus(long jobId, JobStatus status, bool isSaveToDb = false)
@@ -250,12 +250,12 @@ namespace OnceMi.Framework.Service.Admin
             //update redis
             if (job.Status == JobStatus.Running || job.Status == JobStatus.Waiting)
             {
-                _redis.Set(CacheConstant.GetJobKey(job.Id), job);
+                _redis.Set(GlobalCacheConstant.GetJobKey(job.Id), job);
             }
             else
             {
                 //作业停止或暂停后，从缓存中移除
-                _redis.Del(CacheConstant.GetJobKey(job.Id));
+                _redis.Del(GlobalCacheConstant.GetJobKey(job.Id));
                 //强制更新至数据库
                 isSaveToDb = true;
             }
@@ -292,7 +292,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 status = JobStatus.Stopped;
                 //作业停止或暂停后，从缓存中移除
-                _redis.Del(CacheConstant.GetJobKey(job.Id));
+                _redis.Del(GlobalCacheConstant.GetJobKey(job.Id));
             }
             await _repository.Where(p => p.Id == jobId)
                 .ToUpdate()

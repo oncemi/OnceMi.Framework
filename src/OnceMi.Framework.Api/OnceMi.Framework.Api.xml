@@ -73,7 +73,7 @@
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Resolve">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Admin.ApiController.Sync">
             <summary>
             同步
             </summary>
@@ -659,90 +659,90 @@
             根据Id删除
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController">
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController">
             <summary>
             文章分类
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.CascaderList">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController.CascaderList">
             <summary>
             查询分类树
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController.PageList(OnceMi.Framework.Model.Dto.IPageRequest)">
             <summary>
             分页查询
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Get(System.Int64)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController.Get(System.Int64)">
             <summary>
             根据ID查询
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Post(OnceMi.Framework.Model.Dto.CreateArticleCategoryRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController.Post(OnceMi.Framework.Model.Dto.CreateArticleCategoryRequest)">
             <summary>
             新增文章分类
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Put(OnceMi.Framework.Model.Dto.UpdateArticleCategoryRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController.Put(OnceMi.Framework.Model.Dto.UpdateArticleCategoryRequest)">
             <summary>
             修改文章分类
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleCategoryController.Delete(System.Collections.Generic.List{System.Int64})">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleCategoryController.Delete(System.Collections.Generic.List{System.Int64})">
             <summary>
             根据Id删除
             </summary>
         </member>
-        <member name="T:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController">
+        <member name="T:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController">
             <summary>
             文章管理
             </summary>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Tags">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController.Tags">
             <summary>
             查询所有标签
             </summary>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.PageList(OnceMi.Framework.Model.Dto.QueryArticlePageRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController.PageList(OnceMi.Framework.Model.Dto.QueryArticlePageRequest)">
             <summary>
             分页查询
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Get(System.Int64)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController.Get(System.Int64)">
             <summary>
             根据ID查询
             </summary>
             <param name="id"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Post(OnceMi.Framework.Model.Dto.CreateOrUpdateArticleRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController.Post(OnceMi.Framework.Model.Dto.CreateOrUpdateArticleRequest)">
             <summary>
             新增文章
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Put(OnceMi.Framework.Model.Dto.CreateOrUpdateArticleRequest)">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController.Put(OnceMi.Framework.Model.Dto.CreateOrUpdateArticleRequest)">
             <summary>
             修改文章
             </summary>
             <param name="request"></param>
             <returns></returns>
         </member>
-        <member name="M:OnceMi.Framework.Api.Controllers.v1.ar.ArticleController.Delete(System.Collections.Generic.List{System.Int64})">
+        <member name="M:OnceMi.Framework.Api.Controllers.v1.Article.ArticleController.Delete(System.Collections.Generic.List{System.Int64})">
             <summary>
             根据Id删除
             </summary>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FreeRedis;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -27,19 +28,22 @@ namespace OnceMi.Framework.Service.Admin
         private readonly IHttpContextAccessor _accessor;
         private readonly IMapper _mapper;
         private readonly IMemoryCache _cache;
+        private readonly RedisClient _redis;
 
         public MenuService(IMenuRepository repository
             , ILogger<MenuService> logger
             , IIdGeneratorService idGenerator
             , IHttpContextAccessor accessor
             , IMapper mapper
-            , IMemoryCache cache) : base(repository)
+            , IMemoryCache cache
+            , RedisClient redis) : base(repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _idGenerator = idGenerator ?? throw new ArgumentNullException(nameof(idGenerator));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
+            _redis = redis ?? throw new ArgumentNullException(nameof(redis));
             _accessor = accessor;
         }
 
@@ -63,15 +67,25 @@ namespace OnceMi.Framework.Service.Admin
 
         public async ValueTask<int> QueryNextSortValue(long? parentId)
         {
-            parentId = parentId == 0 ? null : parentId;
-            var maxValueMenuObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)
-                .OrderByDescending(p => p.Sort)
-                .FirstAsync();
-            if (maxValueMenuObj != null)
+            using (var locker = _redis.Lock(GlobalCacheConstant.GetRedisLockKey(this.GetType().Namespace, (parentId == 0 ? 0 : parentId).ToString()), 60))
             {
-                return maxValueMenuObj.Sort + 1;
+                try
+                {
+                    parentId = parentId == 0 ? null : parentId;
+                    var maxValueMenuObj = await _repository.Where(p => p.ParentId == parentId && !p.IsDeleted)
+                        .OrderByDescending(p => p.Sort)
+                        .FirstAsync();
+                    if (maxValueMenuObj != null)
+                    {
+                        return maxValueMenuObj.Sort + 1;
+                    }
+                    return 1;
+                }
+                finally
+                {
+                    locker?.Unlock();
+                }
             }
-            return 1;
         }
 
         public async Task<IPageResponse<MenuItemResponse>> Query(IPageRequest request, bool onlyQueryEnabled = false)
@@ -93,7 +107,7 @@ namespace OnceMi.Framework.Service.Admin
             //get order result
             var selector = allMenus
                 .Where(p => !p.IsDeleted)
-                .OrderBy(request.OrderByModels);
+                .OrderBy(request.OrderByParams);
             if (selector is IOrderedEnumerable<Menu>)
                 selector = (selector as IOrderedEnumerable<Menu>).ThenBy(p => p.Sort);
             else
@@ -188,8 +202,8 @@ namespace OnceMi.Framework.Service.Admin
             return menus;
         }
 
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task<MenuItemResponse> Insert(CreateMenuRequest request)
         {
             Menu menu = _mapper.Map<Menu>(request);
@@ -255,9 +269,9 @@ namespace OnceMi.Framework.Service.Admin
             }
 
             //清除菜单缓存
-            _cache.Remove(CacheConstant.SystemMenusKey);
+            _cache.Remove(GlobalCacheConstant.Key.SystemMenusKey);
             //清空角色权限缓存
-            _cache.Remove(CacheConstant.RolePermissionsKey);
+            _cache.Remove(GlobalCacheConstant.Key.RolePermissionsKey);
 
             result = await _repository.Select
                 .LeftJoin(p => p.Api.Id == p.ApiId)
@@ -267,8 +281,8 @@ namespace OnceMi.Framework.Service.Admin
             return _mapper.Map<MenuItemResponse>(result);
         }
 
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Update(UpdateMenuRequest request)
         {
             Menu menu = await _repository.Where(p => p.Id == request.Id).FirstAsync();
@@ -314,8 +328,8 @@ namespace OnceMi.Framework.Service.Admin
         }
 
         [Transaction]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.SystemMenusKey)]
-        [CleanCache(CacheType.MemoryCache, CacheConstant.RolePermissionsKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.SystemMenusKey)]
+        [CleanCache(CacheType.MemoryCache, GlobalCacheConstant.Key.RolePermissionsKey)]
         public async Task Delete(List<long> ids)
         {
             /*
@@ -361,7 +375,7 @@ namespace OnceMi.Framework.Service.Admin
         private async Task<List<Menu>> QueryMenusFromCache()
         {
             //从缓存中取出所有菜单
-            List<Menu> allMenus = await _cache.GetOrCreateAsync(CacheConstant.SystemMenusKey, async (cache) =>
+            List<Menu> allMenus = await _cache.GetOrCreateAsync(GlobalCacheConstant.Key.SystemMenusKey, async (cache) =>
              {
                  List<Menu> menus = await _repository
                      .Where(p => !p.IsDeleted)

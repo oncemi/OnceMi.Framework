@@ -180,7 +180,7 @@ namespace OnceMi.Framework.Extension.Job
                 string jobApiKey = Guid.NewGuid().ToString("N");
                 request.AddHeader("JobKey", jobApiKey);
                 //cache set
-                _redis.Set(CacheConstant.GetJobApiKey(jobApiKey), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TimeSpan.FromSeconds((8 + new Random().Next(5))));
+                _redis.Set(GlobalCacheConstant.GetJobApiKey(jobApiKey), DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"), TimeSpan.FromSeconds((8 + new Random().Next(5))));
             }
             //处理参数
             if (!string.IsNullOrEmpty(@params))

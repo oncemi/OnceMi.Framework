@@ -4,6 +4,10 @@ using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Util.Date;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Job
 {
@@ -49,7 +53,7 @@ namespace OnceMi.Framework.Extension.Job
                     return;
                 }
                 //判断是否频繁通知
-                string lastNoticeTimeStr = _redisCache.Get<string>(CacheConstant.GetJobNoticeTimeKey(job.Id));
+                string lastNoticeTimeStr = _redisCache.Get<string>(GlobalCacheConstant.GetJobNoticeTimeKey(job.Id));
                 if (!string.IsNullOrEmpty(lastNoticeTimeStr)
                     && long.TryParse(lastNoticeTimeStr, out long lastNoticeTime))
                 {
@@ -90,7 +94,7 @@ namespace OnceMi.Framework.Extension.Job
                     await SendEmail(job, emails);
                 }
                 //发送完成之后写发送时间到redis
-                _redisCache.Set(CacheConstant.GetJobNoticeTimeKey(jobId), TimeUtil.Timestamp().ToString(), TimeSpan.FromSeconds(_interval + new Random().Next(2, 10)));
+                _redisCache.Set(GlobalCacheConstant.GetJobNoticeTimeKey(jobId), TimeUtil.Timestamp().ToString(), TimeSpan.FromSeconds(_interval + new Random().Next(2, 10)));
             }
             catch (Exception ex)
             {

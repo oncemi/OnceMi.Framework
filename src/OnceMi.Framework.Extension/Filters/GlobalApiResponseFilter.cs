@@ -103,8 +103,7 @@ namespace OnceMi.Framework.Extension.Filters
         private void ContextResultRewrite(ActionExecutedContext context, int statusCode, object value)
         {
             //跳过在白名单中的action
-            if (_noPackageWhitelists.Length > 0
-                && _noPackageWhitelists.Any(p => p.Equals(context.HttpContext.Request.Path, StringComparison.OrdinalIgnoreCase)))
+            if (_noPackageWhitelists.Any(p => p.Equals(context.HttpContext.Request.Path, StringComparison.OrdinalIgnoreCase)))
             {
                 return;
             }

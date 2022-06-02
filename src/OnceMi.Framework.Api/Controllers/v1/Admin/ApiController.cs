@@ -1,5 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using OnceMi.Framework.Extension.Authorizations;
 using OnceMi.Framework.IService.Admin;
@@ -56,7 +61,7 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
             var data = await _service.Query(new QueryApiPageRequest()
             {
                 Page = 1,
-                Size = 999999,
+                Size = int.MaxValue,
                 OrderBy = new string[] { "id,asc" },
             }, true);
             if (data != null && data.PageData != null && data.PageData.Any())
@@ -166,9 +171,9 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
         /// </summary>
         [HttpPost]
         [Route("[action]")]
-        public async Task Resolve()
+        public async Task Sync()
         {
-            await _service.AutoResolve();
+            await _service.Sync();
         }
 
         /// <summary>

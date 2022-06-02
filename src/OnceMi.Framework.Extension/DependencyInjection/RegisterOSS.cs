@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using OnceMi.AspNetCore.OSS;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Extension.Middlewares;
+using System;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
