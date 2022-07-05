@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model;
 using OnceMi.Framework.Model.Common;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using OnceMi.Framework.Util.Json;
 using Quartz;
 using RestSharp;
@@ -13,7 +13,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -159,10 +158,6 @@ namespace OnceMi.Framework.Extension.Job
             , bool isInnerRequest
             , CancellationToken cancellationToken)
         {
-            var client = new RestClient(new RestClientOptions()
-            {
-                RemoteCertificateValidationCallback = (sender, certificate, chain, errors) => true
-            });
             var request = new RestRequest(url, method)
             {
                 Timeout = 360000, //一个小时
@@ -203,8 +198,14 @@ namespace OnceMi.Framework.Extension.Job
                         break;
                 }
             }
-            var result = await client.ExecuteAsync(request, cancellationToken);
-            return result;
+            using (var client = new RestClient(new RestClientOptions()
+            {
+                RemoteCertificateValidationCallback = (sender, certificate, chain, errors) => true
+            }))
+            {
+                var result = await client.ExecuteAsync(request, cancellationToken);
+                return result;
+            }
         }
     }
 }

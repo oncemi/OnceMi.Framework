@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnceMi.Framework.Model.Dto
+﻿namespace OnceMi.Framework.Model.Common
 {
-    public class OrderByModel
+    public class OrderRule
     {
         private string orderBy = "asc";
 
-        public OrderByModel()
+        public OrderRule()
         {
 
         }
 
-        public OrderByModel(string filed)
+        public OrderRule(string filed)
         {
-            this.Filed = filed;
-            this.OrderBy = "asc";
+            Filed = filed;
+            OrderBy = "asc";
         }
 
-        public OrderByModel(string filed,string orderBy)
+        public OrderRule(string filed, string orderBy)
         {
-            this.Filed = filed;
-            this.OrderBy = orderBy;
+            Filed = filed;
+            OrderBy = orderBy;
         }
 
 

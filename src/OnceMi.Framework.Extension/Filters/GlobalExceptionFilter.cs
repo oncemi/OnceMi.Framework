@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Model;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using System;
 using System.Net;
 

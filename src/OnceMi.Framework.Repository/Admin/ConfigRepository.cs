@@ -1,13 +1,10 @@
-﻿using FreeSql;
-using Microsoft.Extensions.Logging;
-using OnceMi.Framework.Entity.Admin;
+﻿using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IRepository;
-using OnceMi.Framework.Util.Extensions;
 using System;
 
 namespace OnceMi.Framework.Repository
 {
-    public class ConfigRepository : BaseUnitOfWorkRepository<Config, long>, IConfigRepository
+    public class ConfigRepository : BaseUnitOfWorkRepository<Entity.Admin.Config, long>, IConfigRepository
     {
         private readonly ILogger<ConfigRepository> _logger;
         private readonly IFreeSql _db;

@@ -28,11 +28,11 @@ namespace OnceMi.Framework.Util.Http
             if (isfullUrl)
             {
                 int index = query.IndexOf("?");
-                if(index < 0)
+                if (index < 0)
                 {
                     throw new Exception($"Can not find param from url '{query}'");
                 }
-                if(index == query.Length - 1)
+                if (index == query.Length - 1)
                 {
                     throw new Exception($"Can not find param from url '{query}'");
                 }
@@ -76,7 +76,7 @@ namespace OnceMi.Framework.Util.Http
                     {
                         continue;
                     }
-                    dictionary.Add(temp[0],HttpUtil.UrlDecode(temp[1]));
+                    dictionary.Add(temp[0], HttpUtil.UrlDecode(temp[1]));
                 }
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetAssembly(typeof(T));
                 T entry = (T)assembly.CreateInstance(typeof(T).FullName);

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.Internal;
+using System;
 
 namespace OnceMi.Framework.Util.Extensions
 {

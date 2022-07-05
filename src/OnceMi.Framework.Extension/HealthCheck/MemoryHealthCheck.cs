@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Options;
 
 namespace OnceMi.Framework.Extension.HealthCheck
 {
@@ -20,7 +19,7 @@ namespace OnceMi.Framework.Extension.HealthCheck
         public string Name => this.GetType().Name;
 
         public Task<HealthCheckResult> CheckHealthAsync(
-            HealthCheckContext context, 
+            HealthCheckContext context,
             CancellationToken cancellationToken = default(CancellationToken))
         {
             var options = _options.Get(context.Registration.Name);
@@ -34,7 +33,7 @@ namespace OnceMi.Framework.Extension.HealthCheck
                 { "Gen1Collections", GC.CollectionCount(1) },
                 { "Gen2Collections", GC.CollectionCount(2) },
             };
-            var status = (allocated < options.Threshold) ? 
+            var status = (allocated < options.Threshold) ?
                 HealthStatus.Healthy : context.Registration.FailureStatus;
 
             return Task.FromResult(new HealthCheckResult(

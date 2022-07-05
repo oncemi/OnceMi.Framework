@@ -85,7 +85,7 @@ namespace OnceMi.Framework.Extension.Job
                     _logger.LogWarning($"虽然作业【{job.Name}】开启执行结果通知，但是通知用户均未配置或未启用电话号码或邮箱");
                 }
                 //发送通知
-                if(phones.Count > 0)
+                if (phones.Count > 0)
                 {
                     await SendMessage(job, phones);
                 }

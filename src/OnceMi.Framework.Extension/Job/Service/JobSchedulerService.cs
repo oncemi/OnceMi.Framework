@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using OnceMi.AspNetCore.MQ;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using Quartz;
 using Quartz.Impl.Matchers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Job

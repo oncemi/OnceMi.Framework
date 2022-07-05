@@ -1,5 +1,5 @@
-﻿using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Model.Attributes;
+﻿using OnceMi.Framework.Model.Attributes;
+using System;
 
 namespace OnceMi.Framework.Model.Dto.Response.Admin.Config
 {

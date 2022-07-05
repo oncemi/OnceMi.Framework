@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using OnceMi.Framework.Model.Common;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
@@ -36,15 +40,15 @@ namespace OnceMi.Framework.Model.Dto
         /// </summary>
         [JsonIgnore]
         [IgnoreDataMember]
-        public List<OrderByModel> OrderByParams
+        public List<OrderRule> OrderByParams
         {
             get
             {
                 if (this.OrderBy == null || this.OrderBy.Length == 0)
                 {
-                    return new List<OrderByModel>();
+                    return new List<OrderRule>();
                 }
-                List<OrderByModel> result = new List<OrderByModel>();
+                List<OrderRule> result = new List<OrderRule>();
                 foreach (var orderByItem in OrderBy)
                 {
                     if (string.IsNullOrEmpty(orderByItem) || orderByItem.Equals("null", StringComparison.OrdinalIgnoreCase))
@@ -75,7 +79,7 @@ namespace OnceMi.Framework.Model.Dto
                         {
                             if (!result.Any(p => p.Filed.Equals(items[j], StringComparison.OrdinalIgnoreCase)))
                             {
-                                result.Add(new OrderByModel(items[j], items[orderMethodIndex[i]]));
+                                result.Add(new OrderRule(items[j], items[orderMethodIndex[i]]));
                             }
                         }
                         start = orderMethodIndex[i] + 1;

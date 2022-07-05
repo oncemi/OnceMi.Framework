@@ -1,14 +1,13 @@
-﻿using FreeSql;
-using Microsoft.Extensions.Logging;
-using OnceMi.Framework.Entity.Admin;
+﻿using Microsoft.Extensions.Logging;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.Util.Date;
-using OnceMi.Framework.Util.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Repository
 {
-    public class DemoRepository : BaseUnitOfWorkRepository<Config, long>, IDemoRepository
+    public class DemoRepository : BaseUnitOfWorkRepository<Entity.Admin.Config, long>, IDemoRepository
     {
         private readonly ILogger<DemoRepository> _logger;
         private readonly IFreeSql _db;
@@ -20,11 +19,11 @@ namespace OnceMi.Framework.Repository
             _db = base.Orm;
         }
 
-        public async Task<List<Config>> GetAllConfigs()
+        public async Task<List<Entity.Admin.Config>> GetAllConfigs()
         {
             #region 当前库读写
 
-            Config config = new Config()
+            Entity.Admin.Config config = new Entity.Admin.Config()
             {
                 Key = TimeUtil.Timestamp().ToString(),
                 Content = TimeUtil.Timestamp().ToString(),
@@ -35,7 +34,7 @@ namespace OnceMi.Framework.Repository
             int count = await _db.Insert(config).ExecuteAffrowsAsync();
 
             //查询当前库
-            var result1 = await _db.Select<Config>().Where(p => !p.IsDeleted).ToListAsync();
+            var result1 = await _db.Select<Entity.Admin.Config>().Where(p => !p.IsDeleted).ToListAsync();
 
             #endregion
 
@@ -66,7 +65,7 @@ namespace OnceMi.Framework.Repository
             //先获取连接字符串配置中，Name中mysql为连接字符串
             IFreeSql db2 = this.DbContainer.Get("mysql");
             //写
-            Config config2 = new Config()
+            Entity.Admin.Config config2 = new Entity.Admin.Config()
             {
                 Key = TimeUtil.Timestamp().ToString(),
                 Content = TimeUtil.Timestamp().ToString(),
@@ -76,7 +75,7 @@ namespace OnceMi.Framework.Repository
             };
             count = await db2.Insert(config2).ExecuteAffrowsAsync();
             //读
-            var result2 = await db2.Select<Config>().Where(p => !p.IsDeleted).ToListAsync();
+            var result2 = await db2.Select<Entity.Admin.Config>().Where(p => !p.IsDeleted).ToListAsync();
             result1.AddRange(result2);
 
             #endregion

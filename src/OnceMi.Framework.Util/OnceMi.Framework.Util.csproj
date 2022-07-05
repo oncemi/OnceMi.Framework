@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
+		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
@@ -14,8 +14,8 @@
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
 		<PackageReference Include="Microsoft.Net.Http.Headers" Version="2.2.8" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-		<PackageReference Include="FreeSql" Version="3.2.661" />
-		<PackageReference Include="FreeRedis" Version="0.5.3" />
+		<PackageReference Include="FreeSql" Version="3.2.665" />
+		<PackageReference Include="FreeRedis" Version="0.5.4" />
 		<PackageReference Include="IdleBus" Version="1.5.2" />
 		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.0" />
 		<PackageReference Include="UAParser" Version="3.1.47" />

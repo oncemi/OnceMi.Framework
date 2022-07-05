@@ -112,9 +112,9 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             var proxyGenerator = provider.GetRequiredService<ProxyGenerator>();
             var actual = provider.GetRequiredService(implementationType);
             var interceptorServiceList = services
-                .Where(p => p.ServiceType != null 
-                    && p.ImplementationType != null 
-                    && p.ServiceType.IsInterface 
+                .Where(p => p.ServiceType != null
+                    && p.ImplementationType != null
+                    && p.ServiceType.IsInterface
                     && p.ServiceType.GetInterfaces()?.Any(q => q == typeof(IAsyncInterceptor)) == true)
                 .ToList();
             if (interceptorServiceList == null || interceptorServiceList.Count == 0)

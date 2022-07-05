@@ -23,9 +23,9 @@ namespace OnceMi.Framework.Util.Security
 
             int pos = 0;
 
-            while (pos<str.Length)
+            while (pos < str.Length)
             {
-                var count = str.Length - pos<64? str.Length - pos:64;
+                var count = str.Length - pos < 64 ? str.Length - pos : 64;
                 res.Add(str.Substring(pos, count));
                 pos += count;
             }

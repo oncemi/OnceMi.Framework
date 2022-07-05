@@ -47,7 +47,7 @@ namespace OnceMi.Framework.Extension.Subscribers
                 }
                 await _jobHistoriesService.InsertAsync(model);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError($"Write job history failed, {ex.Message}", ex);
             }

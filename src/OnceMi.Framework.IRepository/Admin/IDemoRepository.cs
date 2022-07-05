@@ -1,10 +1,11 @@
 ﻿using FreeSql;
-using OnceMi.Framework.Entity.Admin;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IRepository
 {
-    public interface IDemoRepository : IBaseRepository<Config, long>, IRepositoryDependency
+    public interface IDemoRepository : IBaseRepository<Entity.Admin.Config, long>, IRepositoryDependency
     {
-        Task<List<Config>> GetAllConfigs();
+        Task<List<Entity.Admin.Config>> GetAllConfigs();
     }
 }

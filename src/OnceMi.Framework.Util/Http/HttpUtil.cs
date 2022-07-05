@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Text;
-using System.Net;
-using System.IO;
-using System.Text.RegularExpressions;
-using System.IO.Compression;
-using System.Security.Cryptography.X509Certificates;
-using System.Net.Security;
-using System.Linq;
-using System.Net.Cache;
-using System.Collections.Generic;
 using System.Collections;
-using System.Threading.Tasks;
-using System.Web;
+using System.Collections.Generic;
+using System.Net;
+using System.Text;
 
 namespace OnceMi.Framework.Util.Http
 {

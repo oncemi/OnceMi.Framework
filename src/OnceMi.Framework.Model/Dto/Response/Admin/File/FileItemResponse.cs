@@ -24,7 +24,7 @@ namespace OnceMi.Framework.Model.Dto
 
         public long? Size { get; set; }
 
-        public string  StorageTypeName
+        public string StorageTypeName
         {
             get
             {

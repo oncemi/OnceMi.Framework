@@ -1,7 +1,4 @@
-﻿
-using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Model.Dto;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Extension.Job
 {

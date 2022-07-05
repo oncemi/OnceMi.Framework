@@ -43,6 +43,7 @@ namespace OnceMi.AspNetCore.MQ
                         {
                             throw new Exception("Can not get connect strings from message quene setting.");
                         }
+                        BuildRedisKeyPrefix(Options);
                         client = new RedisClient(Options.Connectstring);
                     }
                     _provider = new RedisProvider(Options, logger, client);
@@ -68,6 +69,31 @@ namespace OnceMi.AspNetCore.MQ
         public void Dispose()
         {
             _provider.Dispose();
+        }
+
+        private void BuildRedisKeyPrefix(MqOptions options)
+        {
+            if (options.ProviderType != MqProviderType.Redis)
+            {
+                return;
+            }
+            if (options.Connectstring.Contains("prefix", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+            string prefix = $"oncemi_mq:{options.AppId}:";
+            if (!string.IsNullOrWhiteSpace(options.RedisPrefix))
+            {
+                prefix = options.RedisPrefix;
+            }
+            if (options.Connectstring.EndsWith(','))
+            {
+                options.Connectstring += $"prefix={prefix}";
+            }
+            else
+            {
+                options.Connectstring += $",prefix={prefix}";
+            }
         }
     }
 }

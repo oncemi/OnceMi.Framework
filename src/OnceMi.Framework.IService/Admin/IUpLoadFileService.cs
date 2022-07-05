@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin

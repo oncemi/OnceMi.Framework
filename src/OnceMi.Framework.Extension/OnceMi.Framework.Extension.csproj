@@ -12,14 +12,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Castle.Core.AsyncInterceptor" Version="2.1.0" />
-		<PackageReference Include="FreeSql.Provider.MySql" Version="3.2.661" />
-		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.661" />
-		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.661" />
-		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.661" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.5" />
+		<PackageReference Include="FreeSql.Provider.MySql" Version="3.2.665" />
+		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.665" />
+		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.665" />
+		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.665" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.6" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="MySql.Data" Version="8.0.29" />
-		<PackageReference Include="RestSharp" Version="107.3.0" />
+		<PackageReference Include="RestSharp" Version="108.0.1" />
 		<PackageReference Include="System.Data.Odbc" Version="6.0.0" />
 		<PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.4" />

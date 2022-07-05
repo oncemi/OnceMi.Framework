@@ -1,12 +1,4 @@
-﻿using OnceMi.Framework.Entity.Article;
-using OnceMi.Framework.Model.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnceMi.Framework.Model.Dto
+﻿namespace OnceMi.Framework.Model.Dto
 {
     public class UpdateArticleCategoryRequest : IUpdateRequest
     {

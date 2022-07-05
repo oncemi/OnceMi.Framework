@@ -1,13 +1,13 @@
-﻿using System;
+﻿using FreeSql;
+using MySql.Data.MySqlClient;
+using Npgsql;
+using System;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
-using FreeSql;
-using MySql.Data.MySqlClient;
-using Npgsql;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -315,7 +315,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
 
             //一个空格都不能多
             //string MasterConnectionString = "Driver={SQL Server};Server=.;Initial Catalog=master;Uid=sa;Pwd=123456";
-            string MasterConnectionString = $"Driver={{SQL Server}};Server={ builder["Server"].ToString()};Initial Catalog=master;Uid={ builder["Uid"].ToString() };Pwd={ builder["Pwd"].ToString()};";
+            string MasterConnectionString = $"Driver={{SQL Server}};Server={builder["Server"].ToString()};Initial Catalog=master;Uid={builder["Uid"].ToString()};Pwd={builder["Pwd"].ToString()};";
             using OdbcConnection cnn = new OdbcConnection(MasterConnectionString);
 
             cnn.Open();

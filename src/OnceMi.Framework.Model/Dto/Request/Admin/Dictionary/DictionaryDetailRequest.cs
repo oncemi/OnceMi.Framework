@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-
-namespace OnceMi.Framework.Model.Dto
+﻿namespace OnceMi.Framework.Model.Dto
 {
     public class DictionaryDetailRequest : IRequest
     {

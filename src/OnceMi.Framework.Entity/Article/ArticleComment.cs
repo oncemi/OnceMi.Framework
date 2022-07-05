@@ -1,4 +1,6 @@
 ﻿using FreeSql.DataAnnotations;
+using System;
+using System.Collections.Generic;
 
 namespace OnceMi.Framework.Entity.Article
 {

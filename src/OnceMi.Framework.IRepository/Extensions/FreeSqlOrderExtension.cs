@@ -1,12 +1,11 @@
-﻿using System;
+﻿using FreeSql;
+using OnceMi.Framework.Model.Common;
+using OnceMi.Framework.Util.Linq;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using FreeSql;
-using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Util.Linq;
 
 namespace OnceMi.Framework.IRepository
 {
@@ -19,7 +18,7 @@ namespace OnceMi.Framework.IRepository
         /// <param name="select"></param>
         /// <param name="orderBys"></param>
         /// <returns></returns>
-        public static ISelect<T> OrderBy<T>(this ISelect<T> select, IEnumerable<OrderByModel> orderBys) where T : class
+        public static ISelect<T> OrderBy<T>(this ISelect<T> select, IEnumerable<OrderRule> orderBys) where T : class
         {
             if (orderBys == null || orderBys.Count() == 0)
                 return select;
@@ -49,7 +48,7 @@ namespace OnceMi.Framework.IRepository
         /// <param name="select"></param>
         /// <param name="orderBys"></param>
         /// <returns></returns>
-        public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> select, IEnumerable<OrderByModel> orderBys) where T : class
+        public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> select, IEnumerable<OrderRule> orderBys) where T : class
         {
             if (orderBys == null || orderBys.Count() == 0)
                 return select;

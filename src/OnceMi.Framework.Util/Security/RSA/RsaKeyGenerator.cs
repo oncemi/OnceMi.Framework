@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Security;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Xml.Linq;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.OpenSsl;
-using Org.BouncyCastle.Security;
 
 namespace OnceMi.Framework.Util.Security
 {
@@ -53,7 +53,7 @@ namespace OnceMi.Framework.Util.Security
             privatElement.Add(pridq);
             privatElement.Add(priinverseQ);
             privatElement.Add(prid);
-            
+
             //添加私钥
             res.Add(privatElement.ToString());
 
@@ -79,7 +79,7 @@ namespace OnceMi.Framework.Util.Security
         /// <param name="keySize">Key Size.Unit: bits</param>
         /// <param name="format">Whether the format is true If it is standard pem file format</param>
         /// <returns></returns>
-        public static List<string> Pkcs1Key(int keySize,bool format)
+        public static List<string> Pkcs1Key(int keySize, bool format)
         {
             List<string> res = new List<string>();
 

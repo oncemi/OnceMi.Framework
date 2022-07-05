@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Config
 {
@@ -45,5 +41,7 @@ namespace OnceMi.Framework.Config
                 return mainDomainName.Split('.')[0];
             }
         }
+
+        public static string GetAppCachePrefix(int appId) => $"{FirstNamespace}_app:{appId}:".ToLower();
     }
 }

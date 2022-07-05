@@ -1,8 +1,5 @@
 ﻿using AutoMapper;
-using FreeRedis;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;

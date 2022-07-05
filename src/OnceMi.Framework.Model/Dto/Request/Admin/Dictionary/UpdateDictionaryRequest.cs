@@ -1,6 +1,4 @@
-﻿using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Model.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace OnceMi.Framework.Model.Dto
 {

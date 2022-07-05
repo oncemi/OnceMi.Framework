@@ -1,21 +1,13 @@
 ﻿using AutoMapper;
 using FreeRedis;
-using Hardware.Info;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OnceMi.AspNetCore.IdGenerator;
-using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Entity.Article;
 using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
-using OnceMi.Framework.Model.Common;
-using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Model.Dto.Response.Admin.Config;
-using OnceMi.Framework.Model.Exception;
-using OnceMi.Framework.Util.Cache;
-using OnceMi.Framework.Util.Json;
-using OnceMi.Framework.Util.User;
-using System.Text;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Service.Admin
 {

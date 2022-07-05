@@ -18,12 +18,12 @@ namespace OnceMi.Framework.Model.Dto
         /// 用户名
         /// </summary>
         public string UserName { get; set; }
-        
+
         /// <summary>
         /// 昵称
         /// </summary>
         public string NickName { get; set; }
-        
+
         /// <summary>
         /// 头像
         /// </summary>
@@ -40,12 +40,12 @@ namespace OnceMi.Framework.Model.Dto
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public UserGender Gender { get; set; }
-        
+
         /// <summary>
         /// 出生日期
         /// </summary>
         public DateTime? BirthDay { get; set; }
-        
+
         /// <summary>
         /// 地址
         /// </summary>
@@ -55,7 +55,7 @@ namespace OnceMi.Framework.Model.Dto
         /// 电话号码是否已经确认
         /// </summary>
         public bool PhoneNumberConfirmed { get; set; }
-        
+
         /// <summary>
         /// 电话号码
         /// </summary>
@@ -65,7 +65,7 @@ namespace OnceMi.Framework.Model.Dto
         /// 是否已经确认电子邮件
         /// </summary>
         public virtual bool EmailConfirmed { get; set; }
-        
+
         /// <summary>
         /// 电子邮件
         /// </summary>

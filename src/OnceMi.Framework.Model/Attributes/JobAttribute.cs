@@ -1,6 +1,4 @@
-﻿using FreeSql;
-using System;
-using System.Data;
+﻿using System;
 
 namespace OnceMi.Framework.Model.Attributes
 {

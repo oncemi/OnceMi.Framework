@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using OnceMi.AspNetCore.MQ;
 using System;
 using System.Collections.Generic;
 using System.Linq;

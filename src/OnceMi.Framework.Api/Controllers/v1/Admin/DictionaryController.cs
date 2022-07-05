@@ -6,7 +6,7 @@ using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

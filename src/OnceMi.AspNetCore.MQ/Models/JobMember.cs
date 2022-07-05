@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OnceMi.AspNetCore.MQ.Models
+﻿namespace OnceMi.AspNetCore.MQ.Models
 {
     class JobMember
     {

@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Xml.Linq;
-using Org.BouncyCastle.Crypto;
+﻿using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Security;
+using System;
+using System.IO;
+using System.Xml.Linq;
 
 namespace OnceMi.Framework.Util.Security
 {
@@ -138,14 +138,14 @@ namespace OnceMi.Framework.Util.Security
             //D
             var d = root.Element("D");
 
-            RsaPrivateCrtKeyParameters rsaPrivateCrtKeyParameters=new RsaPrivateCrtKeyParameters(
-                new BigInteger(1,Convert.FromBase64String(modulus.Value)),
+            RsaPrivateCrtKeyParameters rsaPrivateCrtKeyParameters = new RsaPrivateCrtKeyParameters(
+                new BigInteger(1, Convert.FromBase64String(modulus.Value)),
                 new BigInteger(1, Convert.FromBase64String(exponent.Value)),
                 new BigInteger(1, Convert.FromBase64String(d.Value)),
                 new BigInteger(1, Convert.FromBase64String(p.Value)),
                 new BigInteger(1, Convert.FromBase64String(q.Value)),
-                new BigInteger(1, Convert.FromBase64String(dp.Value)), 
-                new BigInteger(1, Convert.FromBase64String(dq.Value)), 
+                new BigInteger(1, Convert.FromBase64String(dp.Value)),
+                new BigInteger(1, Convert.FromBase64String(dq.Value)),
                 new BigInteger(1, Convert.FromBase64String(inverseQ.Value)));
 
             StringWriter sw = new StringWriter();
@@ -166,7 +166,7 @@ namespace OnceMi.Framework.Util.Security
         {
             privateKey = RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove(privateKey);
             RsaPrivateCrtKeyParameters privateKeyParam =
-                (RsaPrivateCrtKeyParameters) PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
+                (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
 
             XElement privatElement = new XElement("RSAKeyValue");
             //Modulus

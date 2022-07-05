@@ -1,13 +1,7 @@
 ﻿using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Util.Extensions;
-using OnceMi.Framework.Util.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
@@ -30,7 +24,7 @@ namespace OnceMi.Framework.Model.Dto
         {
             get
             {
-                if(this.Type == MenuType.Api && this.Api != null)
+                if (this.Type == MenuType.Api && this.Api != null)
                 {
                     return this.Api.Code;
                 }
@@ -55,7 +49,7 @@ namespace OnceMi.Framework.Model.Dto
                 {
                     return Api.Path;
                 }
-                if(Type == MenuType.View && ViewId != null && View != null)
+                if (Type == MenuType.View && ViewId != null && View != null)
                 {
                     if (!string.IsNullOrEmpty(View.Path))
                     {

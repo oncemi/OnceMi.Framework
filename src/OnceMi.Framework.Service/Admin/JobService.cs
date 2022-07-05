@@ -9,7 +9,7 @@ using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using OnceMi.Framework.Util.Reflection;
 using OnceMi.Framework.Util.User;
 using System;
@@ -62,7 +62,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             else
             {
-                return job;
+                return job.AppId == _config.AppSettings.AppId ? job : null;
             }
             if (job == null)
             {
@@ -146,6 +146,11 @@ namespace OnceMi.Framework.Service.Admin
                 .Skip((request.Page - 1) * request.Size)
                 .Take(request.Size)
                 .ToList();
+            foreach (var item in pageData)
+            {
+                item.LastFireTime = item.LastFireTime?.ToUniversalTime().ToLocalTime();
+                item.NextFireTime = item.NextFireTime?.ToUniversalTime().ToLocalTime();
+            }
             return new IPageResponse<JobItemResponse>()
             {
                 Page = request.Page,
@@ -160,6 +165,7 @@ namespace OnceMi.Framework.Service.Admin
             var allJobs = await _repository
                 .Where(p => !p.IsDeleted
                     && p.IsEnabled
+                    && p.AppId == _config.AppSettings.AppId
                     && (p.EndTime == null || (p.EndTime != null && p.EndTime > DateTime.Now))
                     && (p.Status == JobStatus.Running || p.Status == JobStatus.Waiting))
                 .NoTracking()

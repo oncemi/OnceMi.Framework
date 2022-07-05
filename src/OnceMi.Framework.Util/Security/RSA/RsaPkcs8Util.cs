@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto.Parameters;
+using Org.BouncyCastle.Security;
+using System;
 using System.Security.Cryptography;
 using System.Text;
-using Org.BouncyCastle.Crypto.Parameters;
-using Org.BouncyCastle.Security;
 
 namespace OnceMi.Framework.Util.Security
 {
@@ -10,7 +10,7 @@ namespace OnceMi.Framework.Util.Security
     /// RSA pkcs8 format key helper class
     /// Author:Zhiqiang Li
     /// </summary>
-    public class RsaPkcs8Util:RSAUtilBase
+    public class RsaPkcs8Util : RSAUtilBase
     {
         public RsaPkcs8Util(Encoding dataEncoding, string publicKey, string privateKey = null, int keySize = 2048)
         {
@@ -50,12 +50,12 @@ namespace OnceMi.Framework.Util.Security
             DataEncoding = dataEncoding ?? Encoding.UTF8;
         }
 
-		/// <summary>
-		/// Create an RSA parameter based on the xml format public key
-		/// </summary>
-		/// <param name="publicKey"></param>
-		/// <returns></returns>
-		protected sealed override RSAParameters CreateRsapFromPublicKey(string publicKey)
+        /// <summary>
+        /// Create an RSA parameter based on the xml format public key
+        /// </summary>
+        /// <param name="publicKey"></param>
+        /// <returns></returns>
+        protected sealed override RSAParameters CreateRsapFromPublicKey(string publicKey)
         {
             publicKey = RsaPemFormatHelper.PublicKeyFormatRemove(publicKey);
             RsaKeyParameters publicKeyParam = (RsaKeyParameters)PublicKeyFactory.CreateKey(Convert.FromBase64String(publicKey));
@@ -65,17 +65,17 @@ namespace OnceMi.Framework.Util.Security
             return rsap;
         }
 
-		/// <summary>
-		/// Create an RSA parameter based on the xml format private key
-		/// </summary>
-		/// <param name="privateKey"></param>
-		/// <returns></returns>
-		protected sealed override RSAParameters CreateRsapFromPrivateKey(string privateKey)
+        /// <summary>
+        /// Create an RSA parameter based on the xml format private key
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <returns></returns>
+        protected sealed override RSAParameters CreateRsapFromPrivateKey(string privateKey)
         {
             privateKey = RsaPemFormatHelper.Pkcs8PrivateKeyFormatRemove(privateKey);
             RsaPrivateCrtKeyParameters privateKeyParam = (RsaPrivateCrtKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
 
-            var rsap=new RSAParameters();
+            var rsap = new RSAParameters();
             rsap.Modulus = privateKeyParam.Modulus.ToByteArrayUnsigned();
             rsap.Exponent = privateKeyParam.PublicExponent.ToByteArrayUnsigned();
             rsap.P = privateKeyParam.P.ToByteArrayUnsigned();

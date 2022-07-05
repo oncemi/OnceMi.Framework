@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -18,7 +17,7 @@ namespace OnceMi.Framework.Util.Extensions
             {
                 return null;
             }
-            return path.Replace('\\','/');
+            return path.Replace('\\', '/');
         }
 
         /// <summary>

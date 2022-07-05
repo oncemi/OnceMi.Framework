@@ -1,13 +1,10 @@
-﻿using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Model.Dto;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IDemoService : IBaseService<Config, long>
+    public interface IDemoService : IBaseService<Entity.Admin.Config, long>
     {
-        Task<List<Config>> GetAllConfigs();
+        Task<List<Entity.Admin.Config>> GetAllConfigs();
     }
 }

@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
-using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using Quartz;
 using System;
 using System.Threading.Tasks;

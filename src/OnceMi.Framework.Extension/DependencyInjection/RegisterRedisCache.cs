@@ -28,6 +28,11 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 {
                     throw new Exception("Can not get redis connect strings from redis setting.");
                 }
+                int appId = configuration.GetValue<int>("AppSettings:AppId");
+                if (appId < 0)
+                {
+                    throw new Exception("Can not get app id from app setting.");
+                }
                 RedisSettingNode redisSetting = section.Get<RedisSettingNode>();
                 if (redisSetting == null
                     || redisSetting.RedisConnectionStrings == null
@@ -42,6 +47,21 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                 if (redisSetting.RedisSchema == RedisSchema.MasterSlave && redisSetting.RedisConnectionStrings.Count < 2)
                 {
                     throw new Exception("When user redis master-slave, must more than one redis connection string.");
+                }
+                //给redis缓存加上appId的前缀
+                for (int i = 0; i < redisSetting.RedisConnectionStrings.Count; i++)
+                {
+                    if (!redisSetting.RedisConnectionStrings[i].Contains("prefix", StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (redisSetting.RedisConnectionStrings[i].EndsWith(','))
+                        {
+                            redisSetting.RedisConnectionStrings[i] += $"prefix={GlobalConfigConstant.GetAppCachePrefix(appId)}";
+                        }
+                        else
+                        {
+                            redisSetting.RedisConnectionStrings[i] += $",prefix={GlobalConfigConstant.GetAppCachePrefix(appId)}";
+                        }
+                    }
                 }
                 switch (redisSetting.RedisSchema)
                 {

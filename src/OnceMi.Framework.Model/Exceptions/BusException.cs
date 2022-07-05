@@ -1,9 +1,10 @@
 ﻿using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Util.Extensions;
+using System;
 
-namespace OnceMi.Framework.Model.Exception
+namespace OnceMi.Framework.Model.Exceptions
 {
-    public class BusException : System.Exception
+    public class BusException : Exception
     {
         public ResultCode Code { get; set; }
 

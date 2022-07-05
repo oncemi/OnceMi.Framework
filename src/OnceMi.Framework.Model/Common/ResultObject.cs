@@ -1,9 +1,4 @@
 ﻿using OnceMi.Framework.Util.Date;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model
 {
@@ -17,7 +12,7 @@ namespace OnceMi.Framework.Model
         public ResultObject(int code)
         {
             this.Code = code;
-            if(this.Code == 0)
+            if (this.Code == 0)
             {
                 this.Message = "Success";
             }

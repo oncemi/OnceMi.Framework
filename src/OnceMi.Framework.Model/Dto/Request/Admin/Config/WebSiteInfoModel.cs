@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnceMi.Framework.Model.Dto.Request.Admin.Config
+﻿namespace OnceMi.Framework.Model.Dto.Request.Admin.Config
 {
     class WebSiteInfoModel
     {

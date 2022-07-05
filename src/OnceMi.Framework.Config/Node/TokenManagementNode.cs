@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Config
 {
@@ -24,7 +20,7 @@ namespace OnceMi.Framework.Config
             }
             set
             {
-                if(value < 60)
+                if (value < 60)
                 {
                     throw new Exception("Access expiration can not less than 60 seconds");
                 }

@@ -1,7 +1,6 @@
 ﻿using FreeSql.DataAnnotations;
 using System;
 using System.ComponentModel;
-using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Entity.Admin
 {

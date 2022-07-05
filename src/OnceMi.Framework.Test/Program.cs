@@ -1,13 +1,4 @@
-﻿using FreeRedis;
-using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Util.Json;
-using OnceMi.Framework.Util.Security;
-using OnceMi.Framework.Util.Text;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Caching;
-using System.Text.RegularExpressions;
+﻿using System;
 
 namespace OnceMi.Framework.Test
 {

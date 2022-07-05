@@ -21,7 +21,7 @@ namespace OnceMi.Framework.Model.Common
         [Description("用户名或密码错误")]
         ACT_USERNAME_OR_PASSWORD_ERROR = 30003,
 
-        [Description("刷新Token失败，无效的Token")]
+        [Description("获取秘钥失败，无效的请求秘钥")]
         ACT_REFESH_TOKEN_FAILED = 30005,
 
         [Description("用户被禁用")]

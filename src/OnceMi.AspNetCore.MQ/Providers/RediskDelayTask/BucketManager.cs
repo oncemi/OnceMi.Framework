@@ -1,11 +1,6 @@
 ﻿using FreeRedis;
 using OnceMi.AspNetCore.MQ.Models;
-using OnceMi.AspNetCore.MQ.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnceMi.AspNetCore.MQ.Providers.RediskDelayTask
 {

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 
 namespace OnceMi.Framework.Util.Json
 {
@@ -16,13 +17,13 @@ namespace OnceMi.Framework.Util.Json
             {
                 options = new JsonSerializerOptions()
                 {
-                    Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                 };
             }
             else
             {
                 if (options.Encoder == null)
-                    options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+                    options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
             }
             if (options.Converters.Count == 0)
             {

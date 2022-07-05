@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OnceMi.AspNetCore.MQ
+﻿namespace OnceMi.AspNetCore.MQ
 {
     public class MqOptions
     {
@@ -29,5 +23,10 @@ namespace OnceMi.AspNetCore.MQ
         /// 设置true后将会从DI容器中获取已经注入的RedisClient而不再重新创建
         /// </summary>
         public bool UseExternalRedisClient { get; set; } = false;
+
+        /// <summary>
+        /// 在使用Redis时，Key的前缀。可为空，为空则使用默认规则（oncemi_mq:{AppId}:）
+        /// </summary>
+        public string RedisPrefix { get; set; }
     }
 }

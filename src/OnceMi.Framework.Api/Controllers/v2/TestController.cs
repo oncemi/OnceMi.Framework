@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -11,7 +7,8 @@ using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Dto;
 using OnceMi.Framework.Model.Enums;
-using OnceMi.Framework.Model.Exception;
+using System;
+using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Controllers.v2
 {
@@ -89,6 +86,16 @@ namespace OnceMi.Framework.Api.Controllers.v2
         public string RequestLimitTest()
         {
             return "哈哈";
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        [AllowAnonymous]
+        public string StartGC()
+        {
+            GC.Collect();
+
+            return "OK";
         }
     }
 

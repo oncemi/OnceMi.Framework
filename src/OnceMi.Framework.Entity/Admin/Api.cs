@@ -81,7 +81,7 @@ namespace OnceMi.Framework.Entity.Admin
         /// 参数字典
         /// </summary>
         [Column(IsIgnore = true)]
-        public Dictionary<string,string> ParameterDictionaries { get; set; }
+        public Dictionary<string, string> ParameterDictionaries { get; set; }
     }
 
     /// <summary>

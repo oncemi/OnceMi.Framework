@@ -8,7 +8,7 @@ using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using OnceMi.Framework.Util.Cache;
 using OnceMi.Framework.Util.Json;
 using OnceMi.Framework.Util.User;

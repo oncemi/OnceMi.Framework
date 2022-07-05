@@ -9,7 +9,7 @@ using OnceMi.Framework.IRepository;
 using OnceMi.Framework.IService.Admin;
 using OnceMi.Framework.Model.Common;
 using OnceMi.Framework.Model.Dto;
-using OnceMi.Framework.Model.Exception;
+using OnceMi.Framework.Model.Exceptions;
 using OnceMi.Framework.Util.Enum;
 using OnceMi.Framework.Util.Extensions;
 using OnceMi.Framework.Util.Http;

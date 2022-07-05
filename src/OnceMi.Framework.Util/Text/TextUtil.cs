@@ -1,6 +1,5 @@
 ﻿using Chinese;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace OnceMi.Framework.Util.Text
@@ -133,7 +132,7 @@ namespace OnceMi.Framework.Util.Text
             {
                 return false;
             }
-            for(int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
                 if (input[i] > 127)
                 {

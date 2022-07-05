@@ -1,4 +1,5 @@
 ﻿using FreeSql.DataAnnotations;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace OnceMi.Framework.Entity.Admin

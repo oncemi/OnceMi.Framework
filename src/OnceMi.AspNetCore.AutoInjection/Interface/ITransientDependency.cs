@@ -7,7 +7,7 @@ namespace OnceMi.AspNetCore.AutoInjection
     /// </summary>
     [IgnoreDependency]
     public interface ITransientDependency
-    { 
+    {
 
     }
 }

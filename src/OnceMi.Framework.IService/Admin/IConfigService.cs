@@ -1,12 +1,10 @@
-﻿using OnceMi.Framework.Entity.Admin;
-using OnceMi.Framework.Model.Dto;
-using System.Collections.Generic;
+﻿using OnceMi.Framework.Model.Dto;
 using System.IO;
 using System.Threading.Tasks;
 
 namespace OnceMi.Framework.IService.Admin
 {
-    public interface IConfigService : IBaseService<Config, long>
+    public interface IConfigService : IBaseService<Entity.Admin.Config, long>
     {
         Task<Stream> ExportTestData();
 

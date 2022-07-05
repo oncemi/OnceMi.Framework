@@ -1,8 +1,6 @@
-﻿using FreeSql;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.IRepository;
-using OnceMi.Framework.Util.Extensions;
 using System;
 
 namespace OnceMi.Framework.Repository

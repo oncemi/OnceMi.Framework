@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Text.Unicode;
 
 namespace OnceMi.AspNetCore.MQ
 {
@@ -59,7 +58,7 @@ namespace OnceMi.AspNetCore.MQ
                     options.Converters.Add(new TypeConverter());
                 }
             }
-            
+
             //忽略大小写
             options.PropertyNameCaseInsensitive = true;
             //允许注释

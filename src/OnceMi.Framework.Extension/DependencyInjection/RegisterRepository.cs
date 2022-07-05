@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Reflection;
-using OnceMi.Framework.Model.Attributes;
 using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.IRepository;
+using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {

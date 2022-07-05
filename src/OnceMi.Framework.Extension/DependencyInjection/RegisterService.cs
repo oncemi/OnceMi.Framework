@@ -1,14 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using OnceMi.Framework.IService;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using System.Reflection;
-using OnceMi.Framework.Model.Attributes;
 using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
+using OnceMi.Framework.IService;
+using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Service.Admin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {
@@ -18,7 +18,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
         {
             //为了引入OnceMi.Framework.Service的实现，不然可能无法正确的获取业务逻辑实现
             Type configService = typeof(ConfigService);
-            if(configService == null)
+            if (configService == null)
             {
                 throw new Exception("Can not load service realization");
             }

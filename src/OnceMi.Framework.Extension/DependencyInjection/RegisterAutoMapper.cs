@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -7,7 +8,6 @@ using OnceMi.AspNetCore.AutoInjection;
 using OnceMi.Framework.Config;
 using OnceMi.Framework.Model.Attributes;
 using OnceMi.Framework.Util.Extensions;
-using AutoMapper.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;

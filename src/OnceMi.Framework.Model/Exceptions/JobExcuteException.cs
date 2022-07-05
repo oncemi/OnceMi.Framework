@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace OnceMi.Framework.Model.Exception
+namespace OnceMi.Framework.Model.Exceptions
 {
-    public class JobExcuteException : System.Exception
+    public class JobExcuteException : Exception
     {
         public JobExcuteException()
         {

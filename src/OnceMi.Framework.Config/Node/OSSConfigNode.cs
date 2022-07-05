@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace OnceMi.Framework.Config
+﻿namespace OnceMi.Framework.Config
 {
     public class OSSConfigNode
     {

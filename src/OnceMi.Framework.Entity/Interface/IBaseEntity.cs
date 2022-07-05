@@ -1,7 +1,6 @@
-﻿using System;
+﻿using FreeSql.DataAnnotations;
+using System;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using FreeSql.DataAnnotations;
 
 namespace OnceMi.Framework.Entity
 {

@@ -1,13 +1,8 @@
 ﻿using OnceMi.Framework.Entity.Admin;
 using OnceMi.Framework.Model.Attributes;
-using OnceMi.Framework.Util.Extensions;
-using OnceMi.Framework.Util.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Model.Dto
 {
@@ -96,7 +91,7 @@ namespace OnceMi.Framework.Model.Dto
         /// </summary>
         public long? NoticeRoleId { get; set; }
 
-        public string NoticeRoleName 
+        public string NoticeRoleName
         {
             get
             {

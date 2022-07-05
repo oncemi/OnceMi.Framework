@@ -1,4 +1,5 @@
 ﻿using OnceMi.Framework.Util.Security;
+using System;
 using System.ComponentModel;
 
 namespace OnceMi.Framework.Model.Common
@@ -155,7 +156,7 @@ namespace OnceMi.Framework.Model.Common
         /// <param name="nameSpace">命名空间</param>
         /// <param name="token">标识</param>
         /// <returns></returns>
-        public static string GetRedisLockKey(string nameSpace,string token)
+        public static string GetRedisLockKey(string nameSpace, string token)
         {
             if (string.IsNullOrWhiteSpace(nameSpace))
             {

@@ -1,15 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
-using HealthChecks.UI.Client;
-using OnceMi.Framework.Config;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Text.RegularExpressions;
 using OnceMi.AspNetCore.AutoInjection;
+using OnceMi.Framework.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace OnceMi.Framework.Extension.DependencyInjection
 {

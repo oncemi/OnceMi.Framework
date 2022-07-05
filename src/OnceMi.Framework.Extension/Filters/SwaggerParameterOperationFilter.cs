@@ -1,11 +1,9 @@
 ﻿using Microsoft.OpenApi.Models;
 using OnceMi.Framework.Model.Dto;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 
 namespace OnceMi.Framework.Extension.Filters
 {
@@ -19,7 +17,7 @@ namespace OnceMi.Framework.Extension.Filters
             {
                 operation.Parameters.Remove(versionParameter);
             }
-            
+
             //移除标记有IgnoreDataMember的属性
             var ignoredProperties = context.MethodInfo?.GetParameters()
                 ?.SelectMany(p => p.ParameterType?.GetProperties()
@@ -30,7 +28,7 @@ namespace OnceMi.Framework.Extension.Filters
                 foreach (var property in ignoredProperties)
                 {
                     var removeItem = operation.Parameters.FirstOrDefault(p => p.Name == property.Name);
-                    if(removeItem != null)
+                    if (removeItem != null)
                     {
                         operation.Parameters.Remove(removeItem);
                     }

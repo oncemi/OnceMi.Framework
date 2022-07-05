@@ -13,8 +13,8 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             int appId = -1;
             using (var provider = services.BuildServiceProvider())
             {
-                string appIdStr = provider.GetRequiredService<IConfiguration>().GetValue<string>("AppSettings:AppId");
-                if (string.IsNullOrEmpty(appIdStr) || !int.TryParse(appIdStr, out appId) || appId <= 0)
+                appId = provider.GetRequiredService<IConfiguration>().GetValue<int>("AppSettings:AppId");
+                if (appId < 0)
                 {
                     throw new Exception("Can not get app id from app setting.");
                 }
