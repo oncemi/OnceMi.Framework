@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnceMi.Framework.Util.Json;
+using System;
 
 namespace OnceMi.Framework.Test
 {
@@ -109,6 +110,14 @@ namespace OnceMi.Framework.Test
             //    Console.WriteLine($"Key:{key}, Value:{vd}");
             //}
 
+            TestModel t1 = new TestModel()
+            {
+                Age = 1,
+                CreateTime = DateTime.Now,
+            };
+            string json = JsonUtil.SerializeToFormatString(t1);
+
+            TestModel t2 = JsonUtil.DeserializeStringToObject<TestModel>(json);
 
             Console.ReadKey(false);
         }

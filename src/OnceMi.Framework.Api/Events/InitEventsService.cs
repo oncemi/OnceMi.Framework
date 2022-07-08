@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace OnceMi.Framework.Api.Middlewares
 {
-    public class LifetimeEventsService : IHostedService
+    public class InitEventsService : IHostedService
     {
-        private readonly ILogger<LifetimeEventsService> _logger;
+        private readonly ILogger<InitEventsService> _logger;
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly IServiceProvider _serviceProvider;
 
-        public LifetimeEventsService(ILogger<LifetimeEventsService> logger
+        public InitEventsService(ILogger<InitEventsService> logger
             , IHostApplicationLifetime appLifetime
             , IServiceProvider serviceProvider)
         {

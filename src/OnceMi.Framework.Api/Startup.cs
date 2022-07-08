@@ -1,12 +1,7 @@
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using OnceMi.AspNetCore.IdGenerator;
 using OnceMi.AspNetCore.MQ;
@@ -17,10 +12,14 @@ using OnceMi.Framework.Extension.DependencyInjection;
 using OnceMi.Framework.Extension.Filters;
 using OnceMi.Framework.Extension.Helpers;
 using OnceMi.Framework.Util.Json;
-using System;
 using System.Text;
 using System.Text.Encodings.Web;
-using System.Text.Unicode;
+using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace OnceMi.Framework.Api
 {
@@ -95,11 +94,10 @@ namespace OnceMi.Framework.Api
 
             services.AddMessageQuene(option =>
             {
-                option.UseExternalRedisClient = false;
+                option.UseExternalRedisClient = true;
                 option.AppId = Configuration.GetValue<int>("AppSettings:AppId");
                 option.ProviderType = Configuration.GetValue<MqProviderType>("MessageQueneSetting:ProviderType");
                 option.Connectstring = Configuration.GetValue<string>("MessageQueneSetting:ConnectionString");
-                option.RedisPrefix = GlobalConfigConstant.GetAppCachePrefix(option.AppId);
             });
 
             #endregion
@@ -218,12 +216,11 @@ namespace OnceMi.Framework.Api
             #region Controller
 
             services.AddHttpContextAccessor();
-
             //大量阻止同步 I/O 的操作可能会导致线程池资源不足，进而导致应用无响应。 仅在使用不支持异步 I/O 的库时，才启用 AllowSynchronousIO
             //services.Configure<KestrelServerOptions>(x => x.AllowSynchronousIO = true);
             //services.Configure<IISServerOptions>(x => x.AllowSynchronousIO = true);
 
-            services.AddHostedService<LifetimeEventsService>();
+            services.AddHostedService<InitEventsService>();
             services.AddControllers(options =>
             {
                 //全局异常
@@ -236,7 +233,7 @@ namespace OnceMi.Framework.Api
                 .AddJsonOptions(options =>
                 {
                     //中文等特殊字符序列化
-                    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
                     //包含公共字段
                     options.JsonSerializerOptions.IncludeFields = true;
                     //忽略大小写

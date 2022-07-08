@@ -24,7 +24,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             }
             Dictionary<Type, Type> registerDic = new AssemblyLoader(p => p.Name.StartsWith(GlobalConfigConstant.FirstNamespace, StringComparison.OrdinalIgnoreCase))
                 .GetInheritInterfaceTypes(typeof(IRepositoryDependency));
-            if (registerDic == null)
+            if (registerDic == null || !registerDic.Any())
             {
                 return services;
             }

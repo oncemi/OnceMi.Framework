@@ -11,65 +11,99 @@ namespace OnceMi.Framework.Util.Json
 {
     public class JsonUtil
     {
-        private static JsonSerializerOptions BuildJsonSerializerOptions(JsonSerializerOptions options)
+        private static JsonSerializerOptions _options = null;
+
+        private static readonly object _locker = new object();
+
+        private static JsonSerializerOptions BuildOptions(JsonSerializerOptions options, bool addExtOptions = false)
         {
-            if (options == null)
+            if (options != null)
             {
-                options = new JsonSerializerOptions()
+                if (!addExtOptions)
                 {
-                    Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
-                };
-            }
-            else
-            {
-                if (options.Encoder == null)
-                    options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-            }
-            if (options.Converters.Count == 0)
-            {
-                options.Converters.Add(new DateTimeConverter());
-                options.Converters.Add(new DateTimeNullableConverter());
-                options.Converters.Add(new ExceptionConverter());
-                options.Converters.Add(new TypeConverter());
-            }
-            else
-            {
-                IList<JsonConverter> converters = options.Converters;
-                bool hasDateTimeConverter = false;
-                foreach (var item in converters)
+                    return options;
+                }
+                else
                 {
-                    if (item.GetType().Name.Contains("datetime", StringComparison.OrdinalIgnoreCase))
+                    if (options.Encoder == null)
                     {
-                        hasDateTimeConverter = true;
-                        break;
+                        options.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                    }
+                    if (options.Converters.Count == 0)
+                    {
+                        options.Converters.Add(new DateTimeConverter());
+                        options.Converters.Add(new DateTimeNullableConverter());
+                        options.Converters.Add(new ExceptionConverter());
+                        options.Converters.Add(new TypeConverter());
+                    }
+                    else
+                    {
+                        IList<JsonConverter> converters = options.Converters;
+                        bool hasDateTimeConverter = false;
+                        foreach (var item in converters)
+                        {
+                            if (item.GetType().Name.Contains("datetime", StringComparison.OrdinalIgnoreCase))
+                            {
+                                hasDateTimeConverter = true;
+                                break;
+                            }
+                        }
+                        if (!hasDateTimeConverter)
+                        {
+                            options.Converters.Add(new DateTimeConverter());
+                            options.Converters.Add(new DateTimeNullableConverter());
+                        }
+                        if (!options.Converters.Any(p => p.GetType() == typeof(ExceptionConverter)))
+                        {
+                            options.Converters.Add(new ExceptionConverter());
+                        }
+                        if (!options.Converters.Any(p => p.GetType() == typeof(TypeConverter)))
+                        {
+                            options.Converters.Add(new TypeConverter());
+                        }
+                    }
+                    //忽略大小写
+                    options.PropertyNameCaseInsensitive = true;
+                    //允许注释
+                    options.ReadCommentHandling = JsonCommentHandling.Skip;
+                    //允许尾随逗号
+                    options.AllowTrailingCommas = true;
+                    //允许将字符串读取为数字
+                    options.NumberHandling = JsonNumberHandling.AllowReadingFromString;
+                    //包含公共字段
+                    options.IncludeFields = true;
+                    return options;
+                }
+            }
+            else
+            {
+                lock (_locker)
+                {
+                    if (_options == null)
+                    {
+                        _options = new JsonSerializerOptions()
+                        {
+                            Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
+                            //忽略大小写
+                            PropertyNameCaseInsensitive = true,
+                            //允许注释
+                            ReadCommentHandling = JsonCommentHandling.Skip,
+                            //允许尾随逗号
+                            AllowTrailingCommas = true,
+                            //允许将字符串读取为数字
+                            NumberHandling = JsonNumberHandling.AllowReadingFromString,
+                            //包含公共字段
+                            IncludeFields = true,
+
+                        };
+                        _options.Converters.Add(new DateTimeConverter());
+                        _options.Converters.Add(new DateTimeNullableConverter());
+                        _options.Converters.Add(new ExceptionConverter());
+                        _options.Converters.Add(new TypeConverter());
                     }
                 }
-                if (!hasDateTimeConverter)
-                {
-                    options.Converters.Add(new DateTimeConverter());
-                    options.Converters.Add(new DateTimeNullableConverter());
-                }
-                if (!options.Converters.Any(p => p.GetType() == typeof(ExceptionConverter)))
-                {
-                    options.Converters.Add(new ExceptionConverter());
-                }
-                if (!options.Converters.Any(p => p.GetType() == typeof(TypeConverter)))
-                {
-                    options.Converters.Add(new TypeConverter());
-                }
             }
-
-            //忽略大小写
-            options.PropertyNameCaseInsensitive = true;
-            //允许注释
-            options.ReadCommentHandling = JsonCommentHandling.Skip;
-            //允许尾随逗号
-            options.AllowTrailingCommas = true;
-            //允许将字符串读取为数字
-            options.NumberHandling = JsonNumberHandling.AllowReadingFromString;
-            //包含公共字段
-            options.IncludeFields = true;
-            return options;
+            return _options;
         }
 
         public static bool TryParse(string source, bool formatJson, out string json)
@@ -164,7 +198,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>json字符串</returns>
         public static string SerializeToString(object o, JsonSerializerOptions options)
         {
-            string json = JsonSerializer.Serialize(o, BuildJsonSerializerOptions(options));
+            string json = JsonSerializer.Serialize(o, BuildOptions(options));
             return json;
         }
 
@@ -179,7 +213,7 @@ namespace OnceMi.Framework.Util.Json
             {
                 WriteIndented = true,
             };
-            return SerializeToString(o, options);
+            return JsonSerializer.Serialize(o, BuildOptions(options, true));
         }
 
         /// <summary>
@@ -189,7 +223,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>json字符串</returns>
         public static byte[] SerializeToByte(object o)
         {
-            byte[] json = JsonSerializer.SerializeToUtf8Bytes(o, BuildJsonSerializerOptions(null));
+            byte[] json = JsonSerializer.SerializeToUtf8Bytes(o, BuildOptions(null));
             return json;
         }
 
@@ -201,7 +235,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>json字符串</returns>
         public static byte[] SerializeToByte(object o, JsonSerializerOptions options)
         {
-            byte[] json = JsonSerializer.SerializeToUtf8Bytes(o, BuildJsonSerializerOptions(options));
+            byte[] json = JsonSerializer.SerializeToUtf8Bytes(o, BuildOptions(options));
             return json;
         }
 
@@ -213,7 +247,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>对象实体</returns>
         public static T DeserializeStringToObject<T>(string json)
         {
-            return JsonSerializer.Deserialize<T>(json, BuildJsonSerializerOptions(null));
+            return JsonSerializer.Deserialize<T>(json, BuildOptions(null));
         }
 
 
@@ -225,7 +259,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>对象实体</returns>
         public static object DeserializeStringToObject(string json, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type type)
         {
-            return JsonSerializer.Deserialize(json, type, BuildJsonSerializerOptions(null));
+            return JsonSerializer.Deserialize(json, type, BuildOptions(null));
         }
 
         /// <summary>
@@ -236,7 +270,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>对象实体集合</returns>
         public static List<T> DeserializeStringToList<T>(string json)
         {
-            return JsonSerializer.Deserialize<List<T>>(json, BuildJsonSerializerOptions(null));
+            return JsonSerializer.Deserialize<List<T>>(json, BuildOptions(null));
         }
 
         /// <summary>
@@ -247,7 +281,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>对象实体</returns>
         public static T DeserializeByteToObject<T>(byte[] json)
         {
-            return JsonSerializer.Deserialize<T>(json, BuildJsonSerializerOptions(null));
+            return JsonSerializer.Deserialize<T>(json, BuildOptions(null));
         }
 
         /// <summary>
@@ -258,7 +292,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>对象实体</returns>
         public static object DeserializeByteToObject(byte[] json, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.PublicFields | DynamicallyAccessedMemberTypes.PublicProperties)] Type type)
         {
-            return JsonSerializer.Deserialize(json, type, BuildJsonSerializerOptions(null));
+            return JsonSerializer.Deserialize(json, type, BuildOptions(null));
         }
 
         /// <summary>
@@ -269,7 +303,7 @@ namespace OnceMi.Framework.Util.Json
         /// <returns>对象实体集合</returns>
         public static List<T> DeserializeByteToList<T>(byte[] json)
         {
-            return JsonSerializer.Deserialize<List<T>>(json, BuildJsonSerializerOptions(null));
+            return JsonSerializer.Deserialize<List<T>>(json, BuildOptions(null));
         }
     }
 }
