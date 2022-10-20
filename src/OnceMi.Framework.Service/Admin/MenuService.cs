@@ -262,7 +262,7 @@ namespace OnceMi.Framework.Service.Admin
             }
             //set value
             menu.ParentId = menu.ParentId == 0 ? null : menu.ParentId;
-            menu.Id = _idGenerator.NewId();
+            menu.Id = _idGenerator.CreateId();
             menu.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             menu.CreatedTime = DateTime.Now;
             //保存

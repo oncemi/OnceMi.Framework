@@ -189,7 +189,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 config = new Entity.Admin.Config()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     Content = content,
                     Description = data.Description,
                     CreatedTime = data.CreatedTime,

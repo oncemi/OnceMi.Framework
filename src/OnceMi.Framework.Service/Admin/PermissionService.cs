@@ -196,7 +196,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 List<RolePermission> permissions = distPermissions.Select(p => new RolePermission()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     RoleId = request.RoleId,
                     MenuId = p,
                     IsDeleted = false,

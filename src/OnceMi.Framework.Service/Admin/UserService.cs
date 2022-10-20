@@ -230,7 +230,7 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.USER_EMAIL_EXISTS, $"当前邮箱已被注册");
             }
             //创建信息
-            user.Id = _idGenerator.NewId();
+            user.Id = _idGenerator.CreateId();
             user.CreatedTime = DateTime.Now;
             user.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             //创建密码
@@ -242,7 +242,7 @@ namespace OnceMi.Framework.Service.Admin
             UploadFileInfo fileInfo = null;
             if (!string.IsNullOrEmpty(request.Avatar))
             {
-                using (SKData headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
+                using (SKData headerImage = ImageBase64Converter.Base64ToImage(request.Avatar, out _))
                 {
                     using (var saveStream = new MemoryStream())
                     {
@@ -328,7 +328,7 @@ namespace OnceMi.Framework.Service.Admin
             if (!string.IsNullOrEmpty(request.Avatar)
                 && !request.Avatar.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                using (SKData headerImage = ImageBase64Converter.Base64ToImage(request.Avatar))
+                using (SKData headerImage = ImageBase64Converter.Base64ToImage(request.Avatar,out _))
                 {
                     using (var saveStream = new MemoryStream())
                     {
@@ -549,7 +549,7 @@ namespace OnceMi.Framework.Service.Admin
                 .ExecuteAffrowsAsync();
             List<UserRole> newUserRoles = roles.Select(p => new UserRole()
             {
-                Id = _idGenerator.NewId(),
+                Id = _idGenerator.CreateId(),
                 UserId = userId,
                 RoleId = p,
                 CreatedTime = DateTime.Now,
@@ -578,7 +578,7 @@ namespace OnceMi.Framework.Service.Admin
                 .ExecuteAffrowsAsync();
             List<UserOrganize> newUserOrganizes = organizes.Select(p => new UserOrganize()
             {
-                Id = _idGenerator.NewId(),
+                Id = _idGenerator.CreateId(),
                 UserId = userId,
                 OrganizeId = p,
                 CreatedTime = DateTime.Now,

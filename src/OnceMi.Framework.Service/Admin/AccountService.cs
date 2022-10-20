@@ -189,7 +189,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 userToken = new UserToken()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     UserId = user.Id,
                     Token = token,
                     RefeshToken = refeshToken,
@@ -229,7 +229,7 @@ namespace OnceMi.Framework.Service.Admin
             UserAgentParser parser = new UserAgentParser(_accessor.HttpContext);
             var history = new LoginHistory()
             {
-                Id = _idGenerator.NewId(),
+                Id = _idGenerator.CreateId(),
                 UserId = userId,
                 IP = parser.GetRequestIpAddress(),
                 Browser = parser.GetBrowser(),

@@ -219,7 +219,7 @@ namespace OnceMi.Framework.Service.Admin
             api.Code = $"{api.Path.Trim('/').Replace('/', ':')}:{api.Method}".ToLower();
             api.ParentId = api.ParentId == 0 ? null : api.ParentId;
             api.OperationId = api.Path.Replace("/", "").ToUpper() + "-" + (string.IsNullOrEmpty(api.Method) ? "Controller" : api.Method);
-            api.Id = _idGenerator.NewId();
+            api.Id = _idGenerator.CreateId();
             api.CreateMethod = ApiCreateMethod.Manual;
             api.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             api.CreatedTime = DateTime.Now;
@@ -272,7 +272,7 @@ namespace OnceMi.Framework.Service.Admin
             List<Api> newParentApis = apis.GroupBy(p => new { p.Controller, p.ControllerName, p.Version })
                 .Select(p => new Api()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     OperationId = p.Key.Controller + "-Controller",
                     Path = p.Key.Controller,
                     Name = p.Key.ControllerName,
@@ -288,7 +288,7 @@ namespace OnceMi.Framework.Service.Admin
             List<Api> newApis = apis
                 .Select(p => new Api()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     ParentId = newParentApis.Where(x => x.Path == p.Controller).FirstOrDefault()?.Id,
                     OperationId = p.OperationId,
                     Version = p.Version,

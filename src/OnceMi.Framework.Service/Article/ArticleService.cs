@@ -127,7 +127,7 @@ namespace OnceMi.Framework.Service.Article
         {
             Entity.Article.ArticleInfo article = new Entity.Article.ArticleInfo()
             {
-                Id = _idGenerator.NewId(),
+                Id = _idGenerator.CreateId(),
                 Title = request.Title,
                 SubTitle = request.SubTitle,
                 Content = request.Content,
@@ -168,7 +168,7 @@ namespace OnceMi.Framework.Service.Article
                 }
                 articleCategories.Add(new ArticleBelongCategory()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     CategoryId = item,
                     ArticleId = article.Id,
                     IsDeleted = false,
@@ -196,7 +196,7 @@ namespace OnceMi.Framework.Service.Article
                     }
                     articleTags.Add(new ArticleTag()
                     {
-                        Id = _idGenerator.NewId(),
+                        Id = _idGenerator.CreateId(),
                         ArticleId = article.Id,
                         Tag = item,
                         IsDeleted = false,
@@ -220,7 +220,7 @@ namespace OnceMi.Framework.Service.Article
                     }
                     articleCovers.Add(new ArticleCover()
                     {
-                        Id = _idGenerator.NewId(),
+                        Id = _idGenerator.CreateId(),
                         ArticleId = article.Id,
                         Url = item,
                         IsDeleted = false,
@@ -286,7 +286,7 @@ namespace OnceMi.Framework.Service.Article
                 }
                 articleCategories.Add(new ArticleBelongCategory()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     CategoryId = item,
                     ArticleId = article.Id,
                     IsDeleted = false,
@@ -318,7 +318,7 @@ namespace OnceMi.Framework.Service.Article
                     }
                     articleTags.Add(new ArticleTag()
                     {
-                        Id = _idGenerator.NewId(),
+                        Id = _idGenerator.CreateId(),
                         ArticleId = article.Id,
                         Tag = item,
                         IsDeleted = false,
@@ -353,7 +353,7 @@ namespace OnceMi.Framework.Service.Article
                     }
                     articleCovers.Add(new ArticleCover()
                     {
-                        Id = _idGenerator.NewId(),
+                        Id = _idGenerator.CreateId(),
                         ArticleId = article.Id,
                         Url = item,
                         IsDeleted = false,

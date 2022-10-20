@@ -209,7 +209,7 @@ namespace OnceMi.Framework.Service.Admin
             }
 
             role.ParentId = role.ParentId == 0 ? null : role.ParentId;
-            role.Id = _idGenerator.NewId();
+            role.Id = _idGenerator.CreateId();
             role.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             role.CreatedTime = DateTime.Now;
             role.OrganizeId = request.OrganizeId;

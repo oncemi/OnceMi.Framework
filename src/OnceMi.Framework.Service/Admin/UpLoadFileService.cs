@@ -457,7 +457,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.FILE_CONTENTTYPE_CANNOT_GET, $"获取文件类型失败，文件名称为：{oldName}");
             }
-            string newName = $"{Path.GetFileNameWithoutExtension(oldName)}_{owner}_{_idGenerator.NewId()}{ext}";
+            string newName = $"{Path.GetFileNameWithoutExtension(oldName)}_{owner}_{_idGenerator.CreateId()}{ext}";
             if (string.IsNullOrEmpty(path))
             {
                 throw new BusException(ResultCode.FILE_UPLOAD_PATH_IS_NULL, "上传路径不能为空");
@@ -733,7 +733,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 UpLoadFile saveInfo = await _repository.InsertAsync(new UpLoadFile()
                 {
-                    Id = _idGenerator.NewId(),
+                    Id = _idGenerator.CreateId(),
                     Name = upload.Name,
                     OldName = upload.OldName,
                     Path = upload.Path,

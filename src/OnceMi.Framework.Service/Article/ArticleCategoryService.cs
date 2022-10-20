@@ -146,7 +146,7 @@ namespace OnceMi.Framework.Service.Article
                 throw new BusException(ResultCode.ARITICLECATEGORY_NAME_EXISTS, $"当前添加的分类名称‘{category.Name}’已存在");
             }
             category.ParentId = category.ParentId == 0 ? null : category.ParentId;
-            category.Id = _idGenerator.NewId();
+            category.Id = _idGenerator.CreateId();
             category.IsLocked = false;
             category.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             category.CreatedTime = DateTime.Now;

@@ -79,7 +79,7 @@ namespace OnceMi.Framework.Extension.DependencyInjection
                              && (e.Property.GetCustomAttribute<KeyAttribute>(false) != null || (e.Property.GetCustomAttribute<ColumnAttribute>(false)?.IsPrimary == true)))
                             {
                                 //生成雪花Id
-                                e.Value = idGenerator.NewId();
+                                e.Value = idGenerator.CreateId();
                             }
                         };
                         return fsql;

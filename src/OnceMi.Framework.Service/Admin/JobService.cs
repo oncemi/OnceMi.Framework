@@ -192,7 +192,7 @@ namespace OnceMi.Framework.Service.Admin
             {
                 throw new BusException(ResultCode.JOB_GROUP_NOT_EXISTS, "所选分组不存在");
             }
-            job.Id = _idGenerator.NewId();
+            job.Id = _idGenerator.CreateId();
             job.FireCount = 0;
             job.Status = request.IsEnabled ? JobStatus.Stopped : JobStatus.Paused;
             job.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;

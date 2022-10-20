@@ -213,6 +213,10 @@ namespace OnceMi.Framework.Api.Controllers.v1.Admin
                             {
                                 expiredSeconds = 7 * 24 * 3600;
                             }
+                            if(expiredSeconds < 600)
+                            {
+                                expiredSeconds = 600;
+                            }
                         }
                         if (string.IsNullOrEmpty(file.BucketName))
                         {

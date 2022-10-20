@@ -148,7 +148,7 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.VIEW_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             view.ParentId = view.ParentId == 0 ? null : view.ParentId;
-            view.Id = _idGenerator.NewId();
+            view.Id = _idGenerator.CreateId();
             view.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             view.CreatedTime = DateTime.Now;
             //保存

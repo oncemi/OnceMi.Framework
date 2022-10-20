@@ -193,7 +193,7 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.ORG_PARENTS_NOT_EXISTS, "父条目不存在");
             }
             organize.ParentId = organize.ParentId == 0 ? null : organize.ParentId;
-            organize.Id = _idGenerator.NewId();
+            organize.Id = _idGenerator.CreateId();
             organize.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
             organize.CreatedTime = DateTime.Now;
             List<OrganizeManager> managers = await GenerateOrganizeManagers(request, organize.Id);
@@ -412,7 +412,7 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     var departLeaders = request.DepartLeaders.Select(p => new OrganizeManager()
                     {
-                        Id = _idGenerator.NewId(),
+                        Id = _idGenerator.CreateId(),
                         UserId = departLeaderUsers.SingleOrDefault(q => q.Id == p).Id,
                         OrganizeId = id,
                         ManagerType = OrganizeManagerType.DepartLeader,
@@ -433,7 +433,7 @@ namespace OnceMi.Framework.Service.Admin
                 {
                     var headLeaders = request.HeadLeaders.Select(p => new OrganizeManager()
                     {
-                        Id = _idGenerator.NewId(),
+                        Id = _idGenerator.CreateId(),
                         UserId = hesderLeaderUsers.SingleOrDefault(q => q.Id == p).Id,
                         OrganizeId = id,
                         ManagerType = OrganizeManagerType.HeadLeader,

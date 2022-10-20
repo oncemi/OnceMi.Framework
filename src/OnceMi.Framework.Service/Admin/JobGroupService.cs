@@ -109,7 +109,7 @@ namespace OnceMi.Framework.Service.Admin
                 throw new BusException(ResultCode.JOBG_CODE_FORMAT_ERROR, $"分组编码格式不正确，编码只能由字母、数组和下划线组成");
             }
             //创建信息
-            jobGroup.Id = _idGenerator.NewId();
+            jobGroup.Id = _idGenerator.CreateId();
             jobGroup.CreatedTime = DateTime.Now;
             jobGroup.CreatedUserId = _accessor?.HttpContext?.User?.GetSubject().id;
 
