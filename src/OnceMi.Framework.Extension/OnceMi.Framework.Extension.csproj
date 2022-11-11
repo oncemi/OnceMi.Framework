@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 	</PropertyGroup>
@@ -16,12 +16,12 @@
 		<PackageReference Include="FreeSql.Provider.Sqlite" Version="3.2.682" />
 		<PackageReference Include="FreeSql.Provider.PostgreSQL" Version="3.2.682" />
 		<PackageReference Include="FreeSql.Provider.SqlServer" Version="3.2.682" />
-		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.10" />
+		<PackageReference Include="Microsoft.AspNetCore.Authorization" Version="7.0.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="MySql.Data" Version="8.0.31" />
 		<PackageReference Include="RestSharp" Version="108.0.2" />
-		<PackageReference Include="System.Data.Odbc" Version="6.0.1" />
-		<PackageReference Include="System.Data.SqlClient" Version="4.8.4" />
+		<PackageReference Include="System.Data.Odbc" Version="7.0.0" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI" Version="6.0.5" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
 		<PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="6.0.5" />

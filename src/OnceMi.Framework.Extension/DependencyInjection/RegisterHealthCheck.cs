@@ -1,6 +1,8 @@
 ﻿using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using OnceMi.AspNetCore.AutoInjection;
@@ -99,6 +101,24 @@ namespace OnceMi.Framework.Extension.DependencyInjection
             //    options.UIPath = config.AppSettings.HealthCheck.HealthCheckUIPath;
             //});
             return app;
+        }
+
+        public static IEndpointRouteBuilder MapHealthChecksUI(this IEndpointRouteBuilder endpoints, IConfiguration configuration)
+        {
+            if (configuration.GetValue<bool>("AppSettings:HealthCheck:IsEnabledHealthCheckUI"))
+            {
+                //MapHealthChecksUI应该统一写到UseHealthChecks中
+                //但是有bug，具体请看UseHealthChecks中注释
+                //issue：https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/716
+                endpoints.MapHealthChecksUI(options =>
+                {
+                    options.UseRelativeResourcesPath = false;
+                    options.UseRelativeApiPath = false;
+                    options.UseRelativeWebhookPath = false;
+                    options.UIPath = configuration.GetValue<string>("AppSettings:HealthCheck:HealthCheckUIPath");
+                }).AllowAnonymous();
+            }
+            return endpoints;
         }
 
         private static IHealthChecksBuilder AddCheck(this IHealthChecksBuilder builder, Type type)

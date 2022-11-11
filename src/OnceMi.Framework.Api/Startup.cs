@@ -186,12 +186,6 @@ namespace OnceMi.Framework.Api
 
             #endregion
 
-            #region  自动注入
-
-            services.AddAutoInjection();
-
-            #endregion
-
             #region HealthCheck
 
             services.AddHealthCheckService();
@@ -210,6 +204,12 @@ namespace OnceMi.Framework.Api
                     logging.ResponseBodyLogLimit = 4096;
                 });
             }
+
+            #endregion
+
+            #region  自动注入
+
+            services.AddAutoInjection();
 
             #endregion
 
@@ -260,8 +260,7 @@ namespace OnceMi.Framework.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app
-            , ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
             #region 全局异常处理
 
@@ -297,30 +296,16 @@ namespace OnceMi.Framework.Api
             app.UseCors(GlobalConfigConstant.DefaultOriginsName);
             //消息队列
             app.UseMessageQuene();
-
-            //运行在docker中可能使用反向代理，默认注释，需要重定向可取消注释
+            //https重定向
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            //认证与授权
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                if (Configuration.GetValue<bool>("AppSettings:HealthCheck:IsEnabledHealthCheckUI"))
-                {
-                    //MapHealthChecksUI应该统一写到UseHealthChecks中
-                    //但是有bug，具体请看UseHealthChecks中注释
-                    //issue：https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/716
-                    endpoints.MapHealthChecksUI(options =>
-                    {
-                        options.UseRelativeResourcesPath = false;
-                        options.UseRelativeApiPath = false;
-                        options.UseRelativeWebhookPath = false;
-                        options.UIPath = Configuration.GetValue<string>("AppSettings:HealthCheck:HealthCheckUIPath");
-                    }).AllowAnonymous();
-                }
-
+                endpoints.MapHealthChecksUI(Configuration);
                 endpoints.MapControllers();
             });
         }
